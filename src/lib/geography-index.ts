@@ -69,21 +69,34 @@ function nearestCity(point: { latitude: number; longitude: number }, country: st
   return nearest ? publicCity(nearest) : null;
 }
 function addressCity(address: string, country: string, point?: { latitude: number; longitude: number }) {
-  const tokens = normalizedName(address).split(' ');
-  for (let end = tokens.length; end > 0; end--) {
-    for (let size = Math.min(6, end); size >= 1; size--) {
-      const name = tokens.slice(end - size, end).join(' ');
-      if (name.length < 4) continue;
-      const match = resolveCity(name, country, point); if (match) return match;
+  // Do not interpret street names (Via Roma, Bloor Street) as cities. Search
+  // separate address components, retaining city text after a postal code.
+  const components = address.split(/[,;\n]/).map(normalizedName).filter(Boolean);
+  for (let component of components.reverse()) {
+    if (/\b(street|road|avenue|lane|drive|boulevard|via|viale|piazza|rue|chemin|calle|strasse|straße)\b/u.test(component) && component.split(' ').length > 1) {
+      const suffix = component.match(/\b\d{5}(?: \d{4})?\s+(.+)$/)?.[1];
+      if (!suffix) continue;
+      component = suffix;
+    }
+    const tokens = component.split(' ');
+    for (let end = tokens.length; end > 0; end--) {
+      for (let size = Math.min(6, end); size >= 1; size--) {
+        const name = tokens.slice(end - size, end).join(' ');
+        if (name.length < 4) continue;
+        const match = resolveCity(name, country, point); if (match) return match;
+      }
     }
   }
   return null;
 }
 export function enrichLocation(event: EventRecord, source?: Source): EventRecord {
-  if (event.geographyVersion === 1) return event;
-  const result = { ...event, geographyVersion: 1 };
-  const point = hasCoordinates(event) ? { latitude: event.latitude, longitude: event.longitude } : undefined;
-  const explicitCountry = countryCode(event.countryCode);
+  if (event.geographyVersion === 2) return event;
+  const result = { ...event, geographyVersion: 2 };
+  const gancio = !event.local && (source?.kind === 'gancio' || event.sourceId.startsWith('gancio:'));
+  if (!hasCoordinates(event) || (gancio && event.latitude === 0 && event.longitude === 0)) result.latitude = result.longitude = undefined;
+  const point = hasCoordinates(result) ? { latitude: result.latitude, longitude: result.longitude } : undefined;
+  // Recompute inferred metadata on cache upgrades; only supplied fields are authoritative.
+  const explicitCountry = !event.countryBasis || event.countryBasis === 'provided' ? countryCode(event.countryCode) : '';
   const geoCountry = point ? coordinateCountry(point.latitude, point.longitude) : '';
   const addressCountry = countryCode(event.address.split(',').at(-1));
   const hint = sourceLocation(source);
@@ -91,7 +104,7 @@ export function enrichLocation(event: EventRecord, source?: Source): EventRecord
   let country = explicitCountry || geoCountry || addressCountry;
   result.countryBasis = explicitCountry ? 'provided' : geoCountry ? 'coordinates' : addressCountry ? 'address' : undefined;
   // Old caches used a narrow city heuristic. Re-read their address/coordinates before trusting that label.
-  const supplied = event.cityBasis === 'provided' || event.local || source?.kind === 'snapshot';
+  const supplied = event.cityBasis === 'provided' || (!event.cityBasis && (event.local || source?.kind === 'snapshot'));
   let city = supplied && event.city ? resolveCity(event.city, country || (!point ? regionCountry : ''), point) || (!country ? resolveCity(event.city, '', point) : null) : null;
   let basis: EventRecord['cityBasis'] = city ? 'provided' : undefined;
   if (!city) {
@@ -103,11 +116,12 @@ export function enrichLocation(event: EventRecord, source?: Source): EventRecord
   if (!city && !point && !event.address && !event.city && hint) { city = hint; basis = 'source'; }
   // City-scoped calendars can supply a fallback only if the event has no identifiable alternative city.
   if (!city && !point && !supplied && hint) { city = hint; basis = 'source'; }
-  if (!city && event.city) { city = resolveCity(event.city, country || regionCountry); if (city) basis = supplied ? 'provided' : 'source'; }
+  if (!city && !point && supplied && event.city) { city = resolveCity(event.city, country || regionCountry); if (city) basis = 'provided'; }
   if (city) { result.city = city.name; result.cityId = city.id; result.cityBasis = basis; }
   else { result.city = supplied ? event.city : ''; result.cityId = undefined; result.cityBasis = supplied && event.city ? 'provided' : undefined; }
+  result.cityLocation = city ? { latitude: city.latitude, longitude: city.longitude } : undefined;
   if (!country && city) { country = city.countryCode; result.countryBasis = basis === 'source' ? 'source' : 'city'; }
-  if (!country && !point && !event.city && regionCountry) { country = regionCountry; result.countryBasis = 'source'; }
+  if (!country && !point && !result.city && regionCountry) { country = regionCountry; result.countryBasis = 'source'; }
   result.countryCode = country || undefined;
   return result;
 }

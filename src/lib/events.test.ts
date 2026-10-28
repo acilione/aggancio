@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { classify, deduplicate, normalizeGancio, overlapsDays, safeUrl, defaultSources, fetchGancio } from './events';
+import { classify, coordinate, deduplicate, normalizeGancio, overlapsDays, safeUrl, defaultSources, fetchGancio } from './events';
 import { extractPoster, zonedDateTimeToISO } from './poster';
 import { calendarExport, parseImport } from './export';
 import type { EventRecord } from './types';
@@ -62,6 +62,15 @@ describe('source boundaries', () => {
     const b = event({ ...a, id: 'b', sourceName: 'B' });
     const c = event({ ...a, id: 'c', canonicalUrl: 'https://calendar.test/event/2' });
     const groups = deduplicate([a, b, c]); expect(groups).toHaveLength(2); expect(groups[0].sources).toHaveLength(2);
+  });
+  it('rejects invalid coordinates and Gancio zero-pair placeholders, preserving valid single zeros', () => {
+    for (const value of [' ', false, true, [], {}, null, undefined, 'NaN', Infinity, 91]) expect(coordinate(value, 90)).toBeUndefined();
+    const normalize = (latitude: unknown, longitude: unknown) => normalizeGancio({ id: 2524, title: 'Fiera della Decrescita', start_datetime: 1919955600, place: { address: 'Via Quarnaro 1, 89135 Reggio Calabria, RC', latitude, longitude } }, defaultSources[0]);
+    for (const [lat, lon] of [[0, 0], ['0', '0'], [38.1, null], [' ', 15.6], [false, 15.6]]) {
+      expect(normalize(lat, lon)?.latitude).toBeUndefined(); expect(normalize(lat, lon)?.longitude).toBeUndefined();
+    }
+    expect(normalize(0, 32)).toMatchObject({ latitude: 0, longitude: 32 });
+    expect(normalize(51.5, 0)).toMatchObject({ latitude: 51.5, longitude: 0 });
   });
   it('does not allow executable source URLs', () => {
     expect(safeUrl('javascript:alert(1)')).toBe(''); expect(safeUrl('data:text/html,test')).toBe('');

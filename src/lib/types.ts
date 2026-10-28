@@ -27,6 +27,7 @@ export interface EventRecord {
   address: string;
   city: string;
   cityId?: number;
+  cityLocation?: { latitude: number; longitude: number };
   countryCode?: string;
   cityBasis?: 'provided' | 'address' | 'coordinates' | 'source';
   countryBasis?: 'provided' | 'address' | 'coordinates' | 'city' | 'source';

@@ -5,7 +5,7 @@
   import { addDays, countEventDays, dayKey, deduplicate, defaultSources, formatEventDate, formatEventTime, overlapsDays, primaryOccurrence, safeUrl } from './lib/events';
   import { SourceWorkers } from './lib/source-workers';
   import { geography } from './lib/geography-client';
-  import { countryName, matchesLocation, type CityLocation } from './lib/location';
+  import { countryName, hasCoordinates, matchesLocation, type CityLocation } from './lib/location';
   import LocationFilters from './components/LocationFilters.svelte';
   import { db, saveSourceEvents, saveSources } from './lib/storage';
   import { catalogueCheckedAt, mergeCatalogue, runSourceQueue } from './lib/sources';
@@ -25,6 +25,7 @@
   let city = $state('');
   let country = $state('');
   let radius = $state(0);
+  let exactLocationsOnly = $state(false);
   let cityCenter = $state<CityLocation | null>(null);
   let sourceCities = $state<CityLocation[]>([]);
   let locationError = $state('');
@@ -103,6 +104,14 @@
       try {
         const [enriched, enrichedDrafts, locations] = await Promise.all([geography.enrich(cached, undefined, merged.sources), geography.enrich(local), geography.sources(merged.sources.filter(source => source.enabled))]);
         events = enriched; drafts = enrichedDrafts; sourceCities = locations;
+        try {
+          const migrated = enriched.filter((event, index) => event.geographyVersion !== cached[index].geographyVersion);
+          const migratedDrafts = enrichedDrafts.filter((event, index) => event.geographyVersion !== local[index].geographyVersion);
+          await db.transaction('rw', db.events, db.drafts, async () => {
+            if (migrated.length) await db.events.bulkPut(migrated);
+            if (migratedDrafts.length) await db.drafts.bulkPut(migratedDrafts);
+          });
+        } catch { storageError = 'Corrected locations could not be cached. They remain available until this page closes.'; }
       } catch { locationError = 'Some city and country labels could not be resolved. Refresh to retry.'; }
       for (const source of sources) {
         const cachedEvents = cached.filter(event => event.sourceId === source.id);
@@ -182,7 +191,7 @@
   });
   const matchingEvents = $derived(deduplicate(allEvents.filter(event =>
     (view !== 'drafts' || event.local) && (!onlySaved || savedIds.includes(event.id)) &&
-    matchesLocation(event, city, country, cityCenter, radius) &&
+    matchesLocation(event, city, country, cityCenter, radius, exactLocationsOnly) &&
     (category === 'All' || event.categories.includes(category)) &&
     (!query.trim() || [event.title, event.description, event.venue, event.city, ...event.tags].join(' ').toLowerCase().includes(query.trim().toLowerCase()))
   )));
@@ -190,7 +199,7 @@
   const displayEvents = $derived(filtered.map(group => group.event));
   const weekDays = $derived(Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)));
   const dailyCounts = $derived(countEventDays(matchingEvents.map(group => group.event), weekDays));
-  function clearFilters() { query = ''; city = ''; country = ''; radius = 0; cityCenter = null; cityResolve++; category = 'All'; dateMode = view === 'drafts' ? 'any' : 'upcoming'; selectedDay = today; weekStart = today; onlySaved = false; visibleLimit = 30; }
+  function clearFilters() { query = ''; city = ''; country = ''; radius = 0; exactLocationsOnly = false; cityCenter = null; cityResolve++; category = 'All'; dateMode = view === 'drafts' ? 'any' : 'upcoming'; selectedDay = today; weekStart = today; onlySaved = false; visibleLimit = 30; }
   function changeView(next: 'explore' | 'drafts') { view = next; clearFilters(); }
   function createDraft() { editing = undefined; showEditor = true; }
   function openEvent(event: EventRecord) { selected = event; }
@@ -284,7 +293,7 @@
     {#if storageError}<div class="page-notice warning" role="alert"><AlertCircle size={17} /> {storageError}</div>{/if}
 
     <section class="search-panel" aria-label="Filter events">
-      <LocationFilters bind:city bind:country bind:radius bind:center={cityCenter} />
+      <LocationFilters bind:city bind:country bind:radius bind:center={cityCenter} bind:exactOnly={exactLocationsOnly} />
       {#if locationError}<p class="location-explanation" role="status">{locationError}</p>{/if}
       <div class="search-fields">
         <label class="city-search"><MapPin size={19} /><span class="sr-only">City</span><select aria-label="City" value={city} onchange={event => selectCity(event.currentTarget.value)}><option value="">All cities</option>{#each cityChoices as item}<option value={item.value}>{item.label}</option>{/each}</select></label>
@@ -326,6 +335,7 @@
             <div class="event-card-body"><div class="event-date">{formatEventDate(event, dateWindow[0])}<span>·</span>{formatEventTime(event, dateWindow[0])}{#if event.occurrences.length > 1}<span class="occurrence-count">+{event.occurrences.length - 1} dates</span>{/if}</div>
               <button class="event-title" onclick={() => openEvent(event)}><h3>{event.title}</h3></button>
               <p class="event-place"><MapPin size={13} /><span>{[event.venue, event.city, countryName(event.countryCode)].filter(Boolean).join(' · ') || event.address || 'Location not supplied'}</span></p>
+              {#if radius > 0 && !hasCoordinates(event)}<p class="small muted distance-unverified">Distance unverified · city centre estimate{event.cityBasis === 'source' ? ' from calendar coverage' : ''}</p>{/if}
               <div class="event-meta"><span class="category-tag" data-category={event.categories[0]}>{event.categories[0] || 'Other'}</span>{#if event.local}<span class="draft-tag">Local draft</span>{:else}<a class="source-link" href={event.sourceUrl} target="_blank" rel="noopener noreferrer">{event.sourceName}<ArrowUpRight size={11} /></a>{/if}{#if event.status !== 'scheduled'}<span class="status-tag">{event.status}</span>{/if}</div>
               {#if group.sources.length > 1}<small class="muted">Also listed by {group.sources.slice(1).map(source => source.name).join(', ')}</small>{/if}
             </div><button class="save-event" class:is-saved={savedIds.includes(event.id)} aria-label={`${savedIds.includes(event.id) ? 'Unsave' : 'Save'} ${event.title}`} aria-pressed={savedIds.includes(event.id)} onclick={() => toggleSaved(event.id)}><Heart size={17} fill={savedIds.includes(event.id) ? 'currentColor' : 'none'} /></button>
@@ -349,6 +359,7 @@
     <div class="detail-tags"><span class="category-tag">{selected.categories[0]}</span>{#if selected.local}<span class="draft-tag">Local draft · only on this device</span>{/if}{#if selected.status !== 'scheduled'}<span class="status-tag">{selected.status}</span>{/if}</div>
     <h2 class="detail-title">{selected.title}</h2><p class="detail-location"><MapPin size={17} />{[selected.venue, selected.address, selected.city, countryName(selected.countryCode)].filter(Boolean).join(' · ') || 'Location not supplied'}</p>
     {#if selected.cityBasis && selected.cityBasis !== 'provided'}<p class="small muted">City inferred from {selected.cityBasis === 'source' ? 'calendar coverage' : selected.cityBasis === 'coordinates' ? 'a nearby city; the label is approximate' : 'the event address'}.</p>{/if}
+    {#if !hasCoordinates(selected)}<p class="small muted">Venue coordinates are unavailable. Distance filtering uses the city centre when known; the actual venue may lie outside the selected radius. This event has no map pin.</p>{/if}
     <div class="detail-dates">{#each selected.occurrences as occurrence}<p><CalendarDays size={16} /><span>{new Intl.DateTimeFormat('en-GB', { dateStyle: 'full', timeStyle: 'short', timeZone: selected.timezone }).format(new Date(occurrence.start))}{#if occurrence.end}<br /><span class="muted">Until {new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short', timeZone: selected.timezone }).format(new Date(occurrence.end))}</span>{/if}</span></p>{/each}<small class="muted">Times shown in {selected.timezone}.</small></div>
     <p class="detail-description">{selected.description || (selected.local ? 'No description added yet.' : 'This calendar listing does not include a description. Visit the original event for the full details.')}</p>
     {#if selected.tags.length}<div class="tag-list">{#each selected.tags as tag}<span>#{tag}</span>{/each}</div>{/if}

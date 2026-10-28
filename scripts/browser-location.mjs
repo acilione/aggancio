@@ -8,6 +8,7 @@ page.on('pageerror', error => errors.push(error.message)); context.on('request',
 const start = Date.parse('2030-11-03T17:00Z') / 1000;
 const row = (id, title, address, latitude, longitude) => ({ id, title, start_datetime: start, tags: ['music'], place: { address, latitude, longitude } });
 const data = [row(1, 'Amsterdam venue', 'Warmoesstraat 139, 1012 JB Amsterdam', 52.3737514, 4.8959885), row(2, 'Amsterdam without coordinates', 'Amsterdam, Netherlands', null, null), row(3, 'Haarlem venue', 'Haarlem, Netherlands', 52.3874, 4.6462), row(4, 'Utrecht venue', 'Utrecht, Netherlands', 52.0907, 5.1214), row(5, 'Berlin venue', 'Berlin, Germany', 52.52, 13.405)];
+data.push(row(6, 'Reggio address only', 'Via Nino Bixio 44, Reggio Calabria, RC', null, null), row(7, 'Reggio placeholder coordinates', 'Via Quarnaro 1, 89135 Reggio Calabria, RC', 0, 0), row(8, 'Messina city only', 'Messina, Italy', null, null), row(9, 'Catania city only', 'Catania, Italy', null, null), row(10, 'Reggio venue', 'Reggio Calabria, Italy', 38.11, 15.65));
 await context.route('**/api/events?*', route => offline ? route.abort('failed') : route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(new URL(route.request().url()).host === 'offbeat.amsterdam' ? data : []), headers: { 'Access-Control-Allow-Origin': '*' } }));
 const count = value => page.waitForFunction(value => Number(document.querySelector('.result-count')?.textContent) === value, value);
 try {
@@ -24,18 +25,34 @@ try {
   await page.getByLabel('Search city', { exact: true }).fill('amster');
   await page.locator('.city-suggestions button').filter({ hasText: 'Netherlands' }).first().click();
   await count(2);
-  await page.getByLabel('Distance', { exact: true }).selectOption('25'); await count(2);
+  await page.getByLabel('Distance', { exact: true }).selectOption('25'); await count(3);
   assert.ok(await page.getByRole('heading', { name: 'Haarlem venue', exact: true }).isVisible());
+  assert.ok(await page.getByRole('heading', { name: 'Amsterdam without coordinates', exact: true }).isVisible());
+  assert.equal(await page.locator('.distance-unverified').count(), 1);
+  await page.getByLabel('Only events with venue coordinates').check(); await count(2);
   assert.equal(await page.getByRole('heading', { name: 'Amsterdam without coordinates', exact: true }).count(), 0);
-  await page.getByLabel('Distance', { exact: true }).selectOption('50'); await count(3);
-  await page.getByLabel('Distance', { exact: true }).selectOption('10'); await count(1);
+  await page.getByLabel('Only events with venue coordinates').uncheck(); await count(3);
+  await page.getByLabel('Distance', { exact: true }).selectOption('50'); await count(4);
+  await page.getByLabel('Distance', { exact: true }).selectOption('10'); await count(2);
   await page.getByLabel('Distance', { exact: true }).selectOption('0'); await count(2);
   await page.getByLabel('City', { exact: true }).selectOption('Haarlem'); await count(1);
   await page.waitForFunction(() => !document.querySelector('[aria-label="Distance"]').disabled);
-  await page.getByLabel('Distance', { exact: true }).selectOption('25'); await count(2);
+  await page.getByLabel('Distance', { exact: true }).selectOption('25'); await count(3);
   await page.getByLabel('Country', { exact: true }).selectOption('NL'); await count(4);
   assert.equal(await page.getByLabel('City', { exact: true }).inputValue(), '', 'Country selection resets the city and distance');
   assert.equal(await page.getByLabel('Distance', { exact: true }).inputValue(), '0');
+  await page.getByLabel('Country', { exact: true }).selectOption('');
+  await page.getByLabel('City', { exact: true }).selectOption('Reggio Calabria'); await count(3);
+  await page.waitForFunction(() => !document.querySelector('[aria-label="Distance"]').disabled);
+  await page.getByLabel('Distance', { exact: true }).selectOption('25'); await count(4);
+  assert.equal(await page.locator('.distance-unverified').count(), 3);
+  assert.equal(await page.locator('[data-day="2030-11-03"] .day-count').innerText(), '4\nevents');
+  await page.getByLabel('Only events with venue coordinates').check(); await count(1);
+  assert.equal(await page.locator('[data-day="2030-11-03"] .day-count').innerText(), '1\nevents');
+  await page.getByLabel('Only events with venue coordinates').uncheck(); await count(4);
+  await page.getByRole('button', { name: 'Map and list view', exact: true }).click();
+  await page.locator('.leaflet-container').waitFor();
+  assert.ok((await page.locator('.map-footer').innerText()).includes('3 without coordinates'));
   // Repair old cached labels without a successful API refresh.
   await page.evaluate(async () => {
     const database = await new Promise((resolve, reject) => { const request = indexedDB.open('commons-local'); request.onsuccess = () => resolve(request.result); request.onerror = () => reject(request.error); });
@@ -43,6 +60,8 @@ try {
       const tx = database.transaction('events', 'readwrite'); const table = tx.objectStore('events');
       const request = table.get('gancio:offbeat.amsterdam:1');
       request.onsuccess = () => { const event = request.result; event.city = 'London'; delete event.cityId; delete event.countryCode; delete event.cityBasis; delete event.countryBasis; delete event.geographyVersion; table.put(event); };
+      const reggio = table.get('gancio:offbeat.amsterdam:7');
+      reggio.onsuccess = () => { const event = reggio.result; event.latitude = 0; event.longitude = 0; event.city = 'Street'; event.cityBasis = 'address'; event.countryCode = 'GB'; event.countryBasis = 'city'; event.geographyVersion = 1; delete event.cityLocation; table.put(event); };
       tx.oncomplete = resolve; tx.onerror = () => reject(tx.error);
     }); database.close();
   });
@@ -52,6 +71,18 @@ try {
   await page.getByLabel('Search city', { exact: true }).fill('Amsterdam');
   await page.locator('.city-suggestions button').filter({ hasText: 'Netherlands' }).first().click(); await count(2);
   assert.ok(await page.getByRole('heading', { name: 'Amsterdam venue', exact: true }).isVisible());
+  await page.getByLabel('Country', { exact: true }).selectOption('');
+  await page.getByLabel('City', { exact: true }).selectOption('Reggio Calabria'); await count(3);
+  await page.waitForFunction(() => !document.querySelector('[aria-label="Distance"]').disabled);
+  await page.getByLabel('Distance', { exact: true }).selectOption('25'); await count(4);
+  const repaired = await page.evaluate(async () => {
+    const database = await new Promise(resolve => { const request = indexedDB.open('commons-local'); request.onsuccess = () => resolve(request.result); });
+    const result = await new Promise(resolve => { const request = database.transaction('events').objectStore('events').get('gancio:offbeat.amsterdam:7'); request.onsuccess = () => resolve(request.result); });
+    database.close(); return result;
+  });
+  assert.equal(repaired.geographyVersion, 2); assert.equal(repaired.city, 'Reggio Calabria'); assert.equal(repaired.countryCode, 'IT');
+  assert.equal(repaired.latitude, undefined); assert.equal(repaired.longitude, undefined);
+  assert.ok(repaired.cityLocation.latitude > 38);
   assert.ok(!requests.some(url => /nominatim|open-meteo|geonames\.org/.test(url)), 'City searches never leave the device');
   await page.getByLabel('Distance', { exact: true }).selectOption('25');
   await mkdir('test-results', { recursive: true });
@@ -60,6 +91,6 @@ try {
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   await page.screenshot({ path: 'test-results/location-mobile.png' });
   assert.deepEqual(errors, []);
-  console.log('PASS: Amsterdam discovery, country alone, city search/dropdown, 10/25/50 km radii, missing coordinates, daily counts, cached migration, local search and mobile layout.');
+  console.log('PASS: Amsterdam and Reggio discovery, radius city estimates, exact-only option, daily counts, map coordinate exclusions, persistent offline cache repair, local search and mobile layout.');
 } catch (error) { console.log('Errors:', errors); console.log(await page.locator('.location-explanation').allTextContents()); throw error; }
 finally { await browser.close(); }

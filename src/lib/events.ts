@@ -45,7 +45,7 @@ function timestamp(value: unknown): string | undefined {
   return Number.isFinite(date.getTime()) ? date.toISOString() : undefined;
 }
 export function coordinate(value: unknown, max: number): number | undefined {
-  if (value === null || value === undefined || value === '') return;
+  if (typeof value !== 'number' && (typeof value !== 'string' || !value.trim())) return;
   const n = Number(value); return Number.isFinite(n) && Math.abs(n) <= max ? n : undefined;
 }
 export function normalizeGancio(raw: Record<string, any>, source: Source): EventRecord | null {
@@ -60,11 +60,15 @@ export function normalizeGancio(raw: Record<string, any>, source: Source): Event
   const image = raw.media?.[0]?.url || raw.image;
   const now = new Date().toISOString();
   const statusText = String(raw.status || '').toLowerCase();
+  let latitude = coordinate(place.latitude ?? place.lat, 90);
+  let longitude = coordinate(place.longitude ?? place.lon ?? place.lng, 180);
+  // Some Gancio venues encode an unknown position as the pair (0, 0).
+  if (latitude === undefined || longitude === undefined || (latitude === 0 && longitude === 0)) latitude = longitude = undefined;
   return {
     id: `${source.id}:${raw.id}`, title, description, venue: textOnly(place.name), address: textOnly(place.address),
     city: textOnly(place.city), cityBasis: place.city ? 'provided' : undefined,
     countryCode: countryCode(place.country_code ?? place.countryCode ?? place.country) || undefined,
-    latitude: coordinate(place.latitude ?? place.lat, 90), longitude: coordinate(place.longitude ?? place.lon ?? place.lng, 180),
+    latitude, longitude,
     categories: classify([...tags, title].join(' ')), tags, occurrences: [{ start, end: timestamp(raw.end_datetime ?? raw.endDate) }],
     timezone: source.timezone, sourceId: source.id, sourceName: source.name, sourceUrl, canonicalUrl: original || sourceUrl,
     imageUrl: image ? safeUrl(image, `${source.url}/media/`) : undefined,

@@ -2,7 +2,7 @@
   import { onDestroy } from 'svelte';
   import { geography } from '../lib/geography-client';
   import { countryOptions, countryName, type CityLocation } from '../lib/location';
-  let { city = $bindable(''), country = $bindable(''), radius = $bindable(0), center = $bindable<CityLocation | null>(null) }: { city?: string; country?: string; radius?: number; center?: CityLocation | null } = $props();
+  let { city = $bindable(''), country = $bindable(''), radius = $bindable(0), center = $bindable<CityLocation | null>(null), exactOnly = $bindable(false) }: { city?: string; country?: string; radius?: number; center?: CityLocation | null; exactOnly?: boolean } = $props();
   let search = $state(''); let suggestions = $state<CityLocation[]>([]); let busy = $state(false); let error = $state('');
   let sequence = 0; let disposed = false;
   onDestroy(() => { disposed = true; sequence++; });
@@ -30,6 +30,7 @@
   <label class="field">Country<select aria-label="Country" value={country} onchange={event => changeCountry(event.currentTarget.value)}><option value="">All countries</option>{#each countryOptions as item}<option value={item.code}>{item.name}</option>{/each}<option value="unknown">Country not supplied</option></select></label>
   <label class="field">Distance<select aria-label="Distance" bind:value={radius} disabled={!center}><option value={0}>City only</option>{#each [5, 10, 25, 50, 100, 250, 500] as km}<option value={km}>Within {km} km</option>{/each}</select></label>
 </div>
-{#if center && radius > 0}<p class="location-explanation">Within {radius} km of {center.name}, {countryName(center.countryCode)} (city centre). Distance uses venue coordinates; events without coordinates are excluded. <button class="inline-link" onclick={() => radius = 0}>City only</button></p>
+{#if center && radius > 0}<p class="location-explanation">Within {radius} km of {center.name}, {countryName(center.countryCode)} (city centre). Events without venue coordinates use their city centre and are marked “Distance unverified”; they may lie outside the radius. <button class="inline-link" onclick={() => radius = 0}>City only</button></p>
+<label class="location-explanation"><input type="checkbox" bind:checked={exactOnly} /> Only events with venue coordinates</label>
 {:else if city && !center}<p class="location-explanation">Choose a city from search to enable distance filtering.</p>{/if}
 <p class="location-attribution">City search runs on this device. <a href="https://www.geonames.org/" target="_blank" rel="noopener noreferrer">GeoNames</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a></p>

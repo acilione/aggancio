@@ -45,7 +45,7 @@ New drafts are **only on the current browser/device**. Saving does not publish t
 
 Gancio installations differ. Read access requires the source to allow the browser's origin through CORS. Fetching uses public endpoints without credentials. The browser only knows events supplied by enabled sources; it does not offer a complete worldwide catalogue. The default query retrieves upcoming events, including multi-day/recurrent entries when provided. A maximum of ten 100-row pages per source bounds requests and memory; the UI marks partial results. Private preferences and text searches are not sent to an application backend.
 
-Some listing APIs omit descriptions and coordinates. The original event link is provided for full details. Missing coordinates stay off the map and are excluded from distance filtering; they remain eligible for city/country filtering. Radius is straight-line distance from the selected city centre to actual venue coordinates, not road distance. City centres are never inserted as venue coordinates. Set source timezones explicitly; day filtering uses each event's timezone. Categories are simple, inspectable keyword mappings in `src/lib/events.ts` and can be wrong.
+Some listing APIs omit descriptions and coordinates. The original event link is provided for full details. Radius uses straight-line distance from the selected city centre to venue coordinates when available. Otherwise, events with a known city use its centre and display **Distance unverified**: the venue may lie outside the radius. Select **Only events with venue coordinates** for strict radius filtering. Events with no resolvable city or venue coordinates cannot be included in radius results. City estimates stay off the map and are stored separately from venue coordinates. Gancio's `(0,0)` placeholders and incomplete coordinate pairs are treated as missing; valid single zero coordinates are preserved. Existing cached locations are repaired on upgrade, including when sources are offline. Set source timezones explicitly; day filtering uses each event's timezone. Categories are simple, inspectable keyword mappings in `src/lib/events.ts` and can be wrong.
 
 ## City and country data
 
@@ -128,7 +128,7 @@ The smoke script checks real source reads, three-date extraction, draft persiste
 
 The performance script uses controlled API fixtures with 3,003 unique events to verify actual worker threads and bounded download concurrency, absence of map assets/tiles before opening the map, daily counts under combined filters, deduplication, clustered viewport rendering, individual selection, co-located events, map teardown, and mobile layout. It reports fixture loading times and main-thread long tasks; these are not a guarantee of live-network timing.
 
-The location script covers Amsterdam addresses without city fields, country-only filtering, city search/dropdown selection, distance boundaries, exclusion of missing coordinates from radius searches, daily counts, offline cache migration and mobile layout. It also verifies that searches make no external geocoding requests.
+The location script covers Amsterdam and Reggio Calabria addresses without city fields, country-only filtering, city search/dropdown selection, distance boundaries, city estimates and strict radius filtering, daily counts, map coordinate exclusions, persistent offline cache migration and mobile layout. It also verifies that searches make no external geocoding requests.
 
 ## Structure
 

@@ -23,9 +23,16 @@ export function distanceKm(a: { latitude: number; longitude: number }, b: { lati
   const h = Math.sin(dlat / 2) ** 2 + Math.cos(a.latitude * rad) * Math.cos(b.latitude * rad) * Math.sin(dlon / 2) ** 2;
   return 6371.0088 * 2 * Math.asin(Math.min(1, Math.sqrt(h)));
 }
-export function matchesLocation(event: { city: string; cityId?: number; countryCode?: string; latitude?: number; longitude?: number }, city: string, country: string, center: CityLocation | null, radius: number): boolean {
+export function matchesLocation(event: { city: string; cityId?: number; cityLocation?: { latitude: number; longitude: number }; countryCode?: string; latitude?: number; longitude?: number }, city: string, country: string, center: CityLocation | null, radius: number, exactOnly = false): boolean {
   if (country === 'unknown' ? !!event.countryCode : country && event.countryCode !== country) return false;
-  if (radius > 0) return !!center && hasCoordinates(event) && distanceKm(center, event) <= radius;
+  if (radius > 0) {
+    if (!center) return false;
+    if (hasCoordinates(event)) return distanceKm(center, event) <= radius;
+    if (exactOnly) return false;
+    // City centres are estimates for filtering, never venue coordinates or map pins.
+    if (event.cityLocation && hasCoordinates(event.cityLocation)) return distanceKm(center, event.cityLocation) <= radius;
+    return event.cityId ? event.cityId === center.id : normalizedName(event.city) === normalizedName(center.name) && event.countryCode === center.countryCode;
+  }
   if (city && center && event.cityId) return event.cityId === center.id;
   const [name, code] = city.split('|');
   return !name || (normalizedName(event.city) === normalizedName(name) && (!code || event.countryCode === code));

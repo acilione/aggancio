@@ -1,0 +1,65 @@
+import { chromium } from '@playwright/test';
+import assert from 'node:assert/strict';
+import { mkdir } from 'node:fs/promises';
+const browser = await chromium.launch({ headless: true, ...(process.platform === 'win32' ? { executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' } : process.env.COMMONS_BROWSER ? { executablePath: process.env.COMMONS_BROWSER } : {}) });
+const context = await browser.newContext({ viewport: { width: 1440, height: 1100 } });
+const page = await context.newPage(); const errors = []; const requests = []; let offline = false;
+page.on('pageerror', error => errors.push(error.message)); context.on('request', request => requests.push(request.url()));
+const start = Date.parse('2030-11-03T17:00Z') / 1000;
+const row = (id, title, address, latitude, longitude) => ({ id, title, start_datetime: start, tags: ['music'], place: { address, latitude, longitude } });
+const data = [row(1, 'Amsterdam venue', 'Warmoesstraat 139, 1012 JB Amsterdam', 52.3737514, 4.8959885), row(2, 'Amsterdam without coordinates', 'Amsterdam, Netherlands', null, null), row(3, 'Haarlem venue', 'Haarlem, Netherlands', 52.3874, 4.6462), row(4, 'Utrecht venue', 'Utrecht, Netherlands', 52.0907, 5.1214), row(5, 'Berlin venue', 'Berlin, Germany', 52.52, 13.405)];
+await context.route('**/api/events?*', route => offline ? route.abort('failed') : route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(new URL(route.request().url()).host === 'offbeat.amsterdam' ? data : []), headers: { 'Access-Control-Allow-Origin': '*' } }));
+const count = value => page.waitForFunction(value => Number(document.querySelector('.result-count')?.textContent) === value, value);
+try {
+  await page.goto(process.env.COMMONS_URL || 'http://localhost:5173');
+  await page.getByRole('heading', { name: 'Amsterdam venue', exact: true }).waitFor({ timeout: 60000 });
+  await page.waitForFunction(() => !document.querySelector('.coverage-line')?.textContent.includes('Updating'));
+  assert.ok(page.workers().some(worker => worker.url().includes('geography.worker')), 'Geography runs in its own worker');
+  assert.ok(await page.getByLabel('City', { exact: true }).locator('option').filter({ hasText: 'Amsterdam' }).count() > 0);
+  await page.getByLabel('Country', { exact: true }).selectOption('NL'); await count(4);
+  await page.getByLabel('Select a specific day').fill('2030-11-03');
+  assert.equal(await page.locator('[data-day="2030-11-03"] .day-count').innerText(), '4\nevents');
+  await page.getByLabel('Country', { exact: true }).selectOption('DE'); await count(1);
+  await page.getByLabel('Country', { exact: true }).selectOption('');
+  await page.getByLabel('Search city', { exact: true }).fill('amster');
+  await page.locator('.city-suggestions button').filter({ hasText: 'Netherlands' }).first().click();
+  await count(2);
+  await page.getByLabel('Distance', { exact: true }).selectOption('25'); await count(2);
+  assert.ok(await page.getByRole('heading', { name: 'Haarlem venue', exact: true }).isVisible());
+  assert.equal(await page.getByRole('heading', { name: 'Amsterdam without coordinates', exact: true }).count(), 0);
+  await page.getByLabel('Distance', { exact: true }).selectOption('50'); await count(3);
+  await page.getByLabel('Distance', { exact: true }).selectOption('10'); await count(1);
+  await page.getByLabel('Distance', { exact: true }).selectOption('0'); await count(2);
+  await page.getByLabel('City', { exact: true }).selectOption('Haarlem'); await count(1);
+  await page.waitForFunction(() => !document.querySelector('[aria-label="Distance"]').disabled);
+  await page.getByLabel('Distance', { exact: true }).selectOption('25'); await count(2);
+  await page.getByLabel('Country', { exact: true }).selectOption('NL'); await count(4);
+  assert.equal(await page.getByLabel('City', { exact: true }).inputValue(), '', 'Country selection resets the city and distance');
+  assert.equal(await page.getByLabel('Distance', { exact: true }).inputValue(), '0');
+  // Repair old cached labels without a successful API refresh.
+  await page.evaluate(async () => {
+    const database = await new Promise((resolve, reject) => { const request = indexedDB.open('commons-local'); request.onsuccess = () => resolve(request.result); request.onerror = () => reject(request.error); });
+    await new Promise((resolve, reject) => {
+      const tx = database.transaction('events', 'readwrite'); const table = tx.objectStore('events');
+      const request = table.get('gancio:offbeat.amsterdam:1');
+      request.onsuccess = () => { const event = request.result; event.city = 'London'; delete event.cityId; delete event.countryCode; delete event.cityBasis; delete event.countryBasis; delete event.geographyVersion; table.put(event); };
+      tx.oncomplete = resolve; tx.onerror = () => reject(tx.error);
+    }); database.close();
+  });
+  offline = true; await page.reload();
+  await page.waitForFunction(() => document.querySelector('[aria-label="City"] option') && [...document.querySelectorAll('[aria-label="City"] option')].some(option => option.textContent.includes('Amsterdam')));
+  await page.getByLabel('Country', { exact: true }).selectOption('NL'); await count(4);
+  await page.getByLabel('Search city', { exact: true }).fill('Amsterdam');
+  await page.locator('.city-suggestions button').filter({ hasText: 'Netherlands' }).first().click(); await count(2);
+  assert.ok(await page.getByRole('heading', { name: 'Amsterdam venue', exact: true }).isVisible());
+  assert.ok(!requests.some(url => /nominatim|open-meteo|geonames\.org/.test(url)), 'City searches never leave the device');
+  await page.getByLabel('Distance', { exact: true }).selectOption('25');
+  await mkdir('test-results', { recursive: true });
+  await page.screenshot({ path: 'test-results/location-desktop.png' });
+  await page.setViewportSize({ width: 390, height: 1000 });
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+  await page.screenshot({ path: 'test-results/location-mobile.png' });
+  assert.deepEqual(errors, []);
+  console.log('PASS: Amsterdam discovery, country alone, city search/dropdown, 10/25/50 km radii, missing coordinates, daily counts, cached migration, local search and mobile layout.');
+} catch (error) { console.log('Errors:', errors); console.log(await page.locator('.location-explanation').allTextContents()); throw error; }
+finally { await browser.close(); }

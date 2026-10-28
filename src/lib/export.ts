@@ -1,6 +1,7 @@
 import type { EventRecord } from './types';
 import { categories } from './types';
 import { coordinate, safeUrl } from './events';
+import { countryCode } from './location';
 
 const escapeICS = (s: string) => s.replace(/\\/g, '\\\\').replace(/\r?\n/g, '\\n').replace(/;/g, '\\;').replace(/,/g, '\\,');
 const utc = (s: string) => new Date(s).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
@@ -61,6 +62,7 @@ export function parseImport(json: unknown, source?: { id: string; name: string; 
     return {
       id: source ? `${source.id}:${str('id') || index}` : `draft:${crypto.randomUUID()}`, title: str('title'), description: str('description'), venue: str('venue'), address: str('address'), city: str('city'),
       latitude: coordinate(raw.latitude, 90), longitude: coordinate(raw.longitude, 180),
+      countryCode: countryCode(raw.countryCode) || undefined, cityBasis: str('city') ? 'provided' : undefined,
       categories: Array.isArray(raw.categories) && raw.categories.some((c: any) => categories.includes(c) && c !== 'All') ? raw.categories.filter((c: any) => categories.includes(c) && c !== 'All') : ['Other'],
       tags: Array.isArray(raw.tags) ? raw.tags.filter((t: any) => typeof t === 'string').slice(0, 100) : [], occurrences, timezone,
       sourceId: source?.id || 'local', sourceName: source?.name || 'Local draft', sourceUrl: safeUrl(raw.sourceUrl) || source?.url || '',

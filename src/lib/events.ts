@@ -1,5 +1,6 @@
 import type { Category, EventRecord, Source } from './types';
 import { Parser } from 'htmlparser2';
+import { countryCode } from './location';
 
 export { defaultSources } from './sources';
 export const cities: Record<string, [number, number]> = {
@@ -47,11 +48,6 @@ export function coordinate(value: unknown, max: number): number | undefined {
   if (value === null || value === undefined || value === '') return;
   const n = Number(value); return Number.isFinite(n) && Math.abs(n) <= max ? n : undefined;
 }
-function detectCity(address: string, fallback: string): string {
-  for (const city of Object.keys(cities)) if (address.toLocaleLowerCase().includes(city.toLocaleLowerCase())) return city;
-  if (/\b(london|islington|camden|hackney|southwark|lambeth|westminster)\b|\b[ENWS]{1,2}\d{1,2}\s?\d?[A-Z]{0,2}\b/i.test(address)) return 'London';
-  return fallback;
-}
 export function normalizeGancio(raw: Record<string, any>, source: Source): EventRecord | null {
   const start = timestamp(raw.start_datetime ?? raw.startDate);
   if (!start || !raw.title || raw.id === undefined) return null;
@@ -66,7 +62,8 @@ export function normalizeGancio(raw: Record<string, any>, source: Source): Event
   const statusText = String(raw.status || '').toLowerCase();
   return {
     id: `${source.id}:${raw.id}`, title, description, venue: textOnly(place.name), address: textOnly(place.address),
-    city: textOnly(place.city) || detectCity(String(place.address || ''), source.city),
+    city: textOnly(place.city), cityBasis: place.city ? 'provided' : undefined,
+    countryCode: countryCode(place.country_code ?? place.countryCode ?? place.country) || undefined,
     latitude: coordinate(place.latitude ?? place.lat, 90), longitude: coordinate(place.longitude ?? place.lon ?? place.lng, 180),
     categories: classify([...tags, title].join(' ')), tags, occurrences: [{ start, end: timestamp(raw.end_datetime ?? raw.endDate) }],
     timezone: source.timezone, sourceId: source.id, sourceName: source.name, sourceUrl, canonicalUrl: original || sourceUrl,

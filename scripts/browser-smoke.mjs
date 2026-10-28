@@ -12,6 +12,7 @@ page.on('pageerror', error => errors.push(error.message));
 try {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await page.getByRole('heading', { name: 'Explore events' }).waitFor();
+  await page.locator('.event-card').first().waitFor({ timeout: 90000 });
   const progress = setInterval(() => page.locator('.coverage-line').innerText({ timeout: 5000 }).then(text => console.log(text)).catch(() => {}), 30000);
   try { await page.waitForFunction(() => !document.querySelector('.coverage-line')?.textContent.includes('Updating'), null, { timeout: 180000 }); }
   finally { clearInterval(progress); }
@@ -19,6 +20,14 @@ try {
   console.log('Source summary:', await page.locator('.coverage-line').innerText());
   await page.screenshot({ path: 'test-results/desktop.png', fullPage: false });
   assert.ok(await page.locator('.event-card').count() > 0, 'Real public sources should return events');
+  await page.getByLabel('Country', { exact: true }).selectOption('NL');
+  await page.getByLabel('City', { exact: true }).selectOption('Amsterdam');
+  assert.ok(await page.locator('.event-card').count() > 0, 'Amsterdam should have real loaded events');
+  await page.waitForFunction(() => !document.querySelector('[aria-label="Distance"]').disabled);
+  await page.getByLabel('Distance', { exact: true }).selectOption('25');
+  assert.ok(await page.locator('.event-card').count() > 0, 'Real Amsterdam venues should match the radius');
+  console.log('Live Amsterdam within 25 km:', await page.locator('.result-count').innerText());
+  await page.getByRole('button', { name: /^Explore/ }).first().click();
   await page.getByRole('button', { name: /^Your sources/ }).click();
   console.log('Catalogue entries:', await page.locator('.source-card').count());
   await page.getByLabel('Search sources', { exact: true }).fill('Torino');

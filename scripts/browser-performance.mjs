@@ -53,7 +53,7 @@ try {
   await page.getByLabel('Search events', { exact: true }).fill('two');
   await daily('2030-11-03', 1); await daily('2030-11-05', 0);
   await page.getByLabel('Search events', { exact: true }).fill('');
-  await page.getByLabel('City', { exact: true }).selectOption('Roma');
+  await page.getByLabel('City', { exact: true }).selectOption({ label: 'Roma · Italy' });
   await daily('2030-11-03', 0);
   await page.getByLabel('City', { exact: true }).selectOption('');
   await page.getByRole('button', { name: 'Save Chess one', exact: true }).click();

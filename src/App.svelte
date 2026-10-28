@@ -4,6 +4,9 @@
   import { categories, type Category, type EventRecord, type Source, type SourceState } from './lib/types';
   import { addDays, countEventDays, dayKey, deduplicate, defaultSources, formatEventDate, formatEventTime, overlapsDays, primaryOccurrence, safeUrl } from './lib/events';
   import { SourceWorkers } from './lib/source-workers';
+  import { geography } from './lib/geography-client';
+  import { countryName, matchesLocation, type CityLocation } from './lib/location';
+  import LocationFilters from './components/LocationFilters.svelte';
   import { db, saveSourceEvents, saveSources } from './lib/storage';
   import { catalogueCheckedAt, mergeCatalogue, runSourceQueue } from './lib/sources';
   import { calendarExport, download, jsonExport, parseImport } from './lib/export';
@@ -20,6 +23,27 @@
   let view = $state<'explore' | 'drafts'>('explore');
   let query = $state('');
   let city = $state('');
+  let country = $state('');
+  let radius = $state(0);
+  let cityCenter = $state<CityLocation | null>(null);
+  let sourceCities = $state<CityLocation[]>([]);
+  let locationError = $state('');
+  let cityResolve = 0;
+  async function selectCity(value: string) {
+    city = value; cityCenter = null; radius = 0;
+    const current = ++cityResolve;
+    if (!value) return;
+    const [name, code] = value.split('|');
+    const nation = code || cityChoices.find(item => item.value === value)?.countryCode || country;
+    try {
+      const result = await geography.resolve(name, nation);
+      if (current === cityResolve && city === value) {
+        cityCenter = result;
+        if (result) city = `${result.name}|${result.countryCode}`;
+      }
+    }
+    catch { locationError = 'City coordinates could not load. You can still filter by city name.'; }
+  }
   let category = $state<Category>('All');
   let dateMode = $state('upcoming');
   let selectedDay = $state(dayKey(new Date()));
@@ -65,7 +89,7 @@
   const iconFor: Record<string, typeof Music2> = { Music: Music2, 'Arts & culture': Palette, 'Games & chess': Gamepad2, 'Sport & outdoors': Footprints, Learning: BookOpen, Community: Users, Other: Sprout };
 
   function toast(message: string) { notice = message; clearTimeout(toastTimeout); toastTimeout = setTimeout(() => notice = '', 6000); }
-  onDestroy(() => { disposed = true; controllers.forEach(controller => controller.abort()); workers.dispose(); clearTimeout(flushTimer); clearTimeout(toastTimeout); });
+  onDestroy(() => { disposed = true; controllers.forEach(controller => controller.abort()); workers.dispose(); geography.dispose(); clearTimeout(flushTimer); clearTimeout(toastTimeout); });
   onMount(async () => {
     try {
       const [sourceSetting, cached, local, saved, catalogueSeen] = await Promise.all([db.settings.get('sources'), db.events.toArray(), db.drafts.toArray(), db.settings.get('saved'), db.settings.get('catalogue-seen')]);
@@ -76,6 +100,10 @@
         await db.settings.put({ key: 'catalogue-seen', value: merged.seen });
       });
       events = cached; drafts = local; savedIds = Array.isArray(saved?.value) ? saved.value as string[] : [];
+      try {
+        const [enriched, enrichedDrafts, locations] = await Promise.all([geography.enrich(cached, undefined, merged.sources), geography.enrich(local), geography.sources(merged.sources.filter(source => source.enabled))]);
+        events = enriched; drafts = enrichedDrafts; sourceCities = locations;
+      } catch { locationError = 'Some city and country labels could not be resolved. Refresh to retry.'; }
       for (const source of sources) {
         const cachedEvents = cached.filter(event => event.sourceId === source.id);
         states[source.id] = { status: 'idle', count: cachedEvents.length, message: source.kind === 'snapshot' ? 'Imported snapshot; refresh by importing a new file.' : 'Saved catalogue. Refreshing…', fetchedAt: cachedEvents[0]?.cachedAt };
@@ -131,7 +159,13 @@
     for (const id of incoming.keys()) if (!enabledIds.has(id)) incoming.delete(id);
   });
   const allEvents = $derived([...events.filter(event => enabledIds.has(event.sourceId)), ...drafts]);
-  const cityChoices = $derived([...new Set([...allEvents.map(event => event.city).filter(Boolean), 'Reggio Calabria'])].sort());
+  const cityChoices = $derived.by(() => {
+    const values = [...allEvents.map(event => ({ name: event.city, countryCode: event.countryCode || '' })), ...sourceCities, { name: 'Reggio Calabria', countryCode: 'IT' }, ...(cityCenter ? [cityCenter] : [])].filter(value => value.name && (!country || (country === 'unknown' ? !value.countryCode : value.countryCode === country)));
+    const unique = [...new globalThis.Map(values.map(value => [`${value.name}|${value.countryCode}`, value])).values()];
+    const names = new globalThis.Map<string, number>();
+    unique.forEach(value => names.set(value.name, (names.get(value.name) || 0) + 1));
+    return unique.map(value => ({ countryCode: value.countryCode, value: value.countryCode && (city === `${value.name}|${value.countryCode}` || names.get(value.name)! > 1) ? `${value.name}|${value.countryCode}` : value.name, label: `${value.name}${value.countryCode ? ` · ${countryName(value.countryCode)}` : ''}` })).sort((a,b) => a.label.localeCompare(b.label));
+  });
   const failedSources = $derived(sources.filter(source => source.enabled && states[source.id]?.status === 'error'));
   const partialSources = $derived(sources.filter(source => source.enabled && states[source.id]?.message.startsWith('Partial')));
   const readySources = $derived(sources.filter(source => source.enabled && states[source.id]?.status === 'ready').length);
@@ -148,7 +182,7 @@
   });
   const matchingEvents = $derived(deduplicate(allEvents.filter(event =>
     (view !== 'drafts' || event.local) && (!onlySaved || savedIds.includes(event.id)) &&
-    (!city || event.city.toLowerCase() === city.toLowerCase()) &&
+    matchesLocation(event, city, country, cityCenter, radius) &&
     (category === 'All' || event.categories.includes(category)) &&
     (!query.trim() || [event.title, event.description, event.venue, event.city, ...event.tags].join(' ').toLowerCase().includes(query.trim().toLowerCase()))
   )));
@@ -156,7 +190,7 @@
   const displayEvents = $derived(filtered.map(group => group.event));
   const weekDays = $derived(Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)));
   const dailyCounts = $derived(countEventDays(matchingEvents.map(group => group.event), weekDays));
-  function clearFilters() { query = ''; city = ''; category = 'All'; dateMode = view === 'drafts' ? 'any' : 'upcoming'; selectedDay = today; weekStart = today; onlySaved = false; visibleLimit = 30; }
+  function clearFilters() { query = ''; city = ''; country = ''; radius = 0; cityCenter = null; cityResolve++; category = 'All'; dateMode = view === 'drafts' ? 'any' : 'upcoming'; selectedDay = today; weekStart = today; onlySaved = false; visibleLimit = 30; }
   function changeView(next: 'explore' | 'drafts') { view = next; clearFilters(); }
   function createDraft() { editing = undefined; showEditor = true; }
   function openEvent(event: EventRecord) { selected = event; }
@@ -166,6 +200,7 @@
     return () => { if (url) URL.revokeObjectURL(url); };
   });
   async function saveDraft(event: EventRecord) {
+    [event] = await geography.enrich([$state.snapshot(event)]);
     await db.drafts.put($state.snapshot(event));
     drafts = [...drafts.filter(draft => draft.id !== event.id), event];
     showEditor = false; selected = null; changeView('drafts'); toast('Draft saved on this device. It has not been published.');
@@ -188,7 +223,7 @@
       if (asSource && (!snapshotName.trim() || !safeUrl(snapshotUrl))) throw new Error('Enter a source name and original website URL first.');
       const existing = asSource ? sources.find(source => source.kind === 'snapshot' && source.url === safeUrl(snapshotUrl)) : undefined;
       const source = asSource ? { id: existing?.id || `snapshot:${crypto.randomUUID()}`, name: snapshotName.trim(), url: safeUrl(snapshotUrl) } : undefined;
-      const values = parseImport(JSON.parse(await file.text()), source);
+      const values = await geography.enrich(parseImport(JSON.parse(await file.text()), source));
       if (source) {
         const next = [...sources.filter(item => item.id !== source.id), { ...source, kind: 'snapshot' as const, city: '', timezone: 'Europe/Rome', enabled: true }];
         await saveSourceEvents(source.id, values); await saveSources(next);
@@ -249,8 +284,10 @@
     {#if storageError}<div class="page-notice warning" role="alert"><AlertCircle size={17} /> {storageError}</div>{/if}
 
     <section class="search-panel" aria-label="Filter events">
+      <LocationFilters bind:city bind:country bind:radius bind:center={cityCenter} />
+      {#if locationError}<p class="location-explanation" role="status">{locationError}</p>{/if}
       <div class="search-fields">
-        <label class="city-search"><MapPin size={19} /><span class="sr-only">City</span><select aria-label="City" bind:value={city}><option value="">All cities</option>{#each cityChoices as item}<option value={item}>{item}</option>{/each}</select></label>
+        <label class="city-search"><MapPin size={19} /><span class="sr-only">City</span><select aria-label="City" value={city} onchange={event => selectCity(event.currentTarget.value)}><option value="">All cities</option>{#each cityChoices as item}<option value={item.value}>{item.label}</option>{/each}</select></label>
         <label class="text-search"><Search size={19} /><span class="sr-only">Search events</span><input type="search" bind:value={query} placeholder="Search events, venues or topics…" /></label>
         <label class="date-search"><CalendarDays size={18} /><span class="sr-only">Date range</span><select aria-label="Date range" bind:value={dateMode}><option value="upcoming">Upcoming</option><option value="week">Next 7 days</option><option value="weekend">This weekend</option><option value="day">Choose a day</option><option value="any">Any date</option></select></label>
       </div>
@@ -288,7 +325,7 @@
             </button>
             <div class="event-card-body"><div class="event-date">{formatEventDate(event, dateWindow[0])}<span>·</span>{formatEventTime(event, dateWindow[0])}{#if event.occurrences.length > 1}<span class="occurrence-count">+{event.occurrences.length - 1} dates</span>{/if}</div>
               <button class="event-title" onclick={() => openEvent(event)}><h3>{event.title}</h3></button>
-              <p class="event-place"><MapPin size={13} /><span>{[event.venue, event.city].filter(Boolean).join(' · ') || event.address || 'Location not supplied'}</span></p>
+              <p class="event-place"><MapPin size={13} /><span>{[event.venue, event.city, countryName(event.countryCode)].filter(Boolean).join(' · ') || event.address || 'Location not supplied'}</span></p>
               <div class="event-meta"><span class="category-tag" data-category={event.categories[0]}>{event.categories[0] || 'Other'}</span>{#if event.local}<span class="draft-tag">Local draft</span>{:else}<a class="source-link" href={event.sourceUrl} target="_blank" rel="noopener noreferrer">{event.sourceName}<ArrowUpRight size={11} /></a>{/if}{#if event.status !== 'scheduled'}<span class="status-tag">{event.status}</span>{/if}</div>
               {#if group.sources.length > 1}<small class="muted">Also listed by {group.sources.slice(1).map(source => source.name).join(', ')}</small>{/if}
             </div><button class="save-event" class:is-saved={savedIds.includes(event.id)} aria-label={`${savedIds.includes(event.id) ? 'Unsave' : 'Save'} ${event.title}`} aria-pressed={savedIds.includes(event.id)} onclick={() => toggleSaved(event.id)}><Heart size={17} fill={savedIds.includes(event.id) ? 'currentColor' : 'none'} /></button>
@@ -310,7 +347,8 @@
   <Dialog title={selected.local ? 'Local draft' : 'Event details'} onDismiss={() => selected = null}>
     {#if detailPoster || selected.imageUrl}<img class="detail-poster" src={detailPoster || selected.imageUrl} alt={`Poster for ${selected.title}`} referrerpolicy="no-referrer" />{/if}
     <div class="detail-tags"><span class="category-tag">{selected.categories[0]}</span>{#if selected.local}<span class="draft-tag">Local draft · only on this device</span>{/if}{#if selected.status !== 'scheduled'}<span class="status-tag">{selected.status}</span>{/if}</div>
-    <h2 class="detail-title">{selected.title}</h2><p class="detail-location"><MapPin size={17} />{[selected.venue, selected.address, selected.city].filter(Boolean).join(' · ') || 'Location not supplied'}</p>
+    <h2 class="detail-title">{selected.title}</h2><p class="detail-location"><MapPin size={17} />{[selected.venue, selected.address, selected.city, countryName(selected.countryCode)].filter(Boolean).join(' · ') || 'Location not supplied'}</p>
+    {#if selected.cityBasis && selected.cityBasis !== 'provided'}<p class="small muted">City inferred from {selected.cityBasis === 'source' ? 'calendar coverage' : selected.cityBasis === 'coordinates' ? 'a nearby city; the label is approximate' : 'the event address'}.</p>{/if}
     <div class="detail-dates">{#each selected.occurrences as occurrence}<p><CalendarDays size={16} /><span>{new Intl.DateTimeFormat('en-GB', { dateStyle: 'full', timeStyle: 'short', timeZone: selected.timezone }).format(new Date(occurrence.start))}{#if occurrence.end}<br /><span class="muted">Until {new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short', timeZone: selected.timezone }).format(new Date(occurrence.end))}</span>{/if}</span></p>{/each}<small class="muted">Times shown in {selected.timezone}.</small></div>
     <p class="detail-description">{selected.description || (selected.local ? 'No description added yet.' : 'This calendar listing does not include a description. Visit the original event for the full details.')}</p>
     {#if selected.tags.length}<div class="tag-list">{#each selected.tags as tag}<span>#{tag}</span>{/each}</div>{/if}

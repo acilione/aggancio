@@ -7,6 +7,7 @@ export interface Source {
   url: string;
   kind: 'gancio' | 'snapshot';
   city: string;
+  countryCode?: string;
   timezone: string;
   enabled: boolean;
   region?: string;
@@ -25,6 +26,11 @@ export interface EventRecord {
   venue: string;
   address: string;
   city: string;
+  cityId?: number;
+  countryCode?: string;
+  cityBasis?: 'provided' | 'address' | 'coordinates' | 'source';
+  countryBasis?: 'provided' | 'address' | 'coordinates' | 'city' | 'source';
+  geographyVersion?: number;
   latitude?: number;
   longitude?: number;
   categories: Category[];

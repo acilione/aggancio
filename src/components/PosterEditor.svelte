@@ -6,6 +6,7 @@
   import { cities, coordinate } from '../lib/events';
   import { extractPoster, localDateTime, zonedDateTimeToISO } from '../lib/poster';
   import EventMap from './LazyMap.svelte';
+  import { countryOptions } from '../lib/location';
   let { draft, onSave, onCancel }: { draft?: EventRecord; onSave: (event: EventRecord) => Promise<void>; onCancel: () => void } = $props();
   // Each dialog mounts a fresh editor. Initialize once so typing isn't overwritten by prop changes.
   const initialDraft = untrack(() => draft);
@@ -13,6 +14,7 @@
   let description = $state(initialDraft?.description || '');
   let venue = $state(initialDraft?.venue || '');
   let city = $state(initialDraft?.city || '');
+  let country = $state(initialDraft?.countryCode || '');
   let address = $state(initialDraft?.address || '');
   let category = $state<Category>(initialDraft?.categories[0] || 'Other');
   let timezone = $state(initialDraft?.timezone || 'Europe/Rome');
@@ -85,6 +87,7 @@
       if ((latitude && lat === undefined) || (longitude && lon === undefined) || Boolean(latitude) !== Boolean(longitude)) throw new Error('Enter both valid coordinates, or leave both empty.');
       const now = new Date().toISOString();
       await onSave({ id: draft?.id || `draft:${crypto.randomUUID()}`, title: title.trim(), description, venue, address, city: city.trim(), latitude: lat, longitude: lon,
+        countryCode: country || undefined, cityBasis: 'provided',
         categories: [category], tags: [...(draft?.tags || [])], occurrences, timezone, sourceId: 'local', sourceName: 'Local draft', sourceUrl: '', local: true,
         status: draft?.status || 'scheduled', updatedAt: now, cachedAt: now, imageBlob });
     } catch (reason) { error = reason instanceof Error ? reason.message : 'The draft could not be saved. Try exporting or freeing browser storage.'; }
@@ -115,6 +118,7 @@
     {#if warnings.length}<div class="notice"><AlertCircle size={17} /><div>{#each warnings as warning}<p>{warning}</p>{/each}</div></div>{/if}
     <label class="field">Event title <span class="required">*</span><input required maxlength="250" bind:value={title} placeholder="Event title" /></label>
     <div class="two-fields"><label class="field">Category<select bind:value={category}>{#each categories.filter(c => c !== 'All') as value}<option>{value}</option>{/each}</select></label><label class="field">City or area <span class="required">*</span><input required bind:value={city} list="draft-cities" placeholder="e.g. Reggio Calabria" /><datalist id="draft-cities">{#each Object.keys(cities) as value}<option value={value}></option>{/each}</datalist></label></div>
+    <label class="field">Country<select bind:value={country}><option value="">Infer from city or coordinates</option>{#each countryOptions as item}<option value={item.code}>{item.name}</option>{/each}</select></label>
     <label class="field">Venue<input bind:value={venue} placeholder="Library, community space, park…" /></label>
     <label class="field">Public address<input bind:value={address} placeholder="Optional — share only the precision you want public" /></label>
     <button type="button" class="text-button" onclick={() => showMap = !showMap}><MapPin size={15} /> {showMap ? 'Hide location picker' : 'Choose a location on the map'}</button>

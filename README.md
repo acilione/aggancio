@@ -28,6 +28,7 @@ npm run preview
 
 - A catalogue of 249 Gancio sources, covering all entries from both official directories plus additional instances found through Fedilist, Rumbly and an operator newsletter. Redirect aliases are retained. Search, enable, disable or remove sources in **Your sources**.
 - List as the default view; filters for city, category, search text, individual days, next seven days, and weekend. Day buttons show unique-event counts for the current non-date filters, including saved events and enabled sources. Selecting one day keeps the other daily counts available for comparison. Recurring events count once per occupied day; multi-day events use their own timezone and an exclusive end time.
+- Separate city search across 64,636 cities, a city dropdown with country labels, country-only filtering, and 5/10/25/50/100/250/500 km radii around a selected city centre. Radius filters include nearby towns and cross borders unless a country filter is selected. Country selection clears the previous city/radius. Daily counts and the optional map use the same location filters.
 - Optional map loaded on demand, including its JavaScript and CSS. A dedicated worker builds a Supercluster spatial index; only clusters or individual markers in the visible viewport are rendered. Zooming in reveals more detail. Co-located events remain grouped and can be browsed in pages of 20. Updates preserve the current pan/zoom; **Fit all events** resets the view. Closing the map releases its worker and markers.
 - Source updates run in 2–4 Web Workers (depending on reported CPU capacity), with up to four source requests per worker: 8–16 concurrent sources. Fetching, JSON parsing and event normalization happen off the UI thread. Each source's pages remain sequential. Results are applied in short batches to avoid rerendering the catalogue for every response. Disabling a source cancels its current request; failures retain cached events. Browsers without Web Workers fall back to six concurrent sources on the main thread.
 - Progress counts, retries through Refresh, pagination with a visible 1,000-row/source limit, explicit errors, and stale-cache fallback. Slow or unavailable source servers can still delay completion; events appear as successful sources finish.
@@ -44,7 +45,17 @@ New drafts are **only on the current browser/device**. Saving does not publish t
 
 Gancio installations differ. Read access requires the source to allow the browser's origin through CORS. Fetching uses public endpoints without credentials. The browser only knows events supplied by enabled sources; it does not offer a complete worldwide catalogue. The default query retrieves upcoming events, including multi-day/recurrent entries when provided. A maximum of ten 100-row pages per source bounds requests and memory; the UI marks partial results. Private preferences and text searches are not sent to an application backend.
 
-Some listing APIs omit descriptions and coordinates. The original event link is provided for full details. Missing coordinates stay off the map. A source's optional fallback city is a coverage assumption, not a geocoded address. Set source timezones explicitly; day filtering uses each event's timezone. Categories are simple, inspectable keyword mappings in `src/lib/events.ts` and can be wrong.
+Some listing APIs omit descriptions and coordinates. The original event link is provided for full details. Missing coordinates stay off the map and are excluded from distance filtering; they remain eligible for city/country filtering. Radius is straight-line distance from the selected city centre to actual venue coordinates, not road distance. City centres are never inserted as venue coordinates. Set source timezones explicitly; day filtering uses each event's timezone. Categories are simple, inspectable keyword mappings in `src/lib/events.ts` and can be wrong.
+
+## City and country data
+
+City search, address matching and location enrichment run in a dedicated browser worker. No search terms or event addresses are sent to a geocoding service, and no GPS permission is requested. The static geography worker includes about 5.2 MB of uncompressed city/boundary data and code, fetched once from the same site; HTTP compression can reduce transfer size. The UI and map remain separate from this data processing.
+
+The bundled city index is derived from [GeoNames cities5000](https://download.geonames.org/export/dump/), downloaded on 28 October 2026, under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). It retains local/ASCII names, country, region code, population and centre coordinates, excludes historical/abandoned places and city subdivisions, and adds selected common exonyms. It is broad coverage, not every village worldwide. Run `python3 scripts/build-geography.py` to regenerate the attributed `src/data/geography.json` and `countries.json` files, then rebuild.
+
+Explicit event city/country fields take priority where available. Missing cities are matched against addresses, then estimated from a nearby city within 25 km of supplied coordinates, or finally from a city-scoped calendar's declared coverage. Country inference uses supplied country information, generalized [Natural Earth boundaries distributed by world-atlas](https://github.com/topojson/world-atlas), address/city information, or source coverage. Timezones are never used as countries. Boundaries are the public-domain 1:50m Natural Earth v4.1.0 dataset and are approximate near borders and coastlines. Nearby-city labels are not municipal boundary determinations. Event details identify inferred city labels.
+
+Existing cached events are re-enriched when opened, repairing the old limited city heuristic even if a source is offline. Source configuration and drafts are preserved. Country is optional on local drafts and survives JSON export/import. Unknown country remains selectable in the country filter.
 
 **Bungarang is not connected live.** Its event-list API rejected an unrelated origin with `Invalid CORS request` during inspection. Obtain a supported feed/export or origin permission before enabling direct access. The snapshot importer is a working alternative for an agreed data export; it does not scrape arbitrary websites or bypass CORS. An adapter must normalize another site's format into the schema below.
 
@@ -108,6 +119,7 @@ With a dev or preview server running:
 node scripts/browser-smoke.mjs
 node scripts/browser-features.mjs
 node scripts/browser-performance.mjs
+node scripts/browser-location.mjs
 ```
 
 On Windows these use the installed Chrome at its standard path. On Linux install a Playwright Chromium browser, or set `COMMONS_BROWSER` to an existing compatible browser executable. `COMMONS_URL` overrides localhost:5173.
@@ -115,6 +127,8 @@ On Windows these use the installed Chrome at its standard path. On Linux install
 The smoke script checks real source reads, three-date extraction, draft persistence/editing, exports, day filtering, and mobile layout. The feature script uses explicitly mocked event APIs to exercise source toggles and network failures, then tests the actual OCR worker using a generated test poster and verifies poster JSON roundtripping. Screenshots go to ignored `test-results/`. No test data is injected into the application itself.
 
 The performance script uses controlled API fixtures with 3,003 unique events to verify actual worker threads and bounded download concurrency, absence of map assets/tiles before opening the map, daily counts under combined filters, deduplication, clustered viewport rendering, individual selection, co-located events, map teardown, and mobile layout. It reports fixture loading times and main-thread long tasks; these are not a guarantee of live-network timing.
+
+The location script covers Amsterdam addresses without city fields, country-only filtering, city search/dropdown selection, distance boundaries, exclusion of missing coordinates from radius searches, daily counts, offline cache migration and mobile layout. It also verifies that searches make no external geocoding requests.
 
 ## Structure
 

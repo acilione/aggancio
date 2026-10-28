@@ -2,16 +2,17 @@
   import { onMount, onDestroy } from 'svelte';
   import { ArrowUpRight, ArrowRight, CalendarDays, ChevronLeft, ChevronRight, Compass, Download, ExternalLink, FilePlus2, Globe2, Heart, Layers3, List, LoaderCircle, Map, MapPin, Music2, Plus, RefreshCw, Search, Settings2, ShieldCheck, SlidersHorizontal, Sprout, Trash2, Upload, X, Pencil, Copy, Check, AlertCircle, Gamepad2, Palette, Footprints, BookOpen, Users } from '@lucide/svelte';
   import { categories, type Category, type EventRecord, type Source, type SourceState } from './lib/types';
-  import { addDays, dayKey, deduplicate, defaultSources, fetchGancio, formatEventDate, formatEventTime, overlapsDays, primaryOccurrence, safeUrl } from './lib/events';
+  import { addDays, countEventDays, dayKey, deduplicate, defaultSources, formatEventDate, formatEventTime, overlapsDays, primaryOccurrence, safeUrl } from './lib/events';
+  import { SourceWorkers } from './lib/source-workers';
   import { db, saveSourceEvents, saveSources } from './lib/storage';
   import { catalogueCheckedAt, mergeCatalogue, runSourceQueue } from './lib/sources';
   import { calendarExport, download, jsonExport, parseImport } from './lib/export';
   import Dialog from './components/Dialog.svelte';
-  import EventMap from './components/EventMap.svelte';
+  import EventMap from './components/LazyMap.svelte';
   import PosterEditor from './components/PosterEditor.svelte';
 
   let sources = $state<Source[]>([]);
-  let events = $state<EventRecord[]>([]);
+  let events = $state.raw<EventRecord[]>([]);
   let drafts = $state<EventRecord[]>([]);
   let states = $state<Record<string, SourceState>>({});
   let initialized = $state(false);
@@ -23,7 +24,7 @@
   let dateMode = $state('upcoming');
   let selectedDay = $state(dayKey(new Date()));
   let weekStart = $state(dayKey(new Date()));
-  let showMap = $state(true);
+  let showMap = $state(false);
   let selected = $state<EventRecord | null>(null);
   let showSources = $state(false);
   let showEditor = $state(false);
@@ -47,13 +48,24 @@
   let snapshotImport = $state<HTMLInputElement>();
   let savedIds = $state<string[]>([]);
   let onlySaved = $state(false);
-  const controllers = new Set<AbortController>();
+  const controllers = new globalThis.Map<string, AbortController>();
+  const workers = new SourceWorkers();
+  const incoming = new globalThis.Map<string, EventRecord[]>();
+  let flushTimer: ReturnType<typeof setTimeout>;
+  let disposed = false;
+  function flushEvents() {
+    clearTimeout(flushTimer);
+    if (!incoming.size || disposed) return;
+    const replacements = new globalThis.Map([...incoming].filter(([id]) => sources.some(source => source.id === id && source.enabled)));
+    incoming.clear();
+    if (replacements.size) events = [...events.filter(event => !replacements.has(event.sourceId)), ...[...replacements.values()].flat()];
+  }
   let toastTimeout: ReturnType<typeof setTimeout>;
   const today = dayKey(new Date());
   const iconFor: Record<string, typeof Music2> = { Music: Music2, 'Arts & culture': Palette, 'Games & chess': Gamepad2, 'Sport & outdoors': Footprints, Learning: BookOpen, Community: Users, Other: Sprout };
 
   function toast(message: string) { notice = message; clearTimeout(toastTimeout); toastTimeout = setTimeout(() => notice = '', 6000); }
-  onDestroy(() => { controllers.forEach(controller => controller.abort()); clearTimeout(toastTimeout); });
+  onDestroy(() => { disposed = true; controllers.forEach(controller => controller.abort()); workers.dispose(); clearTimeout(flushTimer); clearTimeout(toastTimeout); });
   onMount(async () => {
     try {
       const [sourceSetting, cached, local, saved, catalogueSeen] = await Promise.all([db.settings.get('sources'), db.events.toArray(), db.drafts.toArray(), db.settings.get('saved'), db.settings.get('catalogue-seen')]);
@@ -73,21 +85,23 @@
     await refresh();
   });
   async function refreshSource(source: Source) {
-    if (source.kind !== 'gancio' || !source.enabled) return;
-    const controller = new AbortController(); controllers.add(controller);
-    const timeout = setTimeout(() => controller.abort(), 30000);
+    if (disposed || source.kind !== 'gancio' || !source.enabled || controllers.has(source.id)) return;
+    const controller = new AbortController(); controllers.set(source.id, controller);
+    const timeout = setTimeout(() => controller.abort(), 35000);
     states[source.id] = { ...states[source.id], status: 'loading', count: states[source.id]?.count || 0, message: 'Fetching public events…' };
     try {
-      const result = await fetchGancio(source, controller.signal);
-      if (!sources.some(item => item.id === source.id && item.enabled)) return;
+      const result = await workers.fetch($state.snapshot(source), controller.signal);
+      if (disposed || controller.signal.aborted || !sources.some(item => item.id === source.id && item.enabled)) return;
       const fetchedAt = new Date().toISOString();
-      events = [...events.filter(event => event.sourceId !== source.id), ...result.events];
+      incoming.set(source.id, result.events);
+      if (incoming.size === 1) flushTimer = setTimeout(flushEvents, 120);
       states[source.id] = { status: 'ready', count: result.events.length, fetchedAt, message: result.limited ? 'Partial catalogue: source pagination limit reached.' : 'Live catalogue loaded.' };
       try { await saveSourceEvents(source.id, result.events); } catch { storageError = 'The latest events could not be cached. They remain available until this page closes.'; }
     } catch (reason) {
+      if (disposed || !sources.some(item => item.id === source.id && item.enabled)) return;
       const count = events.filter(event => event.sourceId === source.id).length;
       states[source.id] = { ...states[source.id], status: 'error', count, message: `${reason instanceof Error && reason.name === 'AbortError' ? 'Request timed out.' : reason instanceof TypeError ? 'Could not connect. The source may be offline or block browser access (CORS).' : reason instanceof Error ? reason.message : 'Source unavailable.'} ${count ? 'Showing the last saved catalogue; it may be outdated.' : 'No events loaded from this source.'}` };
-    } finally { clearTimeout(timeout); controllers.delete(controller); }
+    } finally { clearTimeout(timeout); controllers.delete(source.id); }
   }
   async function refresh() {
     if (refreshing) return;
@@ -96,10 +110,10 @@
     refreshTotal = pending.length; refreshCompleted = 0;
     try {
       await runSourceQueue(pending, async source => {
-        try { if (sources.some(item => item.id === source.id && item.enabled)) await refreshSource(source); }
+        try { if (!disposed && sources.some(item => item.id === source.id && item.enabled)) await refreshSource(source); }
         finally { refreshCompleted++; }
-      });
-    } finally { refreshing = false; }
+      }, workers.concurrency);
+    } finally { flushEvents(); refreshing = false; }
   }
   const matchingSources = $derived(sources.filter(source =>
     [source.name, source.url, source.city, source.region || ''].join(' ').toLowerCase().includes(sourceQuery.toLowerCase()) &&
@@ -112,6 +126,10 @@
     catch { sourceError = 'Could not update sources in browser storage.'; }
   }
   const enabledIds = $derived(new Set(sources.filter(source => source.enabled).map(source => source.id)));
+  $effect(() => {
+    for (const [id, controller] of controllers) if (!enabledIds.has(id)) controller.abort();
+    for (const id of incoming.keys()) if (!enabledIds.has(id)) incoming.delete(id);
+  });
   const allEvents = $derived([...events.filter(event => enabledIds.has(event.sourceId)), ...drafts]);
   const cityChoices = $derived([...new Set([...allEvents.map(event => event.city).filter(Boolean), 'Reggio Calabria'])].sort());
   const failedSources = $derived(sources.filter(source => source.enabled && states[source.id]?.status === 'error'));
@@ -128,15 +146,16 @@
     }
     return [today, '9999-12-31'];
   });
-  const filtered = $derived(deduplicate(allEvents.filter(event =>
+  const matchingEvents = $derived(deduplicate(allEvents.filter(event =>
     (view !== 'drafts' || event.local) && (!onlySaved || savedIds.includes(event.id)) &&
     (!city || event.city.toLowerCase() === city.toLowerCase()) &&
     (category === 'All' || event.categories.includes(category)) &&
-    (!query.trim() || [event.title, event.description, event.venue, event.city, ...event.tags].join(' ').toLowerCase().includes(query.trim().toLowerCase())) &&
-    overlapsDays(event, dateWindow[0], dateWindow[1])
-  )).map(group => ({ group, start: primaryOccurrence(group.event, dateWindow[0]).start })).sort((a, b) => a.start.localeCompare(b.start)).map(item => item.group));
+    (!query.trim() || [event.title, event.description, event.venue, event.city, ...event.tags].join(' ').toLowerCase().includes(query.trim().toLowerCase()))
+  )));
+  const filtered = $derived(matchingEvents.filter(group => overlapsDays(group.event, dateWindow[0], dateWindow[1])).map(group => ({ group, start: primaryOccurrence(group.event, dateWindow[0]).start })).sort((a, b) => a.start.localeCompare(b.start)).map(item => item.group));
   const displayEvents = $derived(filtered.map(group => group.event));
   const weekDays = $derived(Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)));
+  const dailyCounts = $derived(countEventDays(matchingEvents.map(group => group.event), weekDays));
   function clearFilters() { query = ''; city = ''; category = 'All'; dateMode = view === 'drafts' ? 'any' : 'upcoming'; selectedDay = today; weekStart = today; onlySaved = false; visibleLimit = 30; }
   function changeView(next: 'explore' | 'drafts') { view = next; clearFilters(); }
   function createDraft() { editing = undefined; showEditor = true; }
@@ -247,7 +266,8 @@
       </div>
     </section>
 
-    <div class="date-strip"><button class="icon-button" aria-label="Previous seven days" onclick={() => weekStart = addDays(weekStart, -7)}><ChevronLeft size={17} /></button><div class="day-options">{#each weekDays as day}<button class:chosen={dateMode === 'day' && selectedDay === day} onclick={() => { selectedDay = day; dateMode = 'day'; }}><small>{day === today ? 'TODAY' : new Intl.DateTimeFormat('en', { weekday: 'short' }).format(new Date(`${day}T12:00:00`)).toUpperCase()}</small><strong>{Number(day.slice(-2))}</strong><span>{new Intl.DateTimeFormat('en', { month: 'short' }).format(new Date(`${day}T12:00:00`))}</span></button>{/each}</div><button class="icon-button" aria-label="Next seven days" onclick={() => weekStart = addDays(weekStart, 7)}><ChevronRight size={17} /></button><label class="calendar-picker"><CalendarDays size={18} /><input aria-label="Select a specific day" type="date" value={selectedDay} onchange={event => { if (event.currentTarget.value) { selectedDay = event.currentTarget.value; weekStart = selectedDay; dateMode = 'day'; } }} /></label></div>
+    <div class="date-strip"><button class="icon-button" aria-label="Previous seven days" onclick={() => weekStart = addDays(weekStart, -7)}><ChevronLeft size={17} /></button><div class="day-options">{#each weekDays as day}<button data-day={day} aria-label={`${day}: ${dailyCounts[day]} ${dailyCounts[day] === 1 ? 'event' : 'events'}`} aria-pressed={dateMode === 'day' && selectedDay === day} class:chosen={dateMode === 'day' && selectedDay === day} onclick={() => { selectedDay = day; dateMode = 'day'; }}><small>{day === today ? 'TODAY' : new Intl.DateTimeFormat('en', { weekday: 'short' }).format(new Date(`${day}T12:00:00`)).toUpperCase()}</small><strong>{Number(day.slice(-2))}</strong><span>{new Intl.DateTimeFormat('en', { month: 'short' }).format(new Date(`${day}T12:00:00`))}</span><span class="day-count">{dailyCounts[day]}<span class="sr-only"> events</span></span></button>{/each}</div><button class="icon-button" aria-label="Next seven days" onclick={() => weekStart = addDays(weekStart, 7)}><ChevronRight size={17} /></button><label class="calendar-picker"><CalendarDays size={18} /><input aria-label="Select a specific day" type="date" value={selectedDay} onchange={event => { if (event.currentTarget.value) { selectedDay = event.currentTarget.value; weekStart = selectedDay; dateMode = 'day'; } }} /></label></div>
+    <p class="day-count-note">Daily counts use the current filters; select a day to view its events.{#if refreshing}{' '}Counts update as sources load.{/if}</p>
     <div class="coverage-line"><span>{#if refreshing}<LoaderCircle size={12} class="spin" /> Updating sources: {refreshCompleted}/{refreshTotal}{:else}<span class="live-dot"></span>{readySources} live {readySources === 1 ? 'source' : 'sources'} · {sources.filter(s => s.enabled && s.kind === 'snapshot').length} snapshots{/if}</span><button class="text-button" onclick={refresh} disabled={refreshing || !initialized}><RefreshCw size={12} /> Refresh</button></div>
     {#if failedSources.length}<div class="page-notice warning"><AlertCircle size={16} /><span>{failedSources.length} {failedSources.length === 1 ? 'source is' : 'sources are'} unavailable. Cached events may be outdated. <button class="inline-link" onclick={() => showSources = true}>View source status</button></span></div>{/if}
     {#if partialSources.length}<div class="page-notice"><Layers3 size={16} /><span>{partialSources.map(source => source.name).join(', ')}: showing a partial catalogue. <button class="inline-link" onclick={() => showSources = true}>Source details</button></span></div>{/if}

@@ -10,7 +10,7 @@ page.on('pageerror', error => errors.push(error.message));
 const start = Math.floor(Date.parse('2030-11-03T17:00:00Z') / 1000);
 let offline = false;
 const rows = [{ id: 1, title: 'Test chess gathering', start_datetime: start, tags: ['scacchi'], place: { name: 'Test venue', address: 'Torino', latitude: 45.07, longitude: 7.68 } }, { id: 2, title: 'Test outdoor walk', start_datetime: start, tags: ['trekking'], place: { name: 'Test park', address: 'Reggio Calabria', latitude: null, longitude: null } }];
-await page.route('**/api/events?*', async route => {
+await context.route('**/api/events?*', async route => {
   if (offline) return route.abort('failed');
   const events = new URL(route.request().url()).host === 'gancio.cisti.org' ? rows : [];
   return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(events), headers: { 'Access-Control-Allow-Origin': '*' } });
@@ -20,6 +20,9 @@ try {
   await page.getByRole('heading', { name: 'Test chess gathering', exact: true }).waitFor();
   await page.waitForFunction(() => !document.querySelector('.coverage-line')?.textContent.includes('Updating'));
   assert.equal(await page.locator('.event-card').count(), 2);
+  assert.equal(await page.locator('.map-canvas').count(), 0, 'List is the default and no map is mounted');
+  await page.getByRole('button', { name: 'Map and list view', exact: true }).click();
+  await page.locator('.commons-pin').waitFor();
   assert.equal(await page.locator('.commons-pin').count(), 1, 'Only the geolocated event gets a marker');
   await page.locator('.commons-pin').click();
   await page.getByRole('heading', { name: 'Event details', exact: true }).waitFor();
@@ -40,6 +43,7 @@ try {
   await page.getByRole('switch', { name: 'Enable Gancio · Torino' }).click();
   await page.getByRole('button', { name: 'Close dialog' }).click();
   await page.getByRole('heading', { name: 'No matching events' }).waitFor();
+  await page.waitForFunction(() => document.querySelectorAll('.commons-pin').length === 0);
   assert.equal(await page.locator('.commons-pin').count(), 0, 'Disabling a source removes its markers');
   await page.reload();
   await page.waitForFunction(() => !document.querySelector('.coverage-line')?.textContent.includes('Updating'));

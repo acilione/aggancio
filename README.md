@@ -27,8 +27,10 @@ npm run preview
 ## Included
 
 - A catalogue of 249 Gancio sources, covering all entries from both official directories plus additional instances found through Fedilist, Rumbly and an operator newsletter. Redirect aliases are retained. Search, enable, disable or remove sources in **Your sources**.
-- Map and equivalent list; filters for city, category, search text, individual days, next seven days, and weekend.
-- Source loading with six concurrent requests, progress counts, retries through Refresh, pagination with a visible 1,000-row/source limit, explicit errors, and stale-cache fallback.
+- List as the default view; filters for city, category, search text, individual days, next seven days, and weekend. Day buttons show unique-event counts for the current non-date filters, including saved events and enabled sources. Selecting one day keeps the other daily counts available for comparison. Recurring events count once per occupied day; multi-day events use their own timezone and an exclusive end time.
+- Optional map loaded on demand, including its JavaScript and CSS. A dedicated worker builds a Supercluster spatial index; only clusters or individual markers in the visible viewport are rendered. Zooming in reveals more detail. Co-located events remain grouped and can be browsed in pages of 20. Updates preserve the current pan/zoom; **Fit all events** resets the view. Closing the map releases its worker and markers.
+- Source updates run in 2–4 Web Workers (depending on reported CPU capacity), with up to four source requests per worker: 8–16 concurrent sources. Fetching, JSON parsing and event normalization happen off the UI thread. Each source's pages remain sequential. Results are applied in short batches to avoid rerendering the catalogue for every response. Disabling a source cancels its current request; failures retain cached events. Browsers without Web Workers fall back to six concurrent sources on the main thread.
+- Progress counts, retries through Refresh, pagination with a visible 1,000-row/source limit, explicit errors, and stale-cache fallback. Slow or unavailable source servers can still delay completion; events appear as successful sources finish.
 - Event-source links, original tags, inferred categories, and conservative deduplication by canonical URL. Separate occurrences are preserved.
 - Local bookmarks, source configuration, event caches, and drafts in IndexedDB using Dexie.
 - Poster OCR using Tesseract.js, with Italian/English text extraction and an editable review form. Alternatively paste text or enter an event manually.
@@ -105,11 +107,14 @@ With a dev or preview server running:
 ```sh
 node scripts/browser-smoke.mjs
 node scripts/browser-features.mjs
+node scripts/browser-performance.mjs
 ```
 
 On Windows these use the installed Chrome at its standard path. On Linux install a Playwright Chromium browser, or set `COMMONS_BROWSER` to an existing compatible browser executable. `COMMONS_URL` overrides localhost:5173.
 
 The smoke script checks real source reads, three-date extraction, draft persistence/editing, exports, day filtering, and mobile layout. The feature script uses explicitly mocked event APIs to exercise source toggles and network failures, then tests the actual OCR worker using a generated test poster and verifies poster JSON roundtripping. Screenshots go to ignored `test-results/`. No test data is injected into the application itself.
+
+The performance script uses controlled API fixtures with 3,003 unique events to verify actual worker threads and bounded download concurrency, absence of map assets/tiles before opening the map, daily counts under combined filters, deduplication, clustered viewport rendering, individual selection, co-located events, map teardown, and mobile layout. It reports fixture loading times and main-thread long tasks; these are not a guarantee of live-network timing.
 
 ## Structure
 

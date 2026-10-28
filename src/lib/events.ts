@@ -1,4 +1,5 @@
 import type { Category, EventRecord, Source } from './types';
+import { Parser } from 'htmlparser2';
 
 export { defaultSources } from './sources';
 export const cities: Record<string, [number, number]> = {
@@ -24,13 +25,17 @@ export function safeUrl(value: unknown, base?: string): string {
 }
 export function textOnly(value: unknown): string {
   if (typeof value !== 'string') return '';
-  // Never execute source markup. A detached document is used only for text extraction.
-  if (typeof DOMParser !== 'undefined') {
-    const doc = new DOMParser().parseFromString(value, 'text/html');
-    doc.querySelectorAll('script,style,iframe').forEach(node => node.remove());
-    return doc.body.textContent?.trim() || '';
-  }
-  return value.replace(/<[^>]*>/g, ' ').trim();
+  if (!/[<&]/.test(value)) return value.trim();
+  // The same non-DOM parser runs in workers and on the main thread. No markup executes.
+  let text = ''; let blocked = 0;
+  const skip = new Set(['script', 'style', 'iframe']);
+  const parser = new Parser({
+    onopentag(name) { if (skip.has(name)) blocked++; if (!blocked && ['br', 'p', 'div', 'li'].includes(name)) text += '\n'; },
+    onclosetag(name) { if (skip.has(name)) blocked = Math.max(0, blocked - 1); },
+    ontext(value) { if (!blocked) text += value; },
+  }, { decodeEntities: true });
+  parser.end(value);
+  return text.trim();
 }
 function timestamp(value: unknown): string | undefined {
   if (value === null || value === undefined || value === '') return;
@@ -131,6 +136,19 @@ export function overlapsDays(event: EventRecord, from: string, to: string): bool
     const endDay = dayKey(new Date(endMs), event.timezone);
     return startDay <= to && endDay >= from;
   });
+}
+export function countEventDays(events: EventRecord[], days: string[]): Record<string, number> {
+  const counts = Object.fromEntries(days.map(day => [day, 0]));
+  for (const event of events) {
+    const matched = new Set<string>();
+    for (const occurrence of event.occurrences) {
+      const start = dayKey(occurrence.start, event.timezone);
+      const end = dayKey(new Date(occurrence.end ? Math.max(Date.parse(occurrence.start), Date.parse(occurrence.end) - 1) : Date.parse(occurrence.start)), event.timezone);
+      for (const day of days) if (day >= start && day <= end) matched.add(day);
+    }
+    for (const day of matched) counts[day]++;
+  }
+  return counts;
 }
 export function primaryOccurrence(event: EventRecord, from = dayKey(new Date())) {
   return event.occurrences.find(occ => dayKey(occ.end || occ.start, event.timezone) >= from) || event.occurrences[0];

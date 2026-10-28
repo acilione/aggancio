@@ -5,7 +5,7 @@
   import { categories } from '../lib/types';
   import { cities, coordinate } from '../lib/events';
   import { extractPoster, localDateTime, zonedDateTimeToISO } from '../lib/poster';
-  import EventMap from './EventMap.svelte';
+  import EventMap from './LazyMap.svelte';
   let { draft, onSave, onCancel }: { draft?: EventRecord; onSave: (event: EventRecord) => Promise<void>; onCancel: () => void } = $props();
   // Each dialog mounts a fresh editor. Initialize once so typing isn't overwritten by prop changes.
   const initialDraft = untrack(() => draft);

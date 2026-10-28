@@ -1,0 +1,72 @@
+import { chromium } from '@playwright/test';
+import assert from 'node:assert/strict';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+
+const base = process.env.COMMONS_URL || 'http://localhost:5173';
+const browser = await chromium.launch({ headless: true, ...(process.platform === 'win32' ? { executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' } : process.env.COMMONS_BROWSER ? { executablePath: process.env.COMMONS_BROWSER } : {}) });
+await mkdir('test-results', { recursive: true });
+const errors = [];
+const context = await browser.newContext({ viewport: { width: 1440, height: 1100 }, acceptDownloads: true });
+const page = await context.newPage();
+page.on('pageerror', error => errors.push(error.message));
+try {
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await page.getByRole('heading', { name: 'Explore events' }).waitFor();
+  const progress = setInterval(() => page.locator('.coverage-line').innerText({ timeout: 5000 }).then(text => console.log(text)).catch(() => {}), 30000);
+  try { await page.waitForFunction(() => !document.querySelector('.coverage-line')?.textContent.includes('Updating'), null, { timeout: 180000 }); }
+  finally { clearInterval(progress); }
+  console.log('Live cards:', await page.locator('.event-card').count());
+  console.log('Source summary:', await page.locator('.coverage-line').innerText());
+  await page.screenshot({ path: 'test-results/desktop.png', fullPage: false });
+  assert.ok(await page.locator('.event-card').count() > 0, 'Real public sources should return events');
+  await page.getByRole('button', { name: /^Your sources/ }).click();
+  console.log('Catalogue entries:', await page.locator('.source-card').count());
+  await page.getByLabel('Search sources', { exact: true }).fill('Torino');
+  assert.ok(await page.locator('.source-card').count() > 0);
+  await page.getByLabel('Search sources', { exact: true }).fill('');
+  await page.getByRole('button', { name: 'Close dialog' }).click();
+
+  await page.getByRole('button', { name: 'Add an event', exact: true }).click();
+  await page.getByRole('button', { name: 'Paste or inspect poster text' }).click();
+  await page.getByLabel('Poster text', { exact: true }).fill('SCACCHI IN BIBLIOTECA\n3, 10 e 17 novembre 2030\nore 18:00\nPresso Biblioteca civica\nReggio Calabria');
+  await page.getByRole('button', { name: 'Extract event details' }).click();
+  assert.equal(await page.locator('.occurrence-editor').count(), 3);
+  await page.getByRole('button', { name: 'Save local draft', exact: true }).click();
+  await page.getByRole('heading', { name: 'Drafts', exact: true }).waitFor();
+  assert.equal(await page.locator('.event-card').count(), 1);
+  await page.reload();
+  await page.getByRole('button', { name: /Local drafts/ }).click();
+  await page.getByRole('heading', { name: 'SCACCHI IN BIBLIOTECA', exact: true }).waitFor();
+  await page.getByRole('button', { name: 'SCACCHI IN BIBLIOTECA', exact: true }).click();
+  assert.equal(await page.locator('.detail-dates p').count(), 3);
+  const jsonDownload = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export JSON', exact: true }).click();
+  const jsonFile = await jsonDownload;
+  const exported = JSON.parse(await readFile(await jsonFile.path(), 'utf8'));
+  assert.equal(exported.events[0].occurrences.length, 3);
+  assert.equal(exported.events[0].occurrences[0].start, '2030-11-03T17:00:00.000Z');
+  const icsDownload = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Add to calendar', exact: true }).click();
+  const calendar = await readFile(await (await icsDownload).path(), 'utf8');
+  assert.equal(calendar.match(/BEGIN:VEVENT/g)?.length, 3);
+  await page.getByRole('button', { name: 'Edit draft', exact: true }).click();
+  await page.getByLabel('Event title').fill('Chess with neighbours');
+  await page.getByRole('button', { name: 'Save local draft', exact: true }).click();
+  await page.getByRole('heading', { name: 'Chess with neighbours', exact: true }).waitFor();
+  await page.getByLabel('Select a specific day').fill('2030-11-11');
+  assert.equal(await page.locator('.event-card').count(), 0);
+  await page.getByLabel('Select a specific day').fill('2030-11-10');
+  await page.getByRole('heading', { name: 'Chess with neighbours', exact: true }).waitFor();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole('button', { name: 'Explore', exact: false }).first().click();
+  assert.match(await page.locator('.day-options').innerText(), /TODAY/);
+  await page.getByRole('button', { name: 'Dismiss notification' }).click().catch(() => {});
+  await page.screenshot({ path: 'test-results/mobile.png', fullPage: false });
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'Mobile layout should not overflow horizontally');
+  await page.getByRole('button', { name: 'Add an event', exact: true }).click();
+  await page.screenshot({ path: 'test-results/mobile-editor.png', fullPage: false });
+  await page.getByRole('button', { name: 'Close dialog' }).click();
+  assert.deepEqual(errors, [], 'No uncaught browser errors');
+  console.log('PASS: real API loading, three-date extraction, persistence, draft editing, JSON/ICS export, day filtering, mobile layout.');
+} finally { await browser.close(); }

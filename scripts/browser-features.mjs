@@ -1,0 +1,108 @@
+import { chromium } from '@playwright/test';
+import assert from 'node:assert/strict';
+import { readFile, mkdir } from 'node:fs/promises';
+
+const browser = await chromium.launch({ headless: true, ...(process.platform === 'win32' ? { executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' } : process.env.COMMONS_BROWSER ? { executablePath: process.env.COMMONS_BROWSER } : {}) });
+const context = await browser.newContext({ viewport: { width: 1440, height: 1050 }, acceptDownloads: true });
+const page = await context.newPage();
+const errors = [];
+page.on('pageerror', error => errors.push(error.message));
+const start = Math.floor(Date.parse('2030-11-03T17:00:00Z') / 1000);
+let offline = false;
+const rows = [{ id: 1, title: 'Test chess gathering', start_datetime: start, tags: ['scacchi'], place: { name: 'Test venue', address: 'Torino', latitude: 45.07, longitude: 7.68 } }, { id: 2, title: 'Test outdoor walk', start_datetime: start, tags: ['trekking'], place: { name: 'Test park', address: 'Reggio Calabria', latitude: null, longitude: null } }];
+await page.route('**/api/events?*', async route => {
+  if (offline) return route.abort('failed');
+  const events = new URL(route.request().url()).host === 'gancio.cisti.org' ? rows : [];
+  return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(events), headers: { 'Access-Control-Allow-Origin': '*' } });
+});
+try {
+  await page.goto(process.env.COMMONS_URL || 'http://localhost:5173');
+  await page.getByRole('heading', { name: 'Test chess gathering', exact: true }).waitFor();
+  await page.waitForFunction(() => !document.querySelector('.coverage-line')?.textContent.includes('Updating'));
+  assert.equal(await page.locator('.event-card').count(), 2);
+  assert.equal(await page.locator('.commons-pin').count(), 1, 'Only the geolocated event gets a marker');
+  await page.locator('.commons-pin').click();
+  await page.getByRole('heading', { name: 'Event details', exact: true }).waitFor();
+  assert.equal(await page.locator('.detail-title').innerText(), 'Test chess gathering');
+  await page.getByRole('button', { name: 'Close dialog' }).click();
+  await page.getByRole('button', { name: 'Games & chess', exact: true }).click();
+  assert.equal(await page.locator('.event-card').count(), 1);
+  await page.getByRole('button', { name: 'Everything', exact: true }).click();
+  await page.getByLabel('City', { exact: true }).selectOption('Reggio Calabria');
+  assert.equal(await page.locator('.event-card').count(), 1);
+  assert.match(await page.locator('.map-footer').innerText(), /1 without coordinates/);
+  await page.getByLabel('City', { exact: true }).selectOption('');
+
+  await page.getByRole('button', { name: /^Your sources/ }).click();
+  assert.ok(await page.locator('.source-card').count() > 200, 'Expanded catalogue should be present');
+  await page.getByLabel('Search sources', { exact: true }).fill('gancio.cisti.org');
+  assert.equal(await page.locator('.source-card').count(), 1);
+  await page.getByRole('switch', { name: 'Enable Gancio · Torino' }).click();
+  await page.getByRole('button', { name: 'Close dialog' }).click();
+  await page.getByRole('heading', { name: 'No matching events' }).waitFor();
+  assert.equal(await page.locator('.commons-pin').count(), 0, 'Disabling a source removes its markers');
+  await page.reload();
+  await page.waitForFunction(() => !document.querySelector('.coverage-line')?.textContent.includes('Updating'));
+  await page.getByRole('button', { name: /^Your sources/ }).click();
+  assert.equal(await page.getByRole('switch', { name: 'Enable Gancio · Torino' }).getAttribute('aria-checked'), 'false');
+  await page.getByRole('switch', { name: 'Enable Gancio · Torino' }).click();
+  await page.getByLabel('Search sources', { exact: true }).fill('gancio.cisti.org');
+  await page.getByRole('button', { name: 'Disable matching', exact: true }).click();
+  await page.waitForFunction(() => document.querySelector('[role="switch"]')?.getAttribute('aria-checked') === 'false');
+  await page.getByRole('button', { name: 'Enable matching', exact: true }).click();
+  await page.waitForFunction(() => !document.querySelector('.coverage-line')?.textContent.includes('Updating'));
+  await page.getByLabel('Search sources', { exact: true }).fill('');
+  await page.getByRole('button', { name: 'Close dialog' }).click();
+  offline = true;
+  await page.getByRole('button', { name: 'Refresh', exact: true }).click();
+  await page.getByRole('button', { name: 'View source status' }).waitFor();
+  assert.equal(await page.locator('.event-card').count(), 2, 'failed fetch preserves cached events');
+
+  // A generated test image checks the actual OCR worker and language downloads.
+  const pngData = await page.evaluate(() => {
+    const canvas = document.createElement('canvas'); canvas.width = 1500; canvas.height = 650;
+    const ctx = canvas.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 1500, 650); ctx.fillStyle = '#111';
+    ctx.font = 'bold 60px Arial'; ctx.fillText('SCACCHI IN BIBLIOTECA', 70, 120);
+    ctx.font = '48px Arial'; ctx.fillText('3, 10 e 17 novembre 2030', 70, 260); ctx.fillText('ore 18:00', 70, 360);
+    ctx.fillText('Presso Biblioteca civica', 70, 460); ctx.fillText('Reggio Calabria', 70, 560);
+    return canvas.toDataURL('image/png').split(',')[1];
+  });
+  await page.getByRole('button', { name: 'Add an event', exact: true }).click();
+  await page.getByLabel('Choose poster image').setInputFiles({ name: 'poster-test.png', mimeType: 'image/png', buffer: Buffer.from(pngData, 'base64') });
+  await page.getByRole('button', { name: 'Hide extracted text' }).waitFor({ timeout: 150000 });
+  console.log('OCR text:', await page.getByLabel('Poster text', { exact: true }).inputValue());
+  assert.equal(await page.locator('.occurrence-editor').count(), 3, 'image OCR should produce three occurrences');
+  await mkdir('test-results', { recursive: true });
+  await page.screenshot({ path: 'test-results/poster-ocr.png', fullPage: false });
+  await page.getByRole('button', { name: 'Save local draft', exact: true }).click();
+  await page.getByRole('heading', { name: 'Drafts', exact: true }).waitFor();
+  await page.locator('.event-title').first().click();
+  assert.ok(await page.locator('.detail-poster').isVisible());
+  const jsonPromise = page.waitForEvent('download'); await page.getByRole('button', { name: 'Export JSON', exact: true }).click();
+  const download = await jsonPromise;
+  const path = await download.path();
+  const json = JSON.parse(await readFile(path, 'utf8'));
+  assert.match(json.events[0].poster, /^data:image\/png;base64,/);
+  await page.getByRole('button', { name: 'Close dialog' }).click();
+  await page.getByLabel('Import local drafts', { exact: true }).setInputFiles(path);
+  await page.waitForFunction(() => document.querySelectorAll('.event-card').length === 2);
+  await page.reload();
+  await page.getByRole('button', { name: /Local drafts/ }).click();
+  await page.waitForFunction(() => document.querySelectorAll('.event-card').length === 2);
+
+  await page.getByRole('button', { name: /^Your sources/ }).click();
+  await page.getByLabel('Source name', { exact: true }).fill('Community snapshot');
+  await page.getByLabel('Original website', { exact: true }).fill('https://community.example.org/events');
+  await page.locator('dialog input[type="file"]').setInputFiles(path);
+  await page.getByRole('switch', { name: 'Enable Community snapshot' }).waitFor();
+  await page.getByRole('button', { name: 'Close dialog' }).click();
+  await page.getByRole('button', { name: /^Explore/ }).first().click();
+  await page.locator('.event-card a.source-link').filter({ hasText: 'Community snapshot' }).waitFor();
+  assert.equal(await page.locator('.event-card a.source-link').filter({ hasText: 'Community snapshot' }).getAttribute('href'), 'https://community.example.org/events');
+  assert.deepEqual(errors, [], 'No uncaught application errors');
+  console.log('PASS: filters, missing locations, persisted source settings, stale-cache fallback, real image OCR, embedded-poster JSON roundtrip, source snapshot import and attribution.');
+} catch (error) {
+  console.log('Browser errors:', errors);
+  console.log('Visible error messages:', await page.locator('.error-message').allTextContents());
+  throw error;
+} finally { await browser.close(); }

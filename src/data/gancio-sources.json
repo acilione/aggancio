@@ -1,0 +1,4919 @@
+{
+  "checkedAt": "2026-10-28T18:24:21.419Z",
+  "discovery": [
+    {
+      "url": "https://gancio.org/v2/instances",
+      "entries": 68
+    },
+    {
+      "url": "https://gancio.org/instances",
+      "entries": 74
+    },
+    {
+      "url": "https://fedilist.com/instance?software=gancio",
+      "entries": 230
+    },
+    {
+      "url": "https://rumbly.net/communities?project=gancio",
+      "entries": 38
+    }
+  ],
+  "sources": [
+    {
+      "id": "gancio-torino",
+      "name": "Gancio · Torino",
+      "url": "https://gancio.cisti.org",
+      "kind": "gancio",
+      "city": "Torino",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Turin, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:cal.gravitons.org",
+      "name": "#fediwave",
+      "url": "https://cal.gravitons.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/London",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:calendar.klank.school",
+      "name": "010 kalender",
+      "url": "https://calendar.klank.school",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Amsterdam",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:compostela.acontece.gal",
+      "name": "Acontece en Compostela",
+      "url": "https://compostela.acontece.gal",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:ferrol.acontece.gal",
+      "name": "Acontece en Ferrol",
+      "url": "https://ferrol.acontece.gal",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:lugo.acontece.gal",
+      "name": "Acontece en Lugo",
+      "url": "https://lugo.acontece.gal",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:ourense.acontece.gal",
+      "name": "Acontece en Ourense",
+      "url": "https://ourense.acontece.gal",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:pontevedra.acontece.gal",
+      "name": "Acontece en Pontevedra",
+      "url": "https://pontevedra.acontece.gal",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:vigo.acontece.gal",
+      "name": "Acontece en Vigo",
+      "url": "https://vigo.acontece.gal",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:corunha.acontece.gal",
+      "name": "Acontece na Coruña",
+      "url": "https://corunha.acontece.gal",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:actions.nyc",
+      "name": "actions.nyc",
+      "url": "https://actions.nyc",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/New_York",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:actividades.amarinha.gal",
+      "name": "Actividades de A Mariña",
+      "url": "https://actividades.amarinha.gal",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:autonoma.red",
+      "name": "Agenda Autónoma",
+      "url": "https://autonoma.red",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Bogota",
+      "enabled": true,
+      "region": "Bogotá, Colombia",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agenda.bizarro.cc",
+      "name": "AGENDA BCC",
+      "url": "https://agenda.bizarro.cc",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Bogota",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:castello.convoca.la",
+      "name": "Agenda Combativa de Castelló",
+      "url": "https://castello.convoca.la",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Castelló",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:camp.convoca.la",
+      "name": "Agenda comunitària del Camp de Tarragona",
+      "url": "https://camp.convoca.la",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agenda.henares.org",
+      "name": "Agenda del Henares",
+      "url": "https://agenda.henares.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "Valle del Henares, Spain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agenda.morlaixpopulaire.net",
+      "name": "Agenda des Luttes",
+      "url": "https://agenda.morlaixpopulaire.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Paris",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agenda.rouen-luttes.org",
+      "name": "Agenda des Luttes Rouen",
+      "url": "https://agenda.rouen-luttes.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Paris",
+      "enabled": true,
+      "region": "Rouen",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agenda.arree.bzh",
+      "name": "Agenda des monts d'Arrée",
+      "url": "https://agenda.arree.bzh",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Paris",
+      "enabled": true,
+      "region": "Monts d'Arrée, Bretagne",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agenda.giuristidemocratici.it",
+      "name": "Agenda GD",
+      "url": "https://agenda.giuristidemocratici.it",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agenda.info-gaucho.fr",
+      "name": "Agenda infogauchO",
+      "url": "https://agenda.info-gaucho.fr",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agendamilitantloiret.emancipe.org",
+      "name": "Agenda militant du Loiret",
+      "url": "https://agendamilitantloiret.emancipe.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Paris",
+      "enabled": true,
+      "region": "Loiret, France",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agenda.radwende-rheinsieg.de",
+      "name": "Agenda Radwende Rhein-Sieg",
+      "url": "https://agenda.radwende-rheinsieg.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agenda.reteappenninica.it",
+      "name": "Agenda Rete Appenninica",
+      "url": "https://agenda.reteappenninica.it",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Appennini, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:uesca.convoca.la",
+      "name": "Agenda social de la provincia de Uesca",
+      "url": "https://uesca.convoca.la",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agenda.subterrania.es",
+      "name": "Agenda Subterrania",
+      "url": "https://agenda.subterrania.es",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "Cantabria, Spain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agenda.eskoria.eus",
+      "name": "agenda.eskoria.eus",
+      "url": "https://agenda.eskoria.eus",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "UTC",
+      "enabled": false,
+      "region": "",
+      "discoveredAt": [
+        "https://blogs.sindominio.net/blog/boletin-sindominio-marzo-2024-cast-cat-fr-eus/"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "unavailable",
+      "checkMessage": "fetch failed",
+      "confirmedGancio": false,
+      "timezoneUnconfirmed": true
+    },
+    {
+      "id": "gancio:agenda.lanbroa.eus",
+      "name": "agenda.lanbroa.eus",
+      "url": "https://agenda.lanbroa.eus",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "UTC",
+      "enabled": false,
+      "region": "",
+      "discoveredAt": [
+        "https://blogs.sindominio.net/blog/boletin-sindominio-marzo-2024-cast-cat-fr-eus/"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "unavailable",
+      "checkMessage": "fetch failed",
+      "confirmedGancio": false,
+      "timezoneUnconfirmed": true
+    },
+    {
+      "id": "gancio:ainriail.org",
+      "name": "Ainriail",
+      "url": "https://ainriail.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Dublin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:kalendar.retroherna.org",
+      "name": "Akce Retroherny",
+      "url": "https://kalendar.retroherna.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Prague",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:akce.nolog.cz",
+      "name": "AKCE.NOLOG.CZ",
+      "url": "https://akce.nolog.cz",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Prague",
+      "enabled": true,
+      "region": "Czech Republic",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:akce.vetev.place",
+      "name": "akce.vetev.place",
+      "url": "https://akce.vetev.place",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Prague",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.akiba.party",
+      "name": "Akiba Party Events",
+      "url": "https://events.akiba.party",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Los_Angeles",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:abq.bikecal.org",
+      "name": "Albuquerque Bike Calendar",
+      "url": "https://abq.bikecal.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Denver",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:www.aleale.org",
+      "name": "ALÉ ! ",
+      "url": "https://www.aleale.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Paris",
+      "enabled": true,
+      "region": "Montpellier",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agenda.bibittes.net",
+      "name": "Art Calendar / Calendrier des arts",
+      "url": "https://agenda.bibittes.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Toronto",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:askapunk.highbias.org",
+      "name": "Ask A Punk HUNTSVILLE",
+      "url": "https://askapunk.highbias.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Chicago",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:melbourne.askapunk.net",
+      "name": "ASK A PUNK MELBOURNE",
+      "url": "https://melbourne.askapunk.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Australia/Melbourne",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:calendar.askapunk.nl",
+      "name": "Ask a Punk Netherlands",
+      "url": "https://calendar.askapunk.nl",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Amsterdam",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:toronto.askapunk.net",
+      "name": "ASK A PUNK TORONTO",
+      "url": "https://toronto.askapunk.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Toronto",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:all.askapunk.net",
+      "name": "ASK A PUNK WORLDWIDE",
+      "url": "https://all.askapunk.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/New_York",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:askapunk.info",
+      "name": "ASK A PUNK.info",
+      "url": "https://askapunk.info",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:www.athensdiy.net",
+      "name": "ATHENS DIY",
+      "url": "https://www.athensdiy.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/New_York",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:atlanta.askapunk.net",
+      "name": "ATLANTA DIY",
+      "url": "https://atlanta.askapunk.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "US/Eastern",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:www.attoppa.it",
+      "name": "AttoppA",
+      "url": "https://www.attoppa.it",
+      "kind": "gancio",
+      "city": "Catania",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Catania, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:axion.punks.cc",
+      "name": "Axión",
+      "url": "https://axion.punks.cc",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Mexico_City",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:wohin.bachgau.social",
+      "name": "Bachgau.Social",
+      "url": "https://wohin.bachgau.social",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:backend.prikbord.page",
+      "name": "backend.prikbord.page",
+      "url": "https://backend.prikbord.page",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Amsterdam",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:balotta.org",
+      "name": "Balotta",
+      "url": "https://balotta.org",
+      "kind": "gancio",
+      "city": "Bologna",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Bologna, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:baltimore.askapunk.net",
+      "name": "BALTIMORE ASK A PUNK",
+      "url": "https://baltimore.askapunk.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/New_York",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:berlin.askapunk.de",
+      "name": "berlin.askapunk.de",
+      "url": "https://berlin.askapunk.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "diy shows and similar events in berlin",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:www.bilbi.info",
+      "name": "Bilbo Zaharreko Agenda",
+      "url": "https://www.bilbi.info",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "barrio Bilbao La Vieja, San Francisco y Zabala, Spain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.bmorepunk.social",
+      "name": "BMorePunk Events",
+      "url": "https://events.bmorepunk.social",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/New_York",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:bonn.jetzt",
+      "name": "Bonn.jetzt",
+      "url": "https://bonn.jetzt",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "Digital-Events aus Bonn, Rhein-Sieg und der Region",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:perth.askapunk.au",
+      "name": "Boorloo AAP",
+      "url": "https://perth.askapunk.au",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Australia/Perth",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:bootblack.events",
+      "name": "Bootblack Events",
+      "url": "https://bootblack.events",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:botep.org",
+      "name": "Botép",
+      "url": "https://botep.org",
+      "kind": "gancio",
+      "city": "Bergamo",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Bergamo, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:buffalo.askapunk.net",
+      "name": "BUFFALO ASK A PUNK",
+      "url": "https://buffalo.askapunk.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/New_York",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:burque.fun",
+      "name": "burque.fun: stuff happening in albuquerque",
+      "url": "https://burque.fun",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Denver",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:camifa.net",
+      "name": "c'ami fa?",
+      "url": "https://camifa.net",
+      "kind": "gancio",
+      "city": "Cosenza",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Cosenza, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:calendari.femudatraca.cat",
+      "name": "Calendari FeMuDaTraCa",
+      "url": "https://calendari.femudatraca.cat",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:calendari.cc",
+      "name": "calendari.cc",
+      "url": "https://calendari.cc",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "Valencia, Spain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:acampadagc.com",
+      "name": "Calendario AcampadaGC",
+      "url": "https://acampadagc.com",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Atlantic/Canary",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:eventi.sinistraverso.org",
+      "name": "Calendario Iperstizionale",
+      "url": "https://eventi.sinistraverso.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:calendario.extinctionrebellion.es",
+      "name": "Calendario XR",
+      "url": "https://calendario.extinctionrebellion.es",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "UTC",
+      "enabled": false,
+      "region": "Spain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": true
+    },
+    {
+      "id": "gancio:calendarte.illustietor.com",
+      "name": "CalendARTE",
+      "url": "https://calendarte.illustietor.com",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:calendrigeek.com",
+      "name": "CalendriGeek ",
+      "url": "https://calendrigeek.com",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/New_York",
+      "enabled": false,
+      "region": "Abitibi-Témiscamingue, Québec, Canada",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "unavailable",
+      "checkMessage": "API HTTP 404",
+      "confirmedGancio": false,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:calndr.de",
+      "name": "calndr.de",
+      "url": "https://calndr.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:canberra.askapunk.au",
+      "name": "Canberra AAP",
+      "url": "https://canberra.askapunk.au",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Australia/Canberra",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:caosbi.eu",
+      "name": "Caos BI",
+      "url": "https://caosbi.eu",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:carbondale.info",
+      "name": "Carbondale Community Calendar",
+      "url": "https://carbondale.info",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Chicago",
+      "enabled": true,
+      "region": "Carbondale, Illinois",
+      "discoveredAt": [
+        "https://gancio.org/instances"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:www.carbondale.info",
+      "name": "Carbondale Community Calendar",
+      "url": "https://www.carbondale.info",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Chicago",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:cellstoff.org",
+      "name": "CellStoff",
+      "url": "https://cellstoff.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:centralcoast.askapunk.au",
+      "name": "Central Coast AAP",
+      "url": "https://centralcoast.askapunk.au",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Australia/Sydney",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:chefa.re",
+      "name": "chefa.re",
+      "url": "https://chefa.re",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:chicago.askapunk.net",
+      "name": "CHICAGO ASK A PUNK",
+      "url": "https://chicago.askapunk.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Chicago",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:cleveland.askapunk.diy",
+      "name": "CLEVELAND Ask A Punk",
+      "url": "https://cleveland.askapunk.diy",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/New_York",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:akce.cyberladies.cz",
+      "name": "Community Calendar by CyberLadies",
+      "url": "https://akce.cyberladies.cz",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Prague",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:calendrier.constellationmtl.net",
+      "name": "Constellation",
+      "url": "https://calendrier.constellationmtl.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Montreal",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:alc.convoca.la",
+      "name": "Convoca-la Alacant",
+      "url": "https://alc.convoca.la",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:emporda.figueres.social",
+      "name": "Convoca-la alternativa",
+      "url": "https://emporda.figueres.social",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Paris",
+      "enabled": true,
+      "region": "Figueres, Empordà",
+      "discoveredAt": [
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:bcn.convoca.la",
+      "name": "Convoca-la BCN",
+      "url": "https://bcn.convoca.la",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Andorra",
+      "enabled": true,
+      "region": "Barcelona, Spain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:eif.convoca.la",
+      "name": "Convoca-la Eivissa i Formentera",
+      "url": "https://eif.convoca.la",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "Eivissa i Formentera, Spain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:mallorca.convoca.la",
+      "name": "Convoca-la Mallorca",
+      "url": "https://mallorca.convoca.la",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "Mallorca, Spain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:mad.convoca.la",
+      "name": "Convócala Madrid",
+      "url": "https://mad.convoca.la",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "Madrid, Spain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:to.eventi.cubsur.it",
+      "name": "CubSur Torino",
+      "url": "https://to.eventi.cubsur.it",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.libre.ec",
+      "name": "Cuenca organizada",
+      "url": "https://events.libre.ec",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Guayaquil",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:cursoslivres.ong.br",
+      "name": "cursoslivres.ong.br",
+      "url": "https://cursoslivres.ong.br",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "UTC",
+      "enabled": false,
+      "region": "",
+      "discoveredAt": [
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "unavailable",
+      "checkMessage": "fetch failed",
+      "confirmedGancio": false,
+      "timezoneUnconfirmed": true
+    },
+    {
+      "id": "gancio:takvim.d12macera.com",
+      "name": "d12Takvim",
+      "url": "https://takvim.d12macera.com",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Istanbul",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:devent.cz",
+      "name": "Decentralizované Eventy",
+      "url": "https://devent.cz",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Prague",
+      "enabled": true,
+      "region": "Czech Republic",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio-demo",
+      "name": "Demo Gancio update",
+      "url": "https://demo.gancio.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": false,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:calendar.floresmagonbctx.com",
+      "name": "DFW Prairieland Defendants Support Calendar",
+      "url": "https://calendar.floresmagonbctx.com",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Chicago",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:dodenver.diy",
+      "name": "DODENVER.DIY",
+      "url": "https://dodenver.diy",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Denver",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:dondet.org",
+      "name": "Dondet?",
+      "url": "https://dondet.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:dresden.beer",
+      "name": "Dresden Beer Friends",
+      "url": "https://dresden.beer",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:plafo.elmercatcultural.cat",
+      "name": "El Plafó del Barri",
+      "url": "https://plafo.elmercatcultural.cat",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:enredad.es",
+      "name": "enredad·es",
+      "url": "https://enredad.es",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "Queer/Feminist/Racialized-Events, Spain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:evenemang.inorrbotten.se",
+      "name": "Evenemang i Norrbotten",
+      "url": "https://evenemang.inorrbotten.se",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Stockholm",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:event.nemo.earth",
+      "name": "Event Nemo Earth",
+      "url": "https://event.nemo.earth",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Warsaw",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:eventos.txs.es",
+      "name": "Eventos  TXS.es",
+      "url": "https://eventos.txs.es",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Atlantic/Canary",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:cartelera.inexactas.ar",
+      "name": "Eventos Exactas",
+      "url": "https://cartelera.inexactas.ar",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Argentina/Buenos_Aires",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:eventosmurcia.org",
+      "name": "Eventos Murcia",
+      "url": "https://eventosmurcia.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "Murcia, Spain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:eventos.cuates.net",
+      "name": "Eventos para Cuates",
+      "url": "https://eventos.cuates.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Mexico_City",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:eventos.pelumpen.com",
+      "name": "Eventos Valle de Pelumpén (Limache y Olmué)",
+      "url": "https://eventos.pelumpen.com",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Santiago",
+      "enabled": true,
+      "region": "Red de eventos del Valle de Pelumpén; Limache y Olmué, V Región, Chile",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:eventos.coletivos.org",
+      "name": "eventos.coletivos.org",
+      "url": "https://eventos.coletivos.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Lisbon",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:eventos.escala6x1.info",
+      "name": "eventos.escala6x1.info",
+      "url": "https://eventos.escala6x1.info",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "UTC",
+      "enabled": false,
+      "region": "",
+      "discoveredAt": [
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "unavailable",
+      "checkMessage": "fetch failed",
+      "confirmedGancio": false,
+      "timezoneUnconfirmed": true
+    },
+    {
+      "id": "gancio:eventos.institutohiphopcriciumense.com.br",
+      "name": "eventos.institutohiphopcriciumense.com.br",
+      "url": "https://eventos.institutohiphopcriciumense.com.br",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "UTC",
+      "enabled": false,
+      "region": "",
+      "discoveredAt": [
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "unavailable",
+      "checkMessage": "fetch failed",
+      "confirmedGancio": false,
+      "timezoneUnconfirmed": true
+    },
+    {
+      "id": "gancio:events.wundernas.ch",
+      "name": "Events",
+      "url": "https://events.wundernas.ch",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Zurich",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agenda.birkenhack.org",
+      "name": "Events @ Birkenhack",
+      "url": "https://agenda.birkenhack.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/London",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.translife.fyi",
+      "name": "Events @ TransLife.FYI",
+      "url": "https://events.translife.fyi",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Budapest",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.karlsruhe-social.de",
+      "name": "Events Karlsruhe-Social",
+      "url": "https://events.karlsruhe-social.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.eastfrisia.de",
+      "name": "events.eastfrisia.de",
+      "url": "https://events.eastfrisia.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.ludd.ltu.se",
+      "name": "events.ludd.ltu.se",
+      "url": "https://events.ludd.ltu.se",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "UTC",
+      "enabled": false,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": false,
+      "timezoneUnconfirmed": true
+    },
+    {
+      "id": "gancio:events.momangen.se",
+      "name": "events.momangen.se",
+      "url": "https://events.momangen.se",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "UTC",
+      "enabled": false,
+      "region": "",
+      "discoveredAt": [
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "unavailable",
+      "checkMessage": "fetch failed",
+      "confirmedGancio": false,
+      "timezoneUnconfirmed": true
+    },
+    {
+      "id": "gancio:events.todon.eu",
+      "name": "events.todon.eu",
+      "url": "https://events.todon.eu",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "UTC",
+      "enabled": false,
+      "region": "",
+      "discoveredAt": [
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "unavailable",
+      "checkMessage": "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON",
+      "confirmedGancio": false,
+      "timezoneUnconfirmed": true
+    },
+    {
+      "id": "gancio:events.accum.se",
+      "name": "Events@umu",
+      "url": "https://events.accum.se",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Stockholm",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:fahrradtermine-berlin.de",
+      "name": "fahrradtermine-berlin.de (FTB)",
+      "url": "https://fahrradtermine-berlin.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:fandomar.cz",
+      "name": "Fandomář",
+      "url": "https://fandomar.cz",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Prague",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:femcomboi.org",
+      "name": "femcomboi.org",
+      "url": "https://femcomboi.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "UTC",
+      "enabled": false,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": false,
+      "timezoneUnconfirmed": true
+    },
+    {
+      "id": "gancio:events.floxford.org",
+      "name": "FLOxford",
+      "url": "https://events.floxford.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/London",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:flyinghigh-bonn.org",
+      "name": "Flying High Bonn",
+      "url": "https://flyinghigh-bonn.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "resistant and subcultural events in and around Bonn.",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:flypost.ie",
+      "name": "flyPost",
+      "url": "https://flypost.ie",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Dublin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:flypost-gancio.fly.dev",
+      "name": "flyPost",
+      "url": "https://flypost-gancio.fly.dev",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Dublin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:forkfest.ca",
+      "name": "Forkfest 2026",
+      "url": "https://forkfest.ca",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/New_York",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:freestreamers.btfree.org",
+      "name": "Freestreamers",
+      "url": "https://freestreamers.btfree.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Universal",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:organize.frontrange.co",
+      "name": "Frontrange Events",
+      "url": "https://organize.frontrange.co",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Denver",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:cal.fs-physik-atmo.uni-mainz.de",
+      "name": "FS Physik/Atmo Kalender",
+      "url": "https://cal.fs-physik-atmo.uni-mainz.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:fuori.org",
+      "name": "Fuori.org",
+      "url": "https://fuori.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Belluno, Italy",
+      "discoveredAt": [
+        "https://gancio.org/instances"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:www.fuorinellanebbia.it",
+      "name": "FuoriNellaNebbia",
+      "url": "https://www.fuorinellanebbia.it",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Ravenna e Ferrara, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.futtermitliebe.de",
+      "name": "Futter mit Liebe",
+      "url": "https://events.futtermitliebe.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:sydney.askapunk.au",
+      "name": "Gadigal AAP",
+      "url": "https://sydney.askapunk.au",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Australia/Sydney",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:gancio.invegendo.org",
+      "name": "Gancio",
+      "url": "https://gancio.invegendo.org",
+      "kind": "gancio",
+      "city": "Genova",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Genova, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:burgos.convoca.la",
+      "name": "Gancio",
+      "url": "https://burgos.convoca.la",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Burgos, Castilla y León, Spain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:halkal.nodoj.de",
+      "name": "Gancio",
+      "url": "https://halkal.nodoj.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:assemblees-docents.convoca.la",
+      "name": "Gancio",
+      "url": "https://assemblees-docents.convoca.la",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:demo.esquilax.uk",
+      "name": "Gancio",
+      "url": "https://demo.esquilax.uk",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/London",
+      "enabled": false,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:gancio.blablalinux.be",
+      "name": "Gancio BlablaLinux",
+      "url": "https://gancio.blablalinux.be",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Brussels",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:roma.convoca.la",
+      "name": "Gancio de Roma ",
+      "url": "https://roma.convoca.la",
+      "kind": "gancio",
+      "city": "Roma",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Roma, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:des.convoca.la",
+      "name": "Gancio para pruebas",
+      "url": "https://des.convoca.la",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Paris",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:gancio.daghe.org",
+      "name": "gancio.daghe",
+      "url": "https://gancio.daghe.org",
+      "kind": "gancio",
+      "city": "Trento",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Trento, Italy",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances"
+      ],
+      "aliases": [
+        "https://gancio.daghe.xyz"
+      ],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:gancio.genovadalbasso.nohost.me",
+      "name": "gancio.genovadalbasso.nohost.me",
+      "url": "https://gancio.genovadalbasso.nohost.me",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "UTC",
+      "enabled": false,
+      "region": "",
+      "discoveredAt": [
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "unavailable",
+      "checkMessage": "API HTTP 404",
+      "confirmedGancio": false,
+      "timezoneUnconfirmed": true
+    },
+    {
+      "id": "gancio:gancio.graz.events",
+      "name": "gancio.graz.events",
+      "url": "https://gancio.graz.events",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Vienna",
+      "enabled": true,
+      "region": "Verein zur Förderung ethischer Digitalkultur",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:gancio.pl",
+      "name": "Gancio.pl",
+      "url": "https://gancio.pl",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Warsaw",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:gdpcal.fs-physik-atmo.uni-mainz.de",
+      "name": "Gemeinschaft der Physik e.V. Kalender",
+      "url": "https://gdpcal.fs-physik-atmo.uni-mainz.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:terminarz.brwinow.gmina.pl",
+      "name": "Gmina Brwinów",
+      "url": "https://terminarz.brwinow.gmina.pl",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Warsaw",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.gnieh.org",
+      "name": "Gniehvents",
+      "url": "https://events.gnieh.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Paris",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:gancio.ghspace.fr",
+      "name": "Grenoble HACKERSPACE",
+      "url": "https://gancio.ghspace.fr",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Paris",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:hacker.convoca.la",
+      "name": "Hacker Convoca.la",
+      "url": "https://hacker.convoca.la",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.hackerspace.gr",
+      "name": "Hackerspace.gr events",
+      "url": "https://events.hackerspace.gr",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Athens",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:meet.harmreduction.works",
+      "name": "Harm Reduction Works",
+      "url": "https://meet.harmreduction.works",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/New_York",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:hattiesburg.askapunk.net",
+      "name": "Hattiesburg DIY",
+      "url": "https://hattiesburg.askapunk.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "US/Central",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agenda.etxepareikaskoop.eus",
+      "name": "Ikastolen ekimenak",
+      "url": "https://agenda.etxepareikaskoop.eus",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Paris",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:infoates.cat",
+      "name": "infoAtes",
+      "url": "https://infoates.cat",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": false,
+      "region": "Catalunya Central, Spain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "unavailable",
+      "checkMessage": "fetch failed",
+      "confirmedGancio": false,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:jamme.la",
+      "name": "JammeLa",
+      "url": "https://jamme.la",
+      "kind": "gancio",
+      "city": "Napoli",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Napoli, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:jilocal.ababool.eu",
+      "name": "Jiloca-Daroca-Gallocanta",
+      "url": "https://jilocal.ababool.eu",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:jxndiy.fyi",
+      "name": "JXN DIY",
+      "url": "https://jxndiy.fyi",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Chicago",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:kalender.lars-violin.dk",
+      "name": "Kalender",
+      "url": "https://kalender.lars-violin.dk",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:adelaide.askapunk.au",
+      "name": "Kaurna Yerta AAP",
+      "url": "https://adelaide.askapunk.au",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Australia/Adelaide",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:keepkarlsruheboring.org",
+      "name": "Keep Karlsruhe Boring...",
+      "url": "https://keepkarlsruheboring.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Karlsruhe, Germany",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:kiktik.de",
+      "name": "KiKT!K",
+      "url": "https://kiktik.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:kinkcalendar.site",
+      "name": "kinkcalendar.site",
+      "url": "https://kinkcalendar.site",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Lisbon",
+      "enabled": true,
+      "region": "kink, BDSM and fetish community",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:koledar.kompot.si",
+      "name": "Koledar Kompot",
+      "url": "https://koledar.kompot.si",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Ljubljana",
+      "enabled": true,
+      "region": "Ljubljana, Slovenia",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:calendar.kufoka.de",
+      "name": "Kultur in Kaarst",
+      "url": "https://calendar.kufoka.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:kulturkarte.servus.at",
+      "name": "KulturKarte",
+      "url": "https://kulturkarte.servus.at",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Vienna",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:kviriem.lv",
+      "name": "kviriem.lv",
+      "url": "https://kviriem.lv",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Riga",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:cartelera.calamuchita.net.ar",
+      "name": "La Cartelera del Valle",
+      "url": "https://cartelera.calamuchita.net.ar",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Argentina/Cordoba",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:lakelogaztetxea.net",
+      "name": "La Kelo Gaztetxea",
+      "url": "https://lakelogaztetxea.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Andorra",
+      "enabled": false,
+      "region": "Bilbo, Spain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "unavailable",
+      "checkMessage": "The operation was aborted due to timeout",
+      "confirmedGancio": false,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:www.lakelogaztetxea.net",
+      "name": "La Kelo Gaztetxea",
+      "url": "https://www.lakelogaztetxea.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Andorra",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:lamanifestive.fr",
+      "name": "LA MANIFESTIVE 68",
+      "url": "https://lamanifestive.fr",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Paris",
+      "enabled": true,
+      "region": "Social and cultural events of south-alsace, France",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:eventos.lhc.net.br",
+      "name": "Laboratório Hacker de Campinas",
+      "url": "https://eventos.lhc.net.br",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Sao_Paulo",
+      "enabled": true,
+      "region": "Campinas",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:cal.labr.online",
+      "name": "LABR",
+      "url": "https://cal.labr.online",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/London",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:sabina.convoca.la",
+      "name": "LaComunella Sabina",
+      "url": "https://sabina.convoca.la",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Rieti, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:lapunta.org",
+      "name": "LaPunta",
+      "url": "https://lapunta.org",
+      "kind": "gancio",
+      "city": "Firenze",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Florence, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:lasitua.org",
+      "name": "LaSitua",
+      "url": "https://lasitua.org",
+      "kind": "gancio",
+      "city": "Brescia",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Brescia, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:calendar.layerze.ro",
+      "name": "Layer Zero Events",
+      "url": "https://calendar.layerze.ro",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Chicago",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agenda.zeorri.eus",
+      "name": "Lezoko Agenda",
+      "url": "https://agenda.zeorri.eus",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:lucitr.one",
+      "name": "lu citrone",
+      "url": "https://lucitr.one",
+      "kind": "gancio",
+      "city": "L'Aquila",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "L'Aquila, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:www.lubakiagenda.net",
+      "name": "Lubaki Agenda ",
+      "url": "https://www.lubakiagenda.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:tasmania.askapunk.au",
+      "name": "Lutruwita AAP",
+      "url": "https://tasmania.askapunk.au",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Australia/Tasmania",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:brisbane.askapunk.au",
+      "name": "Magandjin AAP",
+      "url": "https://brisbane.askapunk.au",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Australia/Brisbane",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:mlg.convoca.la",
+      "name": "Málaga Convócala",
+      "url": "https://mlg.convoca.la",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "Málaga",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.manuelmaag.de",
+      "name": "Manuel Maag GSC - Veranstaltungen",
+      "url": "https://events.manuelmaag.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:meh.convoca.la",
+      "name": "Meh!",
+      "url": "https://meh.convoca.la",
+      "kind": "gancio",
+      "city": "Bari",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Bari, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:mkeshows.com",
+      "name": "MKE Shows",
+      "url": "https://mkeshows.com",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Chicago",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:meetup.events",
+      "name": "Monero & Privacy Events",
+      "url": "https://meetup.events",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "UTC",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:montreal.askapunk.net",
+      "name": "MONTREAL Ask A Punk",
+      "url": "https://montreal.askapunk.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Canada/Eastern",
+      "enabled": true,
+      "region": "Montreal",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:nafarroa.agendak.eus",
+      "name": "nafarroa.agendak.eus",
+      "url": "https://nafarroa.agendak.eus",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:newfoundlandaskapunk.ca",
+      "name": "Newfoundland Ask A Punk",
+      "url": "https://newfoundlandaskapunk.ca",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/St_Johns",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:cal.nikonians.org",
+      "name": "Nikonians® Calendar",
+      "url": "https://cal.nikonians.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/London",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:nix-meetup.c3d2.de",
+      "name": "Nix-Meetup Dresden",
+      "url": "https://nix-meetup.c3d2.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:northcoast.askapunk.au",
+      "name": "North Coast AAP",
+      "url": "https://northcoast.askapunk.au",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Australia/Sydney",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:northqld.askapunk.au",
+      "name": "North Qld AAP",
+      "url": "https://northqld.askapunk.au",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Australia/Queensland",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.nu31.space",
+      "name": "NU31-Events",
+      "url": "https://events.nu31.space",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Kyiv",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:cal.nyasca.net",
+      "name": "NyasCalendari",
+      "url": "https://cal.nyasca.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:offbeat.amsterdam",
+      "name": "offbeat amsterdam",
+      "url": "https://offbeat.amsterdam",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Amsterdam",
+      "enabled": true,
+      "region": "Amsterdam",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:ottawa.askapunk.net",
+      "name": "OTTAWA Ask A Punk",
+      "url": "https://ottawa.askapunk.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Toronto",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:perthshire.events",
+      "name": "perthshire.events",
+      "url": "https://perthshire.events",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "UTC",
+      "enabled": false,
+      "region": "",
+      "discoveredAt": [
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "unavailable",
+      "checkMessage": "Unexpected end of JSON input",
+      "confirmedGancio": false,
+      "timezoneUnconfirmed": true
+    },
+    {
+      "id": "gancio:calendar.pex.coop",
+      "name": "PEX Calendar",
+      "url": "https://calendar.pex.coop",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Los_Angeles",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:philly.askapunk.net",
+      "name": "PHILLY ASK A PUNK",
+      "url": "https://philly.askapunk.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/New_York",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:plan.undernet.uy",
+      "name": "Plan Undernet",
+      "url": "https://plan.undernet.uy",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Montevideo",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:popopo.soon.it",
+      "name": "PoPoPo ~ Pontino PoPolare",
+      "url": "https://popopo.soon.it",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:calendar.punksagainstapartheid.org",
+      "name": "Punks Against Apartheid Global Calendar",
+      "url": "https://calendar.punksagainstapartheid.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/London",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:puntello.org",
+      "name": "Puntello",
+      "url": "https://puntello.org",
+      "kind": "gancio",
+      "city": "Milano",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Milan, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:puppycalendar.eu",
+      "name": "Puppy Calendar",
+      "url": "https://puppycalendar.eu",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Prague",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.agqueer-lichtenberg.de",
+      "name": "Queere Events in Berlin",
+      "url": "https://events.agqueer-lichtenberg.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:rebaltela.org",
+      "name": "REBALTÈLA",
+      "url": "https://rebaltela.org",
+      "kind": "gancio",
+      "city": "Verona",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Verona, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:gancio.antroposofiachile.net",
+      "name": "Red de Antroposofía Chile",
+      "url": "https://gancio.antroposofiachile.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Santiago",
+      "enabled": true,
+      "region": "Red de Eventos de Antroposofía en Chile",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:rezonek.fr",
+      "name": "RezoneK",
+      "url": "https://rezonek.fr",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Paris",
+      "enabled": true,
+      "region": "Ouest-Cornouaille - Finistère, France",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.rheinmain.social",
+      "name": "Rhein-Main Events",
+      "url": "https://events.rheinmain.social",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "Rheinmain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:rhine.askapunk.de",
+      "name": "Rheinland (NRW) — askapunk.de",
+      "url": "https://rhine.askapunk.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:sapratza.in",
+      "name": "Sa Pratza",
+      "url": "https://sapratza.in",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Sardinia, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:savedum.it",
+      "name": "Savedum",
+      "url": "https://savedum.it",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:sciamsciam.org",
+      "name": "sciam!",
+      "url": "https://sciamsciam.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Basilicata, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:scruscio.org",
+      "name": "Scruscio",
+      "url": "https://scruscio.org",
+      "kind": "gancio",
+      "city": "Palermo",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Palermo, Italy",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:sherbrecal.0x.no",
+      "name": "SHERBROOKE EN LUTTES",
+      "url": "https://sherbrecal.0x.no",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Toronto",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:sottosuolo.ch",
+      "name": "Sottosuolo",
+      "url": "https://sottosuolo.ch",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "Alpi meridionali, Switzerland",
+      "discoveredAt": [
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:southcoast.askapunk.au",
+      "name": "South Coast AAP",
+      "url": "https://southcoast.askapunk.au",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Australia/NSW",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:sprachtreffen.de",
+      "name": "sprachtreffen.de",
+      "url": "https://sprachtreffen.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.stmary-stathanasius.net",
+      "name": "St. Mary and St. Athanasius Coptic Orthodox Church",
+      "url": "https://events.stmary-stathanasius.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Pacific/Auckland",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:t4t.city",
+      "name": "t4t.city",
+      "url": "https://t4t.city",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "UTC",
+      "enabled": false,
+      "region": "",
+      "discoveredAt": [
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "unavailable",
+      "checkMessage": "fetch failed",
+      "confirmedGancio": false,
+      "timezoneUnconfirmed": true
+    },
+    {
+      "id": "gancio:events.techwerkers.nl",
+      "name": "Techwerkers",
+      "url": "https://events.techwerkers.nl",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Amsterdam",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:termine.linxxnet.de",
+      "name": "Termine: linXXnet & INTERIM",
+      "url": "https://termine.linxxnet.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:test.cisti.org",
+      "name": "test.cisti.org",
+      "url": "https://test.cisti.org",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "UTC",
+      "enabled": false,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "unavailable",
+      "checkMessage": "API HTTP 502",
+      "confirmedGancio": false,
+      "timezoneUnconfirmed": true
+    },
+    {
+      "id": "gancio:gancio.thebristol.social",
+      "name": "The Bristol Social Events",
+      "url": "https://gancio.thebristol.social",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/London",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:queerleven.be",
+      "name": "The Trans Agenda™",
+      "url": "https://queerleven.be",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Brussels",
+      "enabled": false,
+      "region": "Belgium",
+      "discoveredAt": [
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "unavailable",
+      "checkMessage": "API HTTP 500",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:acties.todon.nl",
+      "name": "Todon Acties",
+      "url": "https://acties.todon.nl",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Amsterdam",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.tomp.com.br",
+      "name": "Tomb Raider Community Events",
+      "url": "https://events.tomp.com.br",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:tramuntana.convoca.la",
+      "name": "Tramuntana",
+      "url": "https://tramuntana.convoca.la",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "Girona, Spain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:tricity.dance",
+      "name": "Tricity Dance",
+      "url": "https://tricity.dance",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Warsaw",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:tfnb.ca",
+      "name": "Tsí Tkarón:to' Food Not Bombs Federation",
+      "url": "https://tfnb.ca",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Toronto",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:tucsontimeline.info",
+      "name": "Tucson Timeline",
+      "url": "https://tucsontimeline.info",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Phoenix",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:vagancio.partidopirata.com.ar",
+      "name": "Vagancio Pirato",
+      "url": "https://vagancio.partidopirata.com.ar",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Argentina/Buenos_Aires",
+      "enabled": true,
+      "region": "Buenos Aires, Argentina",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:vamosjuntes.com.ar",
+      "name": "Vamos Juntes",
+      "url": "https://vamosjuntes.com.ar",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Argentina/Buenos_Aires",
+      "enabled": true,
+      "region": "Córdoba, Argentina",
+      "discoveredAt": [
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:veranstaltungen.jennelt.de",
+      "name": "Veranstaltungen in Jennelt",
+      "url": "https://veranstaltungen.jennelt.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:event.cologne",
+      "name": "Veranstaltungen in Köln",
+      "url": "https://event.cologne",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Rome",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:kalender.mutterstadt.social",
+      "name": "Veranstaltungskalender Mutterstadt",
+      "url": "https://kalender.mutterstadt.social",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:events.versi-tech.com",
+      "name": "Versi Events",
+      "url": "https://events.versi-tech.com",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "America/Chicago",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:agenda.villemorte.fr",
+      "name": "Ville Morte",
+      "url": "https://agenda.villemorte.fr",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Paris",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio",
+        "https://rumbly.net/communities?project=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:warszawa.askapunk.net",
+      "name": "warszawa.askapunk.net",
+      "url": "https://warszawa.askapunk.net",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Warsaw",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:gancio.emo-essen.de",
+      "name": "Was ist los in Essen",
+      "url": "https://gancio.emo-essen.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:wedel.uber.space",
+      "name": "Wedel live",
+      "url": "https://wedel.uber.space",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:calendar.clonmel.town",
+      "name": "What's On Clonmel",
+      "url": "https://calendar.clonmel.town",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Dublin",
+      "enabled": true,
+      "region": "What's On Clonmel; Local events guide, Ireland",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:cal.writeout.ink",
+      "name": "Writeout Events Calendar",
+      "url": "https://cal.writeout.ink",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "UTC",
+      "enabled": false,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": true
+    },
+    {
+      "id": "gancio:events.wsmdh.de",
+      "name": "WSM Termine",
+      "url": "https://events.wsmdh.de",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Berlin",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:sthlmpunk.party",
+      "name": "www.SthlmPunk.party",
+      "url": "https://sthlmpunk.party",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Stockholm",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:wydarzenia.14-200.pl",
+      "name": "Wydarzenia 14-200.pl",
+      "url": "https://wydarzenia.14-200.pl",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Warsaw",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:zgz.convoca.la",
+      "name": "Zaragoza",
+      "url": "https://zgz.convoca.la",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Madrid",
+      "enabled": true,
+      "region": "Zaragoza, Spain",
+      "discoveredAt": [
+        "https://gancio.org/v2/instances",
+        "https://gancio.org/instances",
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    },
+    {
+      "id": "gancio:manifestacije.zvo.hr",
+      "name": "ЗВО Манифестације",
+      "url": "https://manifestacije.zvo.hr",
+      "kind": "gancio",
+      "city": "",
+      "timezone": "Europe/Zagreb",
+      "enabled": true,
+      "region": "",
+      "discoveredAt": [
+        "https://fedilist.com/instance?software=gancio"
+      ],
+      "aliases": [],
+      "checkedAt": "2026-10-28T18:24:21.419Z",
+      "access": "available",
+      "checkMessage": "Public API and cross-origin response checked.",
+      "confirmedGancio": true,
+      "timezoneUnconfirmed": false
+    }
+  ]
+}

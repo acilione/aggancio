@@ -1,0 +1,919 @@
+# COMMONS
+## Documento di design funzionale
+**Versione:** 0.1 — Bozza fondativa  
+**Stato:** Proposta aperta alla discussione  
+**Natura del progetto:** Open-source, comunitario, non orientato al profitto
+
+---
+
+# 1. Visione
+
+Commons è una piattaforma aperta per scoprire, proporre e partecipare ad attività culturali, sociali, creative, educative e ricreative.
+
+Nasce dalla volontà di ripensare il rapporto tra tecnologia, persone e comunità.
+
+Le piattaforme digitali contemporanee tendono spesso a misurare il proprio successo attraverso il tempo trascorso online, l'attenzione catturata, le interazioni generate e la quantità di contenuti consumati.
+
+Commons propone un modello diverso.
+
+**La tecnologia dovrebbe facilitare la partecipazione alla vita, non diventare il centro della vita stessa.**
+
+Commons non vuole creare un nuovo social network né competere per l'attenzione delle persone. Vuole rendere semplice scoprire ciò che accade nel mondo e prendervi parte.
+
+Un concerto, una jam session, un incontro di scacchi, un gruppo di lettura, un laboratorio artigianale, una conferenza o una passeggiata collettiva devono poter essere scoperti senza attraversare pubblicità, contenuti irrilevanti, algoritmi opachi e procedure di registrazione superflue.
+
+**La promessa fondamentale di Commons è semplice:**
+
+> Apri, scopri, partecipa. Oppure proponi qualcosa agli altri.
+
+# 2. Missione e obiettivi
+
+## 2.1 Missione
+
+Costruire un'infrastruttura digitale pubblicamente accessibile, rispettosa della privacy e governata dalle comunità, che renda più facile la partecipazione ad attività e iniziative nel mondo reale.
+
+Commons deve aiutare a:
+
+- Scoprire attività coerenti con i propri interessi.
+- Esplorare le iniziative disponibili nella propria area geografica o nel mondo.
+- Organizzare eventi senza barriere tecniche o burocratiche inutili.
+- Favorire incontri, collaborazioni e nuove comunità.
+- Dare visibilità a iniziative indipendenti, anche piccole o prive di risorse economiche.
+- Rendere le comunità meno dipendenti dalle grandi piattaforme commerciali.
+
+## 2.2 Obiettivi di prodotto
+
+1. Rendere immediata la consultazione degli eventi.
+2. Permettere la proposta di un evento senza registrazione.
+3. Offrire una ricerca geografica e tematica semplice e controllabile.
+4. Ridurre al minimo la raccolta di dati personali.
+5. Garantire un ambiente informativo utile e moderato.
+6. Consentire alle comunità di mantenere il controllo delle proprie attività e informazioni.
+7. Favorire un modello economico sostenibile senza pubblicità comportamentale.
+
+## 2.3 Cosa Commons non vuole essere
+
+Commons non è:
+
+- Un social network basato su follower e popolarità.
+- Una piattaforma di video e contenuti infiniti.
+- Un sistema pubblicitario.
+- Un servizio di profilazione degli interessi.
+- Un marketplace che impone commissioni per ottenere visibilità.
+- Un'applicazione che richiede di essere utilizzata quotidianamente.
+- Un sistema che valuta il valore sociale delle persone attraverso punteggi.
+
+Commons deve poter essere utilizzato occasionalmente, senza penalizzare chi non torna per settimane o mesi.
+
+---
+
+# 3. Principi fondamentali
+
+Questi principi costituiscono i vincoli di design del progetto e dovrebbero essere modificabili soltanto attraverso un processo di governance trasparente e partecipato.
+
+## 3.1 Privacy per impostazione predefinita
+
+Commons non deve raccogliere dati personali che non siano necessari al funzionamento delle operazioni richieste.
+
+In particolare:
+
+- Nessuna registrazione obbligatoria.
+- Nessuna profilazione comportamentale.
+- Nessuna vendita di dati personali.
+- Nessuna pubblicità personalizzata.
+- Nessun tracciamento sistematico delle ricerche effettuate.
+- Nessuna cronologia individuale delle attività consultate conservata dal servizio.
+- Nessun obbligo di condividere la posizione GPS.
+
+Le preferenze personali, quando possibile, devono rimanere sul dispositivo dell'utente.
+
+I dati pubblicati volontariamente, come il nome di un organizzatore o la descrizione di un evento, devono avere una destinazione e una visibilità chiaramente comprensibili.
+
+Il trattamento temporaneo di informazioni indispensabili al funzionamento e alla sicurezza del servizio deve essere limitato, documentato e soggetto a regole di conservazione.
+
+**L'assenza di profilazione è una proprietà strutturale del prodotto, non una funzionalità premium.**
+
+## 3.2 Semplicità radicale
+
+La complessità organizzativa del progetto non deve ricadere sulle persone che lo utilizzano.
+
+Commons deve essere utilizzabile senza conoscere il funzionamento della sua infrastruttura, senza configurazioni iniziali e senza dover apprendere procedure complesse.
+
+Le due azioni primarie sono:
+
+**Esplorare eventi** e **Pubblicare un evento**.
+
+Ogni funzionalità aggiuntiva deve essere valutata in relazione alla sua utilità concreta.
+
+## 3.3 Sovranità dell'attenzione
+
+L'utente decide quali informazioni desidera ricevere.
+
+Commons non deve imporre contenuti sulla base della loro capacità di generare reazioni.
+
+Sono esclusi dal modello di prodotto:
+
+- Infinite scrolling finalizzato al coinvolgimento.
+- Notifiche progettate per indurre aperture ripetute dell'applicazione.
+- Classifiche di popolarità delle persone.
+- Raccomandazioni basate sulla provocazione emotiva.
+- Meccanismi di ricompensa per la frequenza di utilizzo.
+
+La scoperta di nuovi interessi deve essere possibile, ma sempre volontaria.
+
+## 3.4 Comunità e autonomia
+
+Commons deve favorire comunità indipendenti.
+
+Le comunità devono poter organizzare e gestire le proprie iniziative senza dipendere permanentemente da un singolo operatore.
+
+Le informazioni pubbliche devono poter circolare attraverso strumenti aperti e interoperabili.
+
+Nessuna comunità dovrebbe essere costretta a trasferire il controllo dei propri dati a Commons per poter partecipare alla rete.
+
+## 3.5 Accessibilità e inclusione
+
+Commons deve essere utilizzabile da persone con livelli diversi di competenza digitale.
+
+L'interfaccia deve privilegiare:
+
+- Linguaggio comprensibile.
+- Navigazione essenziale.
+- Compatibilità con tecnologie assistive.
+- Leggibilità e contrasto adeguati.
+- Possibilità di utilizzare l'applicazione senza installazione.
+- Supporto progressivo a più lingue.
+- Informazioni sull'accessibilità degli eventi.
+
+L'accesso alle attività non deve dipendere dalla capacità di costruire una presenza pubblica online.
+
+---
+
+# 4. Destinatari
+
+Commons si rivolge principalmente a quattro categorie di partecipanti.
+
+## 4.1 Persone che cercano attività
+
+Vogliono sapere cosa succede nella propria città o in altre parti del mondo.
+
+Possono essere interessate a musica, lettura, sport, giochi, arte, scienza, tecnologia e altri settori.
+
+Non desiderano necessariamente creare un profilo, pubblicare contenuti o entrare in una comunità digitale permanente.
+
+## 4.2 Persone che propongono attività
+
+Desiderano organizzare eventi, incontri o iniziative.
+
+Possono essere singoli cittadini, musicisti, artisti, appassionati o gruppi informali.
+
+Devono poter pubblicare anche senza un'organizzazione formalmente costituita.
+
+## 4.3 Comunità e organizzazioni
+
+Associazioni culturali, biblioteche, circoli, collettivi, spazi indipendenti, gruppi sportivi e altre realtà che organizzano attività ricorrenti.
+
+Possono beneficiare di strumenti per mantenere e aggiornare un calendario pubblico.
+
+## 4.4 Moderatori e responsabili comunitari
+
+Persone incaricate di valutare le proposte, gestire segnalazioni e garantire il rispetto delle regole pubbliche.
+
+Devono poter operare senza disporre di profili comportamentali degli utenti.
+
+---
+
+# 5. Esperienza utente generale
+
+## 5.1 Accesso immediato
+
+L'apertura di Commons deve condurre direttamente alla consultazione degli eventi.
+
+Non devono comparire:
+
+- Schermate obbligatorie di registrazione.
+- Questionari sugli interessi.
+- Richieste immediate di geolocalizzazione.
+- Richieste di autorizzazione alle notifiche non necessarie.
+- Messaggi pubblicitari.
+
+L'utente deve poter iniziare subito a esplorare.
+
+## 5.2 Navigazione principale
+
+La navigazione ruota attorno a due funzioni:
+
+**Esplora**
+
+Consente di visualizzare e ricercare gli eventi disponibili.
+
+**Pubblica**
+
+Consente di proporre un nuovo evento.
+
+Funzionalità secondarie, come preferiti, impostazioni e gestione degli eventi personali, devono rimanere accessibili senza sovraccaricare l'interfaccia.
+
+## 5.3 Esperienza senza obblighi
+
+L'utente non è obbligato a:
+
+- Registrarsi.
+- Seguire qualcuno.
+- Ricevere notifiche.
+- Salvare preferenze.
+- Condividere contenuti.
+- Pubblicare fotografie.
+- Interagire con altri utenti.
+
+Il sistema deve rispettare anche chi desidera soltanto consultare un'informazione e uscire.
+
+---
+
+# 6. Esplorazione e scoperta degli eventi
+
+## 6.1 Ricerca per categoria
+
+Gli eventi devono essere classificabili in settori.
+
+Categorie iniziali indicative:
+
+- Musica
+- Libri e letteratura
+- Scacchi e giochi
+- Arte
+- Cinema e teatro
+- Scienza e tecnologia
+- Sport e movimento
+- Natura
+- Artigianato
+- Filosofia e cultura
+- Lingue e apprendimento
+- Attività sociali e comunitarie
+
+L'elenco deve poter evolvere nel tempo.
+
+Un evento può appartenere a più categorie, evitando classificazioni rigide.
+
+Esempio: un incontro sulla storia della musica può appartenere sia a Musica sia a Cultura.
+
+## 6.2 Ricerca geografica
+
+Commons deve permettere due modalità principali.
+
+### Esplorazione locale
+
+L'utente seleziona una città, un'area o una distanza massima.
+
+Per esempio:
+
+- Eventi entro 5 km.
+- Eventi entro 20 km.
+- Eventi nella città selezionata.
+- Eventi nella regione selezionata.
+
+La posizione deve poter essere inserita manualmente.
+
+La geolocalizzazione automatica è soltanto un'opzione, da attivare volontariamente.
+
+### Esplorazione globale
+
+L'utente può esplorare gli eventi disponibili in altre regioni, nazioni o nel mondo.
+
+Questa modalità permette di scoprire iniziative lontane, conoscere scene culturali e pianificare eventuali viaggi.
+
+La copertura dipende dalle comunità che pubblicano o condividono eventi. Commons deve evitare di presentare il proprio catalogo come una rappresentazione completa di tutto ciò che accade nel mondo.
+
+## 6.3 Visualizzazione su mappa
+
+Gli eventi con una posizione pubblica devono poter essere visualizzati su una mappa.
+
+La mappa permette di:
+
+- Comprendere la distribuzione geografica delle attività.
+- Individuare eventi nelle vicinanze.
+- Esplorare altre città.
+- Selezionare un evento per ottenere maggiori informazioni.
+- Aprire indicazioni per raggiungere il luogo.
+
+Gli eventi privi di coordinate precise devono rimanere consultabili nell'elenco, senza inventarne la posizione.
+
+## 6.4 Visualizzazione a elenco
+
+L'elenco deve costituire un'alternativa completa alla mappa.
+
+Ordinamenti previsti:
+
+- Distanza crescente.
+- Data e ora.
+- Ordine alfabetico, quando utile.
+
+Non devono esistere ordinamenti opachi basati sulla capacità di attirare attenzione.
+
+## 6.5 Filtri
+
+Filtri fondamentali:
+
+- Categoria.
+- Periodo temporale.
+- Località.
+- Distanza.
+- Evento gratuito o a pagamento.
+- Tipologia di attività.
+
+Tipologie indicative:
+
+- Assistere.
+- Partecipare.
+- Imparare.
+- Insegnare.
+- Collaborare.
+- Organizzare.
+
+I filtri avanzati devono essere facoltativi.
+
+Le preferenze possono essere conservate localmente, senza creare un profilo remoto degli interessi.
+
+## 6.6 Esplorazione volontaria
+
+Commons deve permettere anche una modalità di scoperta libera, attraverso la quale esplorare categorie non precedentemente selezionate.
+
+Questa possibilità non deve trasformarsi in un sistema di raccomandazioni continue.
+
+**L'esplorazione deve essere una scelta, non un'interruzione.**
+
+---
+
+# 7. Scheda evento
+
+Ogni evento deve avere una pagina pubblica, semplice e direttamente condivisibile.
+
+## 7.1 Informazioni essenziali
+
+La scheda deve presentare:
+
+- Titolo.
+- Descrizione.
+- Categoria o categorie.
+- Data e ora.
+- Luogo.
+- Posizione geografica, quando appropriata.
+- Eventuale costo.
+- Informazioni per partecipare.
+- Eventuale organizzatore o presentazione del proponente.
+
+## 7.2 Informazioni facoltative
+
+Possono essere aggiunte:
+
+- Accessibilità del luogo.
+- Livello di esperienza richiesto.
+- Limiti di età pertinenti all'attività.
+- Numero massimo di partecipanti.
+- Materiale necessario.
+- Lingua dell'evento.
+- Link esterni.
+- Immagine rappresentativa.
+- Modalità di contatto.
+
+I campi aggiuntivi devono apparire soltanto quando utili alla tipologia dell'evento.
+
+## 7.3 Azioni disponibili
+
+Dalla scheda deve essere possibile:
+
+- Salvare l'evento sul dispositivo.
+- Aggiungerlo al calendario personale.
+- Visualizzare il percorso.
+- Condividere un collegamento.
+- Contattare l'organizzatore, se previsto.
+- Accedere a una prenotazione esterna, se necessaria.
+- Segnalare un problema.
+
+Commons non deve obbligare l'utente a iscriversi per svolgere queste operazioni, salvo esigenze specifiche di servizi esterni chiaramente indicate.
+
+---
+
+# 8. Pubblicazione degli eventi
+
+## 8.1 Pubblicazione senza account
+
+Chiunque deve poter proporre un evento senza registrazione.
+
+Il modulo iniziale richiede soltanto:
+
+1. Titolo.
+2. Descrizione breve.
+3. Categoria.
+4. Data e ora.
+5. Luogo o area geografica.
+
+Le informazioni devono essere sufficienti a consentire alle altre persone di comprendere l'iniziativa.
+
+Non è necessario presentare credenziali personali o professionali.
+
+## 8.2 Presentazione del proponente
+
+Chi pubblica può aggiungere volontariamente:
+
+- Nome o pseudonimo.
+- Breve descrizione personale.
+- Informazioni sul proprio ruolo nell'evento.
+- Eventuale contatto pubblico.
+
+La presentazione deve essere separata dalle informazioni sull'evento e chiaramente identificata come facoltativa.
+
+Non deve essere richiesto il nome anagrafico, salvo particolari obblighi applicabili a specifiche attività.
+
+## 8.3 Riutilizzo della presentazione
+
+L'utente può scegliere di salvare la propria presentazione sul dispositivo per utilizzarla in pubblicazioni successive.
+
+Una funzionalità di sincronizzazione fra dispositivi potrà essere valutata successivamente, con consenso esplicito.
+
+L'iscrizione non deve diventare un prerequisito per pubblicare.
+
+## 8.4 Gestione senza registrazione
+
+Dopo l'invio, il proponente riceve un collegamento privato di gestione.
+
+Il collegamento consente, secondo i permessi previsti:
+
+- Verificare lo stato della proposta.
+- Modificare le informazioni.
+- Annullare l'evento.
+- Consultare le eventuali motivazioni di moderazione.
+- Richiedere una revisione di una decisione.
+
+La possibilità di gestire un evento non deve richiedere un'identità pubblica permanente.
+
+La perdita del collegamento può impedire il recupero automatico: questa limitazione deve essere spiegata chiaramente.
+
+## 8.5 Eventi ricorrenti
+
+Commons deve prevedere progressivamente la possibilità di pubblicare attività ricorrenti.
+
+Esempi:
+
+- Club di scacchi ogni mercoledì.
+- Jam session settimanale.
+- Gruppo di lettura mensile.
+- Laboratorio periodico.
+
+L'organizzatore deve poter modificare o annullare una singola occorrenza senza necessariamente cancellare l'intera serie.
+
+---
+
+# 9. Moderazione e tutela della comunità
+
+## 9.1 Obiettivo
+
+La moderazione deve proteggere la qualità e la sicurezza del catalogo, prevenendo spam, frodi, abusi e contenuti incompatibili con le regole pubbliche della comunità.
+
+Non deve trasformarsi in uno strumento per classificare il valore delle persone o sorvegliarne le opinioni.
+
+## 9.2 Moderazione centrata sull'evento
+
+Le decisioni devono riguardare in primo luogo il contenuto pubblicato.
+
+Un evento può essere:
+
+- In attesa.
+- In verifica.
+- Approvato.
+- Pubblicato.
+- Sospeso.
+- Rifiutato.
+- Rimosso.
+
+Non è necessario attribuire un punteggio permanente all'autore.
+
+La protezione dagli abusi ripetuti può richiedere limiti temporanei o controlli aggiuntivi, ma non deve dipendere dalla costruzione di identità nascoste.
+
+## 9.3 Controlli automatici
+
+Prima della pubblicazione, gli eventi vengono sottoposti a controlli orientati a individuare:
+
+- Proposte duplicate.
+- Contenuti pubblicitari indesiderati.
+- Link sospetti.
+- Informazioni formalmente incoerenti.
+- Testi ripetuti in massa.
+- Contenuti potenzialmente pericolosi.
+- Possibili violazioni delle regole.
+
+Le parole chiave sensibili costituiscono segnali per ulteriori verifiche.
+
+Una parola, da sola, non determina necessariamente la rimozione.
+
+Per esempio, un evento che discute la storia del nazismo non equivale a un evento che promuove violenza o persecuzione.
+
+La moderazione deve distinguere per quanto possibile tra discussione, documentazione, critica, promozione e incitamento.
+
+## 9.4 Revisione umana
+
+Gli eventi ambigui devono essere sottoposti a revisione.
+
+Nella prima fase del progetto, gli eventi pubblicati anonimamente richiedono approvazione umana.
+
+La moderazione automatica potrà essere estesa progressivamente soltanto dopo averne verificato affidabilità ed errori.
+
+## 9.5 Trasparenza
+
+Chi propone un evento deve poter conoscere il suo stato.
+
+In caso di rifiuto o rimozione, deve essere fornita una motivazione comprensibile, nei limiti necessari alla sicurezza del sistema.
+
+Commons non deve utilizzare shadow ban segreti come normale strumento di moderazione.
+
+Deve essere previsto un meccanismo di contestazione delle decisioni.
+
+## 9.6 Policy pubblica
+
+Le regole di moderazione devono essere documentate pubblicamente.
+
+Devono spiegare quali contenuti non sono ammessi, quali richiedono verifica e quali comportamenti costituiscono abuso.
+
+Le comunità possono adottare regole aggiuntive, purché siano trasparenti, coerenti con la legge applicabile e compatibili con i principi generali del progetto.
+
+---
+
+# 10. Segnalazioni degli eventi
+
+## 10.1 Segnalazioni, non recensioni
+
+Commons deve permettere di segnalare problemi relativi a un evento.
+
+Non deve prevedere un sistema generalizzato di recensioni pubbliche, stelle o punteggi di reputazione.
+
+Le segnalazioni hanno una funzione di tutela e correzione, non di valutazione sociale.
+
+## 10.2 Motivi di segnalazione
+
+Categorie iniziali:
+
+- Spam o pubblicità indesiderata.
+- Evento falso o ingannevole.
+- Informazioni errate.
+- Evento annullato ma ancora pubblicato.
+- Contenuto abusivo o potenzialmente illecito.
+- Problema di sicurezza.
+- Violazione della privacy.
+- Altro.
+
+Il segnalante può aggiungere una spiegazione facoltativa.
+
+I casi che costituiscono notifiche formali di contenuti illegali devono seguire la procedura applicabile, distinta dalle semplici segnalazioni di qualità.
+
+## 10.3 Gestione delle segnalazioni
+
+Le segnalazioni non sono visualizzate come voti pubblici.
+
+I moderatori possono verificarle e adottare le misure appropriate.
+
+Il numero di segnalazioni non deve comportare automaticamente la rimozione, per evitare abusi coordinati.
+
+Devono esistere procedure per riesaminare le decisioni contestate.
+
+---
+
+# 11. Privacy e identità
+
+## 11.1 Nessuna identità obbligatoria
+
+La consultazione e la proposta di eventi non devono richiedere un account personale.
+
+L'utente non deve essere costretto a collegare Commons a social network, numeri telefonici o indirizzi email.
+
+## 11.2 Informazioni personali facoltative
+
+L'utente può scegliere quali informazioni pubblicare.
+
+Una descrizione personale non deve essere trasformata automaticamente in un profilo globale.
+
+Informazioni come età, fotografia, interessi e contatti rimangono facoltative, salvo esigenze specifiche chiaramente motivate.
+
+Per i minori e per particolari tipologie di evento devono essere previste ulteriori tutele.
+
+## 11.3 Dati necessari e dati non necessari
+
+Commons può avere bisogno di elaborare temporaneamente informazioni tecniche per fornire il servizio, prevenire abusi e rispondere a obblighi applicabili.
+
+Questo non autorizza a conservarle indefinitamente o a riutilizzarle per fini estranei.
+
+Ogni categoria di dati deve avere:
+
+- Una finalità dichiarata.
+- Un livello di visibilità comprensibile.
+- Un periodo di conservazione giustificato.
+- Regole di accesso e cancellazione.
+
+## 11.4 Posizione geografica
+
+La posizione deve essere richiesta soltanto se necessaria a una funzione scelta dall'utente.
+
+Deve essere sempre possibile selezionare manualmente un'area.
+
+La posizione esatta dell'utente non deve essere memorizzata come cronologia.
+
+Per eventi privati o in abitazioni personali, gli organizzatori devono poter mostrare soltanto un'area approssimativa e comunicare l'indirizzo preciso attraverso un canale appropriato.
+
+## 11.5 Controllo e rimozione
+
+Gli organizzatori devono poter correggere e rimuovere i contenuti sotto il loro controllo.
+
+Le informazioni federate o già distribuite possono essere state replicate da altre comunità: questa limitazione deve essere comunicata in modo trasparente.
+
+---
+
+# 12. Comunità e decentralizzazione
+
+## 12.1 Una rete, non un unico proprietario
+
+Commons deve essere concepito come un insieme di comunità interoperabili.
+
+Ogni comunità può avere propri organizzatori, moderatori, attività e regole pubbliche.
+
+L'utente finale non deve necessariamente conoscere la struttura distribuita della rete.
+
+## 12.2 Esperienza unificata
+
+Eventi provenienti da comunità diverse devono poter essere consultati attraverso una stessa interfaccia.
+
+La persona deve poter cercare eventi per luogo e categoria senza dover visitare manualmente decine di siti.
+
+La provenienza dell'evento deve rimanere visibile e verificabile.
+
+## 12.3 Indipendenza delle comunità
+
+Una comunità deve poter:
+
+- Pubblicare informazioni autonomamente.
+- Gestire i propri eventi.
+- Stabilire responsabilità di moderazione.
+- Esportare le proprie informazioni pubbliche.
+- Cambiare fornitore di infrastruttura.
+- Interrompere la partecipazione alla rete.
+
+La partecipazione a Commons non deve implicare la rinuncia alla propria autonomia.
+
+## 12.4 Governo del progetto
+
+Il progetto deve tendere a una governance collettiva, con processi trasparenti per:
+
+- Modificare i principi.
+- Stabilire le priorità di sviluppo.
+- Gestire le risorse economiche comuni.
+- Eleggere o nominare responsabilità operative.
+- Valutare controversie e decisioni importanti.
+
+La governance definitiva dovrà essere definita con la comunità fondatrice.
+
+---
+
+# 13. Sostenibilità economica
+
+Commons non deve dipendere dalla monetizzazione dei dati o dell'attenzione.
+
+Possibili fonti di sostegno:
+
+- Donazioni volontarie.
+- Contributi ricorrenti.
+- Sostegno di associazioni e comunità.
+- Finanziamenti culturali.
+- Sovvenzioni per progetti open-source.
+- Contributi trasparenti per servizi organizzativi aggiuntivi.
+
+Il pagamento non deve essere necessario per consultare o proporre un evento ordinario.
+
+Un'organizzazione non deve poter acquistare una posizione privilegiata nei risultati di ricerca.
+
+## 13.1 Trasparenza economica
+
+Devono essere pubblicamente consultabili, in forma appropriata:
+
+- Spese infrastrutturali.
+- Costi operativi.
+- Finanziamenti ricevuti.
+- Criteri di utilizzo dei fondi.
+- Eventuali rapporti economici rilevanti.
+
+L'obiettivo è la sostenibilità del servizio, non la massimizzazione del profitto.
+
+---
+
+# 14. Funzionalità della prima versione
+
+La prima versione deve dimostrare che le persone possono scoprire e proporre eventi facilmente, senza registrarsi e senza essere profilate.
+
+## Funzionalità essenziali — MVP
+
+- [ ] Consultazione pubblica senza account.
+- [ ] Ricerca per città o area geografica.
+- [ ] Ricerca per categoria.
+- [ ] Filtri temporali.
+- [ ] Visualizzazione a mappa.
+- [ ] Visualizzazione a elenco.
+- [ ] Ordinamento per data e distanza.
+- [ ] Scheda evento con informazioni essenziali.
+- [ ] Condivisione degli eventi tramite collegamento.
+- [ ] Aggiunta dell'evento al calendario personale.
+- [ ] Proposta di eventi senza registrazione.
+- [ ] Presentazione facoltativa del proponente.
+- [ ] Collegamento privato per gestire un evento proposto.
+- [ ] Controlli antispam iniziali.
+- [ ] Approvazione delle proposte.
+- [ ] Segnalazione di eventi problematici.
+- [ ] Moderazione con motivazioni e gestione delle contestazioni.
+- [ ] Nessun sistema di pubblicità comportamentale.
+- [ ] Nessuna profilazione individuale.
+- [ ] Interfaccia accessibile anche da browser mobile.
+
+## Funzionalità successive
+
+Potranno essere introdotte in base alle necessità osservate:
+
+- Eventi ricorrenti avanzati.
+- Profili facoltativi e riutilizzabili.
+- Organizzazioni e comunità permanenti.
+- Calendari condivisi.
+- Funzioni per trovare collaboratori.
+- Gruppi musicali e artistici.
+- Supporto economico diretto agli artisti.
+- Prenotazioni integrate.
+- Supporto multilingue esteso.
+- App Android dedicata.
+- Strumenti avanzati di federazione.
+- Esplorazione offline dei cataloghi scaricati.
+
+Queste funzionalità non devono compromettere i principi fondamentali.
+
+---
+
+# 15. Criteri di successo
+
+Commons non deve misurare il proprio successo in base al tempo trascorso nell'applicazione.
+
+Indicatori più coerenti con il progetto sono:
+
+**Utilità**
+- Gli utenti riescono a trovare eventi pertinenti?
+- La ricerca risulta semplice e comprensibile?
+- Le informazioni sono accurate e aggiornate?
+
+**Partecipazione**
+- Vengono pubblicati eventi reali?
+- Le comunità trovano il sistema utile?
+- Le iniziative pubblicate favoriscono concretamente la partecipazione?
+
+**Qualità**
+- Quanto spam viene intercettato?
+- Quanti eventi legittimi vengono bloccati erroneamente?
+- Quanto sono comprensibili le decisioni di moderazione?
+
+**Indipendenza**
+- Le comunità possono gestire autonomamente le proprie informazioni?
+- Possono uscire dal sistema senza perdere i contenuti?
+- Il costo di partecipazione rimane accessibile?
+
+**Privacy**
+- I dati effettivamente trattati sono coerenti con le finalità dichiarate?
+- Sono assenti profilazione e tracciamento comportamentale?
+- Le persone comprendono quali informazioni rendono pubbliche?
+
+La valutazione deve privilegiare informazioni pubbliche, verifiche tecniche non identificative, feedback volontario e confronti con le comunità, evitando la costruzione di cronologie individuali.
+
+---
+
+# 16. Cosa non implementare
+
+Per proteggere Commons dalla progressiva trasformazione in un social network convenzionale, alcune funzionalità devono rimanere deliberatamente escluse dal modello principale.
+
+- Feed infinito.
+- Follower e classifiche di popolarità.
+- Like pubblici come misura del valore delle iniziative.
+- Recensioni generalizzate delle persone.
+- Pubblicità comportamentale.
+- Vendita dei dati.
+- Ranking acquistabili.
+- Notifiche finalizzate a massimizzare l'utilizzo.
+- Gamification della partecipazione.
+- Profilazione automatica degli interessi.
+- Obbligo di creare una presenza digitale permanente.
+
+Ogni nuova funzione dovrà rispondere a una domanda:
+
+**Aiuta davvero qualcuno a scoprire, proporre o partecipare a qualcosa di significativo?**
+
+Se la risposta non è chiara, la funzione non dovrebbe essere aggiunta.
+
+---
+
+# 17. Questioni aperte
+
+Alcune decisioni devono essere affrontate attraverso sperimentazione e discussione comunitaria.
+
+**1. Organizzazione della moderazione**
+
+Come ripartire le responsabilità fra moderatori locali e regole comuni? Quali casi richiedono sempre l'intervento umano?
+
+**2. Attendibilità degli organizzatori**
+
+Come aiutare le persone a distinguere eventi affidabili senza creare sistemi invasivi di identità verificata o reputazione personale?
+
+**3. Prenotazioni**
+
+Come permettere la partecipazione a eventi con posti limitati, mantenendo la possibilità di utilizzare pseudonimi o identificatori temporanei?
+
+**4. Sostenibilità**
+
+Quali contributi volontari e forme di sostegno possono coprire i costi senza introdurre privilegi commerciali?
+
+**5. Equilibrio tra ricerca e scoperta**
+
+Come permettere la conoscenza di attività nuove senza generare raccomandazioni intrusive?
+
+**6. Controllo delle informazioni distribuite**
+
+Come garantire la massima possibilità di correzione e rimozione, rispettando i limiti di una rete federata?
+
+**7. Partecipazione delle comunità**
+
+Come costruire un modello decisionale che sia aperto, efficace e resistente alla concentrazione del potere?
+
+---
+
+# 18. Scenari esemplificativi
+
+## Scenario A — Scoprire una jam session
+
+Una persona apre Commons.
+
+Seleziona la propria città e la categoria Musica.
+
+Visualizza gli eventi disponibili, ordinati per data o distanza.
+
+Apre la scheda di una jam session, controlla il luogo e l'orario e aggiunge l'appuntamento al calendario.
+
+Chiude Commons.
+
+Non ha creato un account, ricevuto pubblicità o comunicato i propri interessi a un sistema di profilazione.
+
+## Scenario B — Organizzare una partita di scacchi
+
+Una persona decide di organizzare una serata di scacchi in una biblioteca.
+
+Apre Commons, seleziona Pubblica e compila titolo, descrizione, data, luogo e categoria.
+
+Aggiunge facoltativamente uno pseudonimo.
+
+Invia la proposta.
+
+Dopo i controlli previsti e l'approvazione, l'evento diventa pubblico.
+
+La persona conserva un collegamento privato per modificarlo o annullarlo.
+
+Non è stato necessario creare un profilo permanente.
+
+## Scenario C — Esplorare iniziative nel mondo
+
+Una persona è interessata ai laboratori artigianali.
+
+Apre la mappa mondiale, seleziona la categoria e visualizza le aree in cui sono disponibili attività pubblicate dalle comunità partecipanti.
+
+Seleziona una città, osserva gli eventi e ne salva uno per un possibile viaggio.
+
+La ricerca non modifica automaticamente un profilo degli interessi.
+
+## Scenario D — Segnalare un evento falso
+
+Un visitatore nota che un concerto è stato pubblicato con una sede inesistente.
+
+Apre la funzione Segnala, seleziona Informazioni ingannevoli e aggiunge una breve spiegazione.
+
+Il caso viene esaminato dai moderatori.
+
+Se necessario, l'evento viene corretto, sospeso o rimosso, con una motivazione consultabile dal proponente.
+
+Non vengono generati voti negativi o classifiche reputazionali.
+
+---
+
+# 19. Dichiarazione conclusiva
+
+Commons nasce da una convinzione:
+
+**La tecnologia dovrebbe ampliare le possibilità delle persone, non appropriarsi della loro attenzione.**
+
+Non abbiamo bisogno di trasformare ogni esperienza in un contenuto, ogni relazione in un seguito di follower e ogni interesse in un profilo commerciale.
+
+Abbiamo bisogno di strumenti accessibili che permettano alle comunità di esistere, incontrarsi, organizzarsi e collaborare.
+
+Commons vuole essere uno di questi strumenti.
+
+Un'infrastruttura aperta, semplice, sostenibile e rispettosa della libertà individuale.
+
+Una rete che non chiede alle persone di restare, ma le aiuta ad andare.
+
+**Commons — Meno rumore. Più possibilità.**
+
+*Fine del documento — Versione 0.1*

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { countEventDays, deduplicate, textOnly } from './events';
 import { MapIndex } from './map-index';
+import { mapPoint } from './map-points';
 import type { EventRecord } from './types';
 
 function event(id: string, occurrences: EventRecord['occurrences'], timezone = 'Europe/Rome'): EventRecord {
@@ -24,6 +25,32 @@ describe('worker-safe text normalization', () => {
   });
 });
 describe('spatial indexing', () => {
+  it('accounts for venue positions, city estimates, invalid coordinates and unplaced records', () => {
+    const original = event('city', [{ start: '2030-11-03T17:00:00Z' }]);
+    original.cityLocation = { latitude: 45.46, longitude: 9.19 };
+    expect(mapPoint(original)).toEqual({ id: 'city', latitude: 45.46, longitude: 9.19, approximate: true, kind: 'city' });
+    expect(original.latitude).toBeUndefined();
+    expect(mapPoint({ ...original, latitude: 45.5, longitude: 9.2 })?.approximate).toBe(false);
+    expect(mapPoint({ ...original, latitude: NaN, longitude: 200 })?.approximate).toBe(true);
+    expect(mapPoint({ ...original, cityLocation: undefined, latitude: Infinity })).toBeNull();
+    expect(mapPoint({ ...original, cityLocation: { latitude: 100, longitude: 0 } })).toBeNull();
+    expect(mapPoint({ ...original, latitude: 0, longitude: 9 })?.approximate).toBe(false);
+  });
+  it('keeps estimates distinguishable and every co-located event reachable through cluster pages', () => {
+    const index = new MapIndex();
+    index.load(Array.from({ length: 45 }, (_, i) => ({ id: String(i), latitude: 45.46, longitude: 9.19, approximate: i < 30 })));
+    const marks = index.view([9, 45, 10, 46], 19);
+    expect(marks).toHaveLength(1); expect(marks[0]).toMatchObject({ count: 45, approximateCount: 30 });
+    const ids = [0, 20, 40].flatMap(offset => index.leaves(marks[0].clusterId!, offset));
+    expect(new Set(ids).size).toBe(45);
+  });
+  it('does not lose visible edge points when a densely populated viewport is queried', () => {
+    const index = new MapIndex();
+    const points = Array.from({ length: 600 }, (_, i) => ({ id: String(i), latitude: 45 + i * .0001, longitude: 9 + (i % 5) * .001 }));
+    index.load([...points, ...Array.from({ length: 1000 }, (_, i) => ({ id: `outside-${i}`, latitude: 45 + i * .0001, longitude: 8.999 }))]);
+    const marks = index.view([9, 44.99, 9.005, 45.07], 19);
+    expect(marks.reduce((sum, mark) => sum + mark.count, 0)).toBe(points.length);
+  });
   it('reduces a large global catalogue to clusters and preserves every event in their counts', () => {
     const index = new MapIndex();
     const points = Array.from({ length: 12000 }, (_, i) => ({ id: String(i), latitude: -60 + (i % 120) * 1, longitude: -170 + Math.floor(i / 120) * 3.4 }));

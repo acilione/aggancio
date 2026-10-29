@@ -1,6 +1,6 @@
 import type { Category, EventRecord, Source } from './types';
 import { Parser } from 'htmlparser2';
-import { countryCode } from './location';
+import { countryCode, hasCoordinates } from './location';
 
 export { defaultSources } from './sources';
 export const cities: Record<string, [number, number]> = {
@@ -167,6 +167,13 @@ export function deduplicate(events: EventRecord[]): { event: EventRecord; source
     const key = event.local ? event.id : event.canonicalUrl || event.id;
     const existing = groups.get(key);
     if (existing) {
+      // A federated copy may supply a position missing from the first listing.
+      const precision = (value: EventRecord) => hasCoordinates(value) ? 4 : value.addressLocation?.precision === 'address' ? 3 : value.addressLocation ? 2 : value.cityLocation ? 1 : 0;
+      if (precision(event) > precision(existing.event)) {
+        for (const key of ['venue', 'address', 'city', 'cityId', 'cityLocation', 'addressLocation', 'cityBasis', 'countryCode', 'countryBasis', 'latitude', 'longitude'] as const) {
+          Object.assign(existing.event, { [key]: event[key] });
+        }
+      }
       if (!existing.sources.some(s => s.name === event.sourceName && s.url === event.sourceUrl)) existing.sources.push({ name: event.sourceName, url: event.sourceUrl });
       existing.event.occurrences = [...new Map([...existing.event.occurrences, ...event.occurrences].map(occurrence => [occurrence.start, occurrence])).values()].sort((a, b) => a.start.localeCompare(b.start));
     } else groups.set(key, { event: { ...event, occurrences: [...event.occurrences] }, sources: event.local ? [] : [{ name: event.sourceName, url: event.sourceUrl }] });

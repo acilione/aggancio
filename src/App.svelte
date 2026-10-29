@@ -5,7 +5,9 @@
   import { addDays, countEventDays, dayKey, deduplicate, defaultSources, formatEventDate, formatEventTime, overlapsDays, primaryOccurrence, safeUrl } from './lib/events';
   import { SourceWorkers } from './lib/source-workers';
   import { geography } from './lib/geography-client';
-  import { countryName, hasCoordinates, matchesLocation, type CityLocation } from './lib/location';
+  import { countryName, hasCoordinates, venuePosition, matchesLocation, type CityLocation } from './lib/location';
+  import { applyAddressCache, defaultGeocoder, freshEntry, geocoderURL, type AddressCache, type AddressCacheEntry } from './lib/address-lookup';
+  import AddressLookup from './components/AddressLookup.svelte';
   import LocationFilters from './components/LocationFilters.svelte';
   import { db, saveSourceEvents, saveSources } from './lib/storage';
   import { catalogueCheckedAt, mergeCatalogue, runSourceQueue } from './lib/sources';
@@ -26,6 +28,9 @@
   let country = $state('');
   let radius = $state(0);
   let exactLocationsOnly = $state(false);
+  let addressCache = $state<AddressCache>({});
+  let addressProvider = $state(defaultGeocoder);
+  let addressMapRevision = $state(0);
   let cityCenter = $state<CityLocation | null>(null);
   let sourceCities = $state<CityLocation[]>([]);
   let locationError = $state('');
@@ -101,6 +106,9 @@
         await db.settings.put({ key: 'catalogue-seen', value: merged.seen });
       });
       events = cached; drafts = local; savedIds = Array.isArray(saved?.value) ? saved.value as string[] : [];
+      const [savedAddresses, savedProvider] = await Promise.all([db.settings.get('address-cache-v1'), db.settings.get('address-provider')]);
+      if (Array.isArray(savedAddresses?.value)) addressCache = Object.fromEntries((savedAddresses.value as AddressCacheEntry[]).filter(entry => entry && typeof entry.key === 'string' && freshEntry(entry)).slice(-2000).map(entry => [entry.key, entry]));
+      if (typeof savedProvider?.value === 'string') { try { addressProvider = geocoderURL(savedProvider.value); } catch {} }
       try {
         const [enriched, enrichedDrafts, locations] = await Promise.all([geography.enrich(cached, undefined, merged.sources), geography.enrich(local), geography.sources(merged.sources.filter(source => source.enabled))]);
         events = enriched; drafts = enrichedDrafts; sourceCities = locations;
@@ -167,7 +175,17 @@
     for (const [id, controller] of controllers) if (!enabledIds.has(id)) controller.abort();
     for (const id of incoming.keys()) if (!enabledIds.has(id)) incoming.delete(id);
   });
-  const allEvents = $derived([...events.filter(event => enabledIds.has(event.sourceId)), ...drafts]);
+  const allEvents = $derived([...events.filter(event => enabledIds.has(event.sourceId)), ...drafts].map(event => applyAddressCache(event, addressCache, addressProvider)));
+  async function saveAddressResult(entry: AddressCacheEntry) {
+    addressCache = Object.fromEntries([...Object.values(addressCache).filter(item => item.key !== entry.key && freshEntry(item)), entry].slice(-2000).map(item => [item.key, item]));
+    if (selected) selected = applyAddressCache(selected, addressCache, addressProvider);
+    if (entry.location) addressMapRevision++;
+    try { await db.settings.put({ key: 'address-cache-v1', value: $state.snapshot(Object.values(addressCache)) }); }
+    catch { storageError = 'Address results could not be cached. They remain available until this page closes.'; }
+  }
+  async function saveAddressProvider(url: string) {
+    await db.settings.put({ key: 'address-provider', value: url }); addressProvider = url;
+  }
   const cityChoices = $derived.by(() => {
     const values = [...allEvents.map(event => ({ name: event.city, countryCode: event.countryCode || '' })), ...sourceCities, { name: 'Reggio Calabria', countryCode: 'IT' }, ...(cityCenter ? [cityCenter] : [])].filter(value => value.name && (!country || (country === 'unknown' ? !value.countryCode : value.countryCode === country)));
     const unique = [...new globalThis.Map(values.map(value => [`${value.name}|${value.countryCode}`, value])).values()];
@@ -197,6 +215,7 @@
   )));
   const filtered = $derived(matchingEvents.filter(group => overlapsDays(group.event, dateWindow[0], dateWindow[1])).map(group => ({ group, start: primaryOccurrence(group.event, dateWindow[0]).start })).sort((a, b) => a.start.localeCompare(b.start)).map(item => item.group));
   const displayEvents = $derived(filtered.map(group => group.event));
+  const mapFilterKey = $derived(JSON.stringify([city, country, radius, exactLocationsOnly, category, query, dateWindow, onlySaved, view, addressProvider]));
   const weekDays = $derived(Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)));
   const dailyCounts = $derived(countEventDays(matchingEvents.map(group => group.event), weekDays));
   function clearFilters() { query = ''; city = ''; country = ''; radius = 0; exactLocationsOnly = false; cityCenter = null; cityResolve++; category = 'All'; dateMode = view === 'drafts' ? 'any' : 'upcoming'; selectedDay = today; weekStart = today; onlySaved = false; visibleLimit = 30; }
@@ -335,7 +354,7 @@
             <div class="event-card-body"><div class="event-date">{formatEventDate(event, dateWindow[0])}<span>·</span>{formatEventTime(event, dateWindow[0])}{#if event.occurrences.length > 1}<span class="occurrence-count">+{event.occurrences.length - 1} dates</span>{/if}</div>
               <button class="event-title" onclick={() => openEvent(event)}><h3>{event.title}</h3></button>
               <p class="event-place"><MapPin size={13} /><span>{[event.venue, event.city, countryName(event.countryCode)].filter(Boolean).join(' · ') || event.address || 'Location not supplied'}</span></p>
-              {#if radius > 0 && !hasCoordinates(event)}<p class="small muted distance-unverified">Distance unverified · city centre estimate{event.cityBasis === 'source' ? ' from calendar coverage' : ''}</p>{/if}
+              {#if radius > 0 && !venuePosition(event)}<p class="small muted distance-unverified">Distance unverified · {event.addressLocation?.precision === 'street' ? 'street' : 'city centre'} estimate{!event.addressLocation && event.cityBasis === 'source' ? ' from calendar coverage' : ''}</p>{/if}
               <div class="event-meta"><span class="category-tag" data-category={event.categories[0]}>{event.categories[0] || 'Other'}</span>{#if event.local}<span class="draft-tag">Local draft</span>{:else}<a class="source-link" href={event.sourceUrl} target="_blank" rel="noopener noreferrer">{event.sourceName}<ArrowUpRight size={11} /></a>{/if}{#if event.status !== 'scheduled'}<span class="status-tag">{event.status}</span>{/if}</div>
               {#if group.sources.length > 1}<small class="muted">Also listed by {group.sources.slice(1).map(source => source.name).join(', ')}</small>{/if}
             </div><button class="save-event" class:is-saved={savedIds.includes(event.id)} aria-label={`${savedIds.includes(event.id) ? 'Unsave' : 'Save'} ${event.title}`} aria-pressed={savedIds.includes(event.id)} onclick={() => toggleSaved(event.id)}><Heart size={17} fill={savedIds.includes(event.id) ? 'currentColor' : 'none'} /></button>
@@ -343,7 +362,7 @@
         {/each}
         {#if filtered.length > visibleLimit}<button class="load-more secondary-button" onclick={() => visibleLimit += 30}>Show next {Math.min(30, filtered.length - visibleLimit)} events <Plus size={16} /></button>{/if}
       </div>
-      {#if showMap}<aside class="map-panel"><EventMap events={displayEvents} selectedId={selected?.id} onSelect={openEvent} /><div class="map-footer"><span><MapPin size={13} /> Exact locations only</span><span>{displayEvents.filter(event => event.latitude === undefined || event.longitude === undefined).length} without coordinates</span></div><p class="map-privacy">Map tiles load from OpenStreetMap. Location is never requested automatically.</p></aside>{/if}
+      {#if showMap}<aside class="map-panel"><EventMap events={displayEvents} filterKey={`${mapFilterKey}:${addressMapRevision}`} selectedId={selected?.id} onSelect={openEvent} /><AddressLookup events={displayEvents} cache={addressCache} provider={addressProvider} filterKey={mapFilterKey} focused={!!cityCenter || displayEvents.length <= 20} onResult={saveAddressResult} onProvider={saveAddressProvider} /><p class="map-privacy">Map tiles load from OpenStreetMap. Location is never requested automatically.</p></aside>{/if}
     </section>
     <footer class="main-footer"><button class="text-button" onclick={() => showSources = true}>Sources & privacy <ArrowUpRight size={13} /></button></footer>
   </main>
@@ -359,7 +378,8 @@
     <div class="detail-tags"><span class="category-tag">{selected.categories[0]}</span>{#if selected.local}<span class="draft-tag">Local draft · only on this device</span>{/if}{#if selected.status !== 'scheduled'}<span class="status-tag">{selected.status}</span>{/if}</div>
     <h2 class="detail-title">{selected.title}</h2><p class="detail-location"><MapPin size={17} />{[selected.venue, selected.address, selected.city, countryName(selected.countryCode)].filter(Boolean).join(' · ') || 'Location not supplied'}</p>
     {#if selected.cityBasis && selected.cityBasis !== 'provided'}<p class="small muted">City inferred from {selected.cityBasis === 'source' ? 'calendar coverage' : selected.cityBasis === 'coordinates' ? 'a nearby city; the label is approximate' : 'the event address'}.</p>{/if}
-    {#if !hasCoordinates(selected)}<p class="small muted">Venue coordinates are unavailable. Distance filtering uses the city centre when known; the actual venue may lie outside the selected radius. This event has no map pin.</p>{/if}
+    {#if !hasCoordinates(selected) && selected.addressLocation}<p class="small muted">{selected.addressLocation.precision === 'address' ? 'Address matched' : 'Street-level estimate; the house number could not be resolved'} with Photon: <a href={selected.addressLocation.osmUrl} target="_blank" rel="noopener noreferrer">{selected.addressLocation.label}</a>. Map data © OpenStreetMap contributors. Check the original event address before travelling.</p>
+    {:else if !hasCoordinates(selected)}<p class="small muted">Venue coordinates are unavailable. A known city centre is shown as an estimate on the map and used for distance filtering; the actual venue may lie outside the selected radius.{#if !selected.cityLocation} No city centre is known, so this event is listed under unplaced events on the map.{/if}</p>{/if}
     <div class="detail-dates">{#each selected.occurrences as occurrence}<p><CalendarDays size={16} /><span>{new Intl.DateTimeFormat('en-GB', { dateStyle: 'full', timeStyle: 'short', timeZone: selected.timezone }).format(new Date(occurrence.start))}{#if occurrence.end}<br /><span class="muted">Until {new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short', timeZone: selected.timezone }).format(new Date(occurrence.end))}</span>{/if}</span></p>{/each}<small class="muted">Times shown in {selected.timezone}.</small></div>
     <p class="detail-description">{selected.description || (selected.local ? 'No description added yet.' : 'This calendar listing does not include a description. Visit the original event for the full details.')}</p>
     {#if selected.tags.length}<div class="tag-list">{#each selected.tags as tag}<span>#{tag}</span>{/each}</div>{/if}
@@ -380,6 +400,6 @@
     <div class="source-form"><h3>Import another source</h3><p class="small muted">Import an agreed Commons-format JSON snapshot. Importing the same source website again replaces its previous snapshot.</p><label class="field">Source name<input bind:value={snapshotName} placeholder="e.g. Bungarang · Reggio Calabria" /></label><label class="field">Original website<input type="url" bind:value={snapshotUrl} placeholder="https://reggiocalabria.bungarang.com" /></label><button class="secondary-button" onclick={() => snapshotImport?.click()}><Upload size={16} /> Choose source JSON</button><input class="hidden" type="file" accept="application/json,.json" bind:this={snapshotImport} onchange={event => importFile(event.currentTarget.files?.[0], true)} /></div>
     {#if sourceError}<p class="error-message" role="alert">{sourceError}</p>{/if}
     <div class="notice"><AlertCircle size={17} /><div><strong>About Bungarang</strong><p>Its event API rejected requests from an unrelated website during our check. Direct integration needs a supported feed or permission for this website’s origin. You can import an agreed snapshot meanwhile.</p><a href="https://reggiocalabria.bungarang.com/it/evento/lista-completa" target="_blank" rel="noopener noreferrer">Visit the original calendar ↗</a></div></div>
-    <div class="privacy-note"><ShieldCheck size={20} /><div><h3>Privacy and coverage</h3><p>No account, analytics, or remote preference profile. Sources and map providers receive ordinary network requests, including your IP address. Poster recognition stays local; language assets download on first use. Categories are inferred from source tags and titles. Coverage is limited to enabled sources and their available upcoming events.</p><p>Missing coordinates remain missing. Calendar downloads are snapshots and will not automatically receive later cancellations.</p></div></div>
+    <div class="privacy-note"><ShieldCheck size={20} /><div><h3>Privacy and coverage</h3><p>No account, analytics, or remote preference profile. Sources and map providers receive ordinary network requests, including your IP address. Poster recognition stays local; language assets download on first use. Categories are inferred from source tags and titles. Coverage is limited to enabled sources and their available upcoming events.</p><p>Street-address lookup sends addresses to the chosen Photon service only when requested. Local drafts are excluded unless explicitly included. Results are cached on this device; markers distinguish address matches from approximate street/city locations. Calendar downloads are snapshots and will not automatically receive later cancellations.</p></div></div>
   </Dialog>
 {/if}

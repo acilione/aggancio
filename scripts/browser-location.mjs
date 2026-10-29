@@ -52,7 +52,7 @@ try {
   await page.getByLabel('Only events with venue coordinates').uncheck(); await count(4);
   await page.getByRole('button', { name: 'Map and list view', exact: true }).click();
   await page.locator('.leaflet-container').waitFor();
-  assert.ok((await page.locator('.map-footer').innerText()).includes('3 without coordinates'));
+  assert.ok((await page.locator('.map-footer').innerText()).includes('3 city estimates'));
   // Repair old cached labels without a successful API refresh.
   await page.evaluate(async () => {
     const database = await new Promise((resolve, reject) => { const request = indexedDB.open('commons-local'); request.onsuccess = () => resolve(request.result); request.onerror = () => reject(request.error); });
@@ -91,6 +91,6 @@ try {
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   await page.screenshot({ path: 'test-results/location-mobile.png' });
   assert.deepEqual(errors, []);
-  console.log('PASS: Amsterdam and Reggio discovery, radius city estimates, exact-only option, daily counts, map coordinate exclusions, persistent offline cache repair, local search and mobile layout.');
+  console.log('PASS: Amsterdam and Reggio discovery, radius city estimates, exact-only option, daily counts, map coverage, persistent offline cache repair, local search and mobile layout.');
 } catch (error) { console.log('Errors:', errors); console.log(await page.locator('.location-explanation').allTextContents()); throw error; }
 finally { await browser.close(); }

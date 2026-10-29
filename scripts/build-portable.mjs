@@ -113,7 +113,7 @@ Before replacing the executable with an update, quit the running app first.
 
 No Node.js, Go, Python, Docker, or separately installed web server is needed.
 An existing modern browser is required. Internet is needed for live events,
-map tiles, remote posters, and OCR language downloads on first use.
+map tiles, requested street-address lookups, remote posters, and OCR language downloads on first use.
 The interface, city search and previously cached events work without internet.
 Drafts belong to the browser profile, NOT the executable: export them to transfer
 or back them up. Existing localhost:5173 or localhost:4173 drafts must be exported

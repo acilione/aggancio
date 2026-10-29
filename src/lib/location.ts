@@ -1,4 +1,5 @@
 import countries from '../data/countries.json';
+import type { AddressLocation } from './types';
 export interface CityLocation { id: number; name: string; countryCode: string; latitude: number; longitude: number; admin: string }
 export const countryOptions = Object.entries(countries).map(([code, value]) => ({ code, name: value.name })).sort((a, b) => a.name.localeCompare(b.name));
 export const countryName = (code?: string) => countryOptions.find(country => country.code === code)?.name || '';
@@ -23,13 +24,20 @@ export function distanceKm(a: { latitude: number; longitude: number }, b: { lati
   const h = Math.sin(dlat / 2) ** 2 + Math.cos(a.latitude * rad) * Math.cos(b.latitude * rad) * Math.sin(dlon / 2) ** 2;
   return 6371.0088 * 2 * Math.asin(Math.min(1, Math.sqrt(h)));
 }
-export function matchesLocation(event: { city: string; cityId?: number; cityLocation?: { latitude: number; longitude: number }; countryCode?: string; latitude?: number; longitude?: number }, city: string, country: string, center: CityLocation | null, radius: number, exactOnly = false): boolean {
+export function venuePosition(event: { latitude?: number; longitude?: number; addressLocation?: AddressLocation }) {
+  if (hasCoordinates(event)) return { latitude: event.latitude, longitude: event.longitude };
+  if (event.addressLocation?.precision === 'address' && hasCoordinates(event.addressLocation)) return event.addressLocation;
+  return null;
+}
+export function matchesLocation(event: { city: string; cityId?: number; cityLocation?: { latitude: number; longitude: number }; addressLocation?: AddressLocation; countryCode?: string; latitude?: number; longitude?: number }, city: string, country: string, center: CityLocation | null, radius: number, exactOnly = false): boolean {
   if (country === 'unknown' ? !!event.countryCode : country && event.countryCode !== country) return false;
   if (radius > 0) {
     if (!center) return false;
-    if (hasCoordinates(event)) return distanceKm(center, event) <= radius;
+    const venue = venuePosition(event);
+    if (venue) return distanceKm(center, venue) <= radius;
     if (exactOnly) return false;
-    // City centres are estimates for filtering, never venue coordinates or map pins.
+    if (event.addressLocation && hasCoordinates(event.addressLocation)) return distanceKm(center, event.addressLocation) <= radius;
+    // City centres remain separate estimates, never venue coordinates.
     if (event.cityLocation && hasCoordinates(event.cityLocation)) return distanceKm(center, event.cityLocation) <= radius;
     return event.cityId ? event.cityId === center.id : normalizedName(event.city) === normalizedName(center.name) && event.countryCode === center.countryCode;
   }

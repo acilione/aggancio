@@ -63,6 +63,16 @@ describe('source boundaries', () => {
     const c = event({ ...a, id: 'c', canonicalUrl: 'https://calendar.test/event/2' });
     const groups = deduplicate([a, b, c]); expect(groups).toHaveLength(2); expect(groups[0].sources).toHaveLength(2);
   });
+  it('retains the most precise available location when duplicate sources differ', () => {
+    const missing = event({ id: 'missing', local: false, canonicalUrl: 'https://calendar.test/event/1', cityLocation: { latitude: 45.46, longitude: 9.19 }, sourceName: 'A' });
+    const exact = { ...missing, id: 'exact', sourceName: 'B', latitude: 45.5, longitude: 9.2, venue: 'Actual venue', address: 'Milano', city: 'Milano' };
+    for (const input of [[missing, exact], [exact, missing]]) {
+      const [group] = deduplicate(input);
+      expect(group.event).toMatchObject({ latitude: 45.5, longitude: 9.2, city: 'Milano', venue: 'Actual venue' });
+      expect(group.sources).toHaveLength(2);
+    }
+    expect(missing.latitude).toBeUndefined();
+  });
   it('rejects invalid coordinates and Gancio zero-pair placeholders, preserving valid single zeros', () => {
     for (const value of [' ', false, true, [], {}, null, undefined, 'NaN', Infinity, 91]) expect(coordinate(value, 90)).toBeUndefined();
     const normalize = (latitude: unknown, longitude: unknown) => normalizeGancio({ id: 2524, title: 'Fiera della Decrescita', start_datetime: 1919955600, place: { address: 'Via Quarnaro 1, 89135 Reggio Calabria, RC', latitude, longitude } }, defaultSources[0]);

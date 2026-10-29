@@ -10,12 +10,12 @@ Built files are in `releases/`. Give someone the one matching their operating sy
 
 | Computer | File | Start |
 | --- | --- | --- |
-| Windows Intel/AMD | `Commons-0.1.0-windows-x64.exe` | Double-click |
-| Windows ARM | `Commons-0.1.0-windows-arm64.exe` | Double-click |
-| Linux Intel/AMD | `Commons-0.1.0-linux-x64` | Allow execution in file permissions, then open |
-| Linux ARM | `Commons-0.1.0-linux-arm64` | Allow execution in file permissions, then open |
-| macOS Intel | `Commons-0.1.0-macos-intel.zip` | Extract, then open `Commons.app` |
-| macOS Apple Silicon | `Commons-0.1.0-macos-apple-silicon.zip` | Extract, then open `Commons.app` |
+| Windows Intel/AMD | `Commons-0.1.1-windows-x64.exe` | Double-click |
+| Windows ARM | `Commons-0.1.1-windows-arm64.exe` | Double-click |
+| Linux Intel/AMD | `Commons-0.1.1-linux-x64` | Allow execution in file permissions, then open |
+| Linux ARM | `Commons-0.1.1-linux-arm64` | Allow execution in file permissions, then open |
+| macOS Intel | `Commons-0.1.1-macos-intel.zip` | Extract, then open `Commons.app` |
+| macOS Apple Silicon | `Commons-0.1.1-macos-apple-silicon.zip` | Extract, then open `Commons.app` |
 
 The application opens `http://127.0.0.1:4173` in the default browser. No Node, Go, Python, Docker, administrator access, or application installation is required. Linux needs a desktop browser and `xdg-open`; some file managers require launching the executable from a terminal. macOS bundles target macOS 12 or newer. These builds are unsigned: Windows/macOS may require permission to open the download; macOS can offer **Open Anyway** in **System Settings → Privacy & Security** after the first attempt. Signed/notarized releases would need the distributor's signing credentials. Do not disable system protections globally.
 
@@ -67,10 +67,10 @@ npm run preview
 - A catalogue of 249 Gancio sources, covering all entries from both official directories plus additional instances found through Fedilist, Rumbly and an operator newsletter. Redirect aliases are retained. Search, enable, disable or remove sources in **Your sources**.
 - List as the default view; filters for city, category, search text, individual days, next seven days, and weekend. Day buttons show unique-event counts for the current non-date filters, including saved events and enabled sources. Selecting one day keeps the other daily counts available for comparison. Recurring events count once per occupied day; multi-day events use their own timezone and an exclusive end time.
 - Separate city search across 64,636 cities, a city dropdown with country labels, country-only filtering, and 5/10/25/50/100/250/500 km radii around a selected city centre. Radius filters include nearby towns and cross borders unless a country filter is selected. Country selection clears the previous city/radius. Daily counts and the optional map use the same location filters.
-- Optional map loaded on demand, including its JavaScript and CSS. A dedicated worker builds a Supercluster spatial index; only clusters or individual markers in the visible viewport are rendered. Zooming in reveals more detail. Co-located events remain grouped and can be browsed in pages of 20. Updates preserve the current pan/zoom; **Fit all events** resets the view. Closing the map releases its worker and markers.
+- Optional map loaded on demand, including its JavaScript and CSS. A dedicated worker builds a Supercluster spatial index; only clusters or individual markers in the visible viewport are rendered. Zooming in reveals more detail. Co-located events remain grouped and can be browsed in pages of 20. Dashed markers identify city-centre estimates; records with no usable location remain selectable in the map's **unplaced events** section. Coverage counts account for every filtered event, including events beyond the list's first page. Filter changes refit the map; background updates preserve an intentional pan/zoom, while the initial load continues fitting newly arriving events. **Fit all events** resets the view. Closing the map releases its worker and markers.
 - Source updates run in 2–4 Web Workers (depending on reported CPU capacity), with up to four source requests per worker: 8–16 concurrent sources. Fetching, JSON parsing and event normalization happen off the UI thread. Each source's pages remain sequential. Results are applied in short batches to avoid rerendering the catalogue for every response. Disabling a source cancels its current request; failures retain cached events. Browsers without Web Workers fall back to six concurrent sources on the main thread.
 - Progress counts, retries through Refresh, pagination with a visible 1,000-row/source limit, explicit errors, and stale-cache fallback. Slow or unavailable source servers can still delay completion; events appear as successful sources finish.
-- Event-source links, original tags, inferred categories, and conservative deduplication by canonical URL. Separate occurrences are preserved.
+- Event-source links, original tags, inferred categories, and conservative deduplication by canonical URL. Separate occurrences are preserved; available venue coordinates are retained when another duplicate lacks them.
 - Local bookmarks, source configuration, event caches, and drafts in IndexedDB using Dexie.
 - Poster OCR using Tesseract.js, with Italian/English text extraction and an editable review form. Alternatively paste text or enter an event manually.
 - Multiple dated occurrences, event timezone, optional end times, and optional map coordinates.
@@ -83,11 +83,21 @@ New drafts are **only on the current browser/device**. Saving does not publish t
 
 Gancio installations differ. Read access requires the source to allow the browser's origin through CORS. Fetching uses public endpoints without credentials. The browser only knows events supplied by enabled sources; it does not offer a complete worldwide catalogue. The default query retrieves upcoming events, including multi-day/recurrent entries when provided. A maximum of ten 100-row pages per source bounds requests and memory; the UI marks partial results. Private preferences and text searches are not sent to an application backend.
 
-Some listing APIs omit descriptions and coordinates. The original event link is provided for full details. Radius uses straight-line distance from the selected city centre to venue coordinates when available. Otherwise, events with a known city use its centre and display **Distance unverified**: the venue may lie outside the radius. Select **Only events with venue coordinates** for strict radius filtering. Events with no resolvable city or venue coordinates cannot be included in radius results. City estimates stay off the map and are stored separately from venue coordinates. Gancio's `(0,0)` placeholders and incomplete coordinate pairs are treated as missing; valid single zero coordinates are preserved. Existing cached locations are repaired on upgrade, including when sources are offline. Set source timezones explicitly; day filtering uses each event's timezone. Categories are simple, inspectable keyword mappings in `src/lib/events.ts` and can be wrong.
+Some listing APIs omit descriptions and coordinates. The original event link is provided for full details. Radius uses straight-line distance from the selected city centre to source coordinates or a matched house-number address. Otherwise it uses an available street or city estimate and displays **Distance unverified**: the venue may lie outside the radius. Select **Only events with venue coordinates** to exclude approximate street/city positions. Events with no usable position cannot be included in radius results. Estimates appear as dashed markers or groups, are labelled in group details, and stay separate from actual venue coordinates in data and exports. Gancio's `(0,0)` placeholders and incomplete coordinate pairs are treated as missing; valid single zero coordinates are preserved. Existing cached locations are repaired on upgrade, including when sources are offline. Set source timezones explicitly; day filtering uses each event's timezone. Categories are simple, inspectable keyword mappings in `src/lib/events.ts` and can be wrong.
+
+### Street-address markers
+
+Open the map and click **Locate street addresses**. This explicitly sends up to 20 unique addresses from the filtered results to a Photon-compatible geocoder, one request at a time, at least 1.1 seconds apart. Choose a city first, or narrow the results to 20 events. It never scans the whole catalogue in the background. Local draft addresses are excluded unless **Include local draft addresses in this lookup** is checked. Only address/city/country and city-centre bias are sent; not titles, descriptions, posters, or GPS position. Requests omit credentials and referrer information. Closing the map, changing filters, or pressing **Stop lookup** cancels pending work.
+
+The default is [Photon's public demo](https://github.com/komoot/photon#demo-server), which permits reasonable use but may throttle requests and has no availability guarantee. Change **Address service → Photon API endpoint** to use another compatible service without rebuilding; it must allow browser requests (CORS). Public services are unsuitable for unrestricted bulk geocoding. No backend, API key, or paid service is required for this limited lookup action.
+
+Matches must agree with the supplied street and house number and pass city/country/proximity checks. Ambiguous or unmatched addresses keep their existing estimate; a street-only result remains a labelled **street estimate**, never a house-number match. Multiple nearby OSM objects at the same address are treated as one location. Source coordinates always win. The map refits to newly requested matches, and all matching events at an address reuse the result. A label and OpenStreetMap link explain each match; a geocoder match is not a guarantee of venue accuracy. Export/import retains the separate `addressLocation` metadata and attribution rather than inserting inferred coordinates into the original source fields.
+
+Up to 2,000 results are cached in browser storage: matches for 30 days and no-match results for one day. The key includes provider, address, city and country, so changed addresses do not reuse stale locations. Network errors are not cached as no-match results. Cached results are reapplied after source refresh and reload. Map data is © OpenStreetMap contributors, under [ODbL](https://www.openstreetmap.org/copyright).
 
 ## City and country data
 
-City search, address matching and location enrichment run in a dedicated browser worker. No search terms or event addresses are sent to a geocoding service, and no GPS permission is requested. The static geography worker includes about 5.2 MB of uncompressed city/boundary data and code, fetched once from the same site; HTTP compression can reduce transfer size. The UI and map remain separate from this data processing.
+City search, city-name matching within addresses, and basic location enrichment run in a dedicated browser worker without sending searches or addresses to a geocoding service. Street-address lookup is a separate explicit action described above. No GPS permission is requested. The static geography worker includes about 5.2 MB of uncompressed city/boundary data and code, fetched once from the same site; HTTP compression can reduce transfer size. The UI and map remain separate from this data processing.
 
 The bundled city index is derived from [GeoNames cities5000](https://download.geonames.org/export/dump/), downloaded on 28 October 2026, under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). It retains local/ASCII names, country, region code, population and centre coordinates, excludes historical/abandoned places and city subdivisions, and adds selected common exonyms. It is broad coverage, not every village worldwide. Run `python3 scripts/build-geography.py` to regenerate the attributed `src/data/geography.json` and `countries.json` files, then rebuild.
 
@@ -158,6 +168,8 @@ node scripts/browser-smoke.mjs
 node scripts/browser-features.mjs
 node scripts/browser-performance.mjs
 node scripts/browser-location.mjs
+node scripts/browser-map.mjs
+node scripts/browser-address.mjs
 ```
 
 On Windows these use the installed Chrome at its standard path. On Linux install a Playwright Chromium browser, or set `COMMONS_BROWSER` to an existing compatible browser executable. `COMMONS_URL` overrides localhost:5173.
@@ -166,7 +178,9 @@ The smoke script checks real source reads, three-date extraction, draft persiste
 
 The performance script uses controlled API fixtures with 3,003 unique events to verify actual worker threads and bounded download concurrency, absence of map assets/tiles before opening the map, daily counts under combined filters, deduplication, clustered viewport rendering, individual selection, co-located events, map teardown, and mobile layout. It reports fixture loading times and main-thread long tasks; these are not a guarantee of live-network timing.
 
-The location script covers Amsterdam and Reggio Calabria addresses without city fields, country-only filtering, city search/dropdown selection, distance boundaries, city estimates and strict radius filtering, daily counts, map coordinate exclusions, persistent offline cache migration and mobile layout. It also verifies that searches make no external geocoding requests.
+The location script covers Amsterdam and Reggio Calabria addresses without city fields, country-only filtering, city search/dropdown selection, distance boundaries, city estimates and strict radius filtering, daily counts, map coverage, persistent offline cache migration and mobile layout. It also verifies that searches make no external geocoding requests. The map script reproduces Milano/today with more than 30 events, approximate groups, shared-source coordinates, unplaced records, filter refitting, pan preservation during refresh, strict radius mode and mobile layout.
+
+The address script checks explicit-only requests, shared-address caching, rate limits, house/street/city distinctions, private-draft opt-in, attribution, radius filtering, automatic refitting after lookup, and cache reuse after refresh/reload. It uses controlled Photon responses; live checks should use a few public venue addresses, not bulk queries.
 
 ## Structure
 

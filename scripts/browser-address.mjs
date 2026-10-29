@@ -1,0 +1,71 @@
+import { chromium } from '@playwright/test';
+import assert from 'node:assert/strict';
+import { mkdir } from 'node:fs/promises';
+const browser = await chromium.launch({ headless: true, ...(process.platform === 'win32' ? { executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' } : process.env.COMMONS_BROWSER ? { executablePath: process.env.COMMONS_BROWSER } : {}) });
+const context = await browser.newContext({ viewport: { width: 1440, height: 1100 } });
+const page = await context.newPage(); const errors = []; const requests = []; let inFlight = 0; let peak = 0;
+page.on('pageerror', error => errors.push(error.message));
+const row = (id, title, address, latitude = null, longitude = null) => ({ id, title, start_datetime: Date.parse('2030-11-03T17:00Z') / 1000, place: { city: 'Milano', country: 'IT', address, latitude, longitude } });
+const rows = [row(1, 'Stuparich address', 'P.za Stuparich 18, Milano'), row(2, 'Shared Stuparich address', 'P.za Stuparich 18, Milano'), row(3, 'Confalonieri address', 'Via Federico Confalonieri 3, Milano'), row(4, 'Street without number', 'Via Test Strada, Milano'), row(5, 'Unmatched number', 'Via Federico Confalonieri 99, Milano'), row(6, 'City only', 'Milano'), row(7, 'Supplied venue position', 'Piazza Duomo 1, Milano', 45.464, 9.19)];
+await context.route('**/api/events?*', route => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(new URL(route.request().url()).hostname === 'puntello.org' ? rows : []), headers: { 'Access-Control-Allow-Origin': '*' } }));
+await context.route(url => url.hostname === 'photon.komoot.io', async route => {
+  requests.push({ query: new URL(route.request().url()).searchParams.get('q'), time: Date.now() }); inFlight++; peak = Math.max(peak, inFlight);
+  const query = requests.at(-1).query;
+  const street = query.includes('stuparich') ? 'Piazza Carlo Stuparich' : query.includes('test strada') ? 'Via Test Strada' : query.includes('privata') ? 'Via Privata' : 'Via Federico Confalonieri';
+  const number = street.includes('Stuparich') ? '18' : street.includes('Test') ? undefined : street.includes('Privata') ? '5' : '3';
+  const feature = { type: 'Feature', geometry: { type: 'Point', coordinates: street.includes('Stuparich') ? [9.1440148, 45.4835121] : [9.1898187, 45.4865532] }, properties: { type: number ? 'house' : 'street', street, housenumber: number, city: 'Milano', country: 'Italia', countrycode: 'IT', osm_type: 'N', osm_id: 2456060997 } };
+  await new Promise(resolve => setTimeout(resolve, 80));
+  await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ features: [feature] }), headers: { 'Access-Control-Allow-Origin': '*' } }); inFlight--;
+});
+const ready = () => page.waitForFunction(() => document.querySelector('.coverage-line button') && !document.querySelector('.coverage-line button').disabled);
+const chooseMap = async () => {
+  await page.getByLabel('City', { exact: true }).selectOption('Milano');
+  await page.getByRole('button', { name: 'Map and list view', exact: true }).click();
+  await page.waitForFunction(() => document.querySelector('.map-topline')?.textContent.includes('8 located'));
+};
+try {
+  await page.goto(process.env.COMMONS_URL || 'http://localhost:5173'); await ready();
+  await page.evaluate(async () => {
+    const database = await new Promise(resolve => { const request = indexedDB.open('commons-local'); request.onsuccess = () => resolve(request.result); });
+    await new Promise((resolve, reject) => {
+      const tx = database.transaction('drafts', 'readwrite');
+      tx.objectStore('drafts').put({ id: 'draft:private-address', title: 'Private address draft', description: '', venue: '', address: 'Via Privata 5, Milano', city: 'Milano', cityBasis: 'provided', countryCode: 'IT', categories: ['Other'], tags: [], occurrences: [{ start: '2030-11-03T17:00:00Z' }], timezone: 'Europe/Rome', sourceId: 'local', sourceName: 'Local draft', sourceUrl: '', local: true, status: 'scheduled', updatedAt: new Date().toISOString(), cachedAt: new Date().toISOString() });
+      tx.oncomplete = resolve; tx.onerror = () => reject(tx.error);
+    }); database.close();
+  });
+  await page.reload(); await ready(); await chooseMap();
+  assert.equal(requests.length, 0, 'Opening the map never sends addresses automatically');
+  await page.getByRole('button', { name: 'Zoom in', exact: true }).click();
+  await page.getByRole('button', { name: 'Zoom in', exact: true }).click();
+  await page.getByRole('button', { name: 'Locate street addresses (4)', exact: true }).click();
+  await page.waitForFunction(() => document.querySelector('.address-lookup')?.textContent.includes('3 of 4 addresses located'), null, { timeout: 30000 });
+  assert.equal(requests.length, 4, 'One query per unique address, no requests for supplied coordinates or city-only text');
+  assert.equal(peak, 1);
+  assert.ok(requests.every((request, i) => !i || request.time - requests[i - 1].time >= 1000));
+  assert.ok(!requests.some(request => request.query.includes('privata')), 'Draft addresses stay local by default');
+  await page.waitForFunction(() => document.querySelector('.map-footer')?.textContent.includes('3 address matches'));
+  assert.match(await page.locator('.map-footer').innerText(), /1 venue locations[\s\S]*3 address matches[\s\S]*1 street estimates[\s\S]*3 city estimates/);
+  await page.waitForFunction(() => !document.querySelector('.map-topline')?.textContent.includes('Updating') && [...document.querySelectorAll('.commons-pin,.commons-cluster')].reduce((sum, marker) => sum + Number(marker.dataset.eventCount), 0) === 8);
+  await page.getByLabel('Distance', { exact: true }).selectOption('25');
+  await page.getByLabel('Only events with venue coordinates').check();
+  await page.waitForFunction(() => document.querySelector('.result-count')?.textContent === '4');
+  await page.getByLabel('Only events with venue coordinates').uncheck();
+  await page.getByLabel('Include local draft addresses in this lookup').check();
+  await page.getByRole('button', { name: 'Locate street addresses (1)', exact: true }).click();
+  await page.waitForFunction(() => document.querySelector('.map-footer')?.textContent.includes('4 address matches'));
+  assert.ok(requests.at(-1).query.includes('privata'));
+  await page.locator('.event-title').filter({ hasText: /^Confalonieri address$/ }).click();
+  await page.getByRole('heading', { name: 'Event details' }).waitFor();
+  assert.ok((await page.locator('dialog').innerText()).includes('Address matched with Photon'));
+  await page.getByRole('button', { name: 'Close dialog' }).click();
+  await page.reload(); await ready(); await chooseMap();
+  await page.waitForFunction(() => document.querySelector('.map-footer')?.textContent.includes('4 address matches'));
+  assert.equal(requests.length, 5, 'Cached positive and negative results survive reload and source refresh');
+  assert.ok(await page.getByRole('button', { name: 'Locate street addresses', exact: true }).isDisabled());
+  await page.setViewportSize({ width: 390, height: 1000 });
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+  await mkdir('test-results', { recursive: true });
+  await page.locator('.map-panel').screenshot({ path: 'test-results/address-lookup-map.png' });
+  assert.deepEqual(errors, []);
+  console.log('PASS: explicit address lookup, shared-address caching, rate limits, precise/street/city distinctions, radius filtering, private draft opt-in, attribution, cache reload and mobile layout.');
+} finally { await browser.close(); }

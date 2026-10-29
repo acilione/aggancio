@@ -5,7 +5,7 @@
   import { addDays, countEventDays, dayKey, deduplicate, defaultSources, formatEventDate, formatEventTime, overlapsDays, primaryOccurrence, safeUrl } from './lib/events';
   import { SourceWorkers } from './lib/source-workers';
   import { geography } from './lib/geography-client';
-  import { countryName, hasCoordinates, venuePosition, matchesLocation, type CityLocation } from './lib/location';
+  import { countryName, hasCoordinates, venuePosition, matchesLocation, type CityLocation, type GeoBounds } from './lib/location';
   import { applyAddressCache, defaultGeocoder, freshEntry, geocoderURL, type AddressCache, type AddressCacheEntry } from './lib/address-lookup';
   import AddressLookup from './components/AddressLookup.svelte';
   import LocationFilters from './components/LocationFilters.svelte';
@@ -32,6 +32,12 @@
   let addressProvider = $state(defaultGeocoder);
   let addressMapRevision = $state(0);
   let cityCenter = $state<CityLocation | null>(null);
+  let countryFocus = $state<GeoBounds | null>(null);
+  $effect(() => {
+    const code = country; let current = true; countryFocus = null;
+    if (code && code !== 'unknown') geography.bounds(code).then(value => { if (current) countryFocus = value; }).catch(() => {});
+    return () => { current = false; };
+  });
   let sourceCities = $state<CityLocation[]>([]);
   let locationError = $state('');
   let cityResolve = 0;
@@ -362,7 +368,7 @@
         {/each}
         {#if filtered.length > visibleLimit}<button class="load-more secondary-button" onclick={() => visibleLimit += 30}>Show next {Math.min(30, filtered.length - visibleLimit)} events <Plus size={16} /></button>{/if}
       </div>
-      {#if showMap}<aside class="map-panel"><EventMap events={displayEvents} filterKey={`${mapFilterKey}:${addressMapRevision}`} selectedId={selected?.id} onSelect={openEvent} /><AddressLookup events={displayEvents} cache={addressCache} provider={addressProvider} filterKey={mapFilterKey} focused={!!cityCenter || displayEvents.length <= 20} onResult={saveAddressResult} onProvider={saveAddressProvider} /><p class="map-privacy">Map tiles load from OpenStreetMap. Location is never requested automatically.</p></aside>{/if}
+      {#if showMap}<aside class="map-panel"><EventMap events={displayEvents} center={cityCenter ? [cityCenter.latitude, cityCenter.longitude] : undefined} bounds={countryFocus || undefined} filterKey={`${mapFilterKey}:${addressMapRevision}`} selectedId={selected?.id} onSelect={openEvent} /><AddressLookup events={displayEvents} cache={addressCache} provider={addressProvider} filterKey={mapFilterKey} focused={!!cityCenter || displayEvents.length <= 20} onResult={saveAddressResult} onProvider={saveAddressProvider} /><p class="map-privacy">Map tiles load from OpenStreetMap. Location is never requested automatically.</p></aside>{/if}
     </section>
     <footer class="main-footer"><button class="text-button" onclick={() => showSources = true}>Sources & privacy <ArrowUpRight size={13} /></button></footer>
   </main>

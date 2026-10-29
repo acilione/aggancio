@@ -1,11 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import { enrichLocation, searchCities, resolveCity, sourceLocation } from './geography-index';
+import { countryBounds, enrichLocation, searchCities, resolveCity, sourceLocation } from './geography-index';
 import { countryCode, distanceKm, matchesLocation } from './location';
 import { parseImport } from './export';
 import type { EventRecord, Source } from './types';
 const source: Source = { id: 'amsterdam', name: 'Offbeat Amsterdam', url: 'https://offbeat.amsterdam', kind: 'gancio', city: '', region: 'Amsterdam', timezone: 'Europe/Amsterdam', enabled: true };
 const event = (values: Partial<EventRecord> = {}): EventRecord => ({ id: 'a', title: 'Event', description: '', venue: '', address: '', city: '', categories: ['Other'], tags: [], occurrences: [{ start: '2030-11-03T17:00:00Z' }], timezone: 'Europe/Amsterdam', sourceId: source.id, sourceName: source.name, sourceUrl: source.url, local: false, status: 'scheduled', updatedAt: '2030-10-01T00:00:00Z', cachedAt: '2030-10-01T00:00:00Z', ...values });
 describe('worldwide city lookup', () => {
+  it('supplies country bounds for map navigation even with no matching events', () => {
+    const japan = countryBounds('JP')!;
+    expect(japan[0][0]).toBeLessThan(36); expect(japan[1][0]).toBeGreaterThan(36);
+    expect(japan[0][1]).toBeLessThan(139); expect(japan[1][1]).toBeGreaterThan(139);
+    const fiji = countryBounds('FJ')!;
+    expect(fiji[1][1]).toBeGreaterThan(fiji[0][1]);
+    expect(fiji[1][1] - fiji[0][1]).toBeLessThan(30);
+    expect(countryBounds('unknown')).toBeNull();
+  });
   it('finds Amsterdam, accented names, Italian exonyms and country-qualified matches', () => {
     expect(searchCities('amster')[0]).toMatchObject({ name: 'Amsterdam', countryCode: 'NL' });
     expect(searchCities('koln')[0].countryCode).toBe('DE');

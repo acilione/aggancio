@@ -2,7 +2,7 @@ import data from '../data/geography.json';
 import topology from 'world-atlas/countries-50m.json';
 import { feature } from 'topojson-client';
 import { geoBounds, geoContains } from 'd3-geo';
-import { countryCode, normalizedName, hasCoordinates, distanceKm, type CityLocation } from './location';
+import { countryCode, normalizedName, hasCoordinates, distanceKm, type CityLocation, type GeoBounds } from './location';
 import type { EventRecord, Source } from './types';
 import type { Feature, MultiPolygon, Polygon } from 'geojson';
 
@@ -24,6 +24,33 @@ for (const city of cities) {
 const numericCodes = new Map(Object.entries(data.countries).map(([code, country]) => [country.numeric, code]));
 const shapes = (feature(topology as any, topology.objects.countries as any) as unknown as { features: Feature<Polygon | MultiPolygon>[] }).features.map(shape => ({ shape, bounds: geoBounds(shape), code: numericCodes.get(String(shape.id).padStart(3, '0')) || '' }));
 const countryCache = new Map<string, string>();
+export function countryBounds(code: string): GeoBounds | null {
+  const match = shapes.find(shape => shape.code === code);
+  if (match) {
+    let [[west, south], [east, north]] = match.bounds;
+    // Split polygons at the date line can produce a whole-world d3 bound.
+    // Use the smallest longitude arc containing their vertices (except polar land).
+    if (east - west >= 359 && south > -80 && north < 89) {
+      const geometry = match.shape.geometry;
+      const vertices = geometry.type === 'Polygon' ? geometry.coordinates.flat() : geometry.coordinates.flat(2);
+      const longitudes = [...new Set(vertices.map(point => (point[0] + 360) % 360))].sort((a, b) => a - b);
+      let gap = -1;
+      for (let i = 0; i < longitudes.length; i++) {
+        const next = longitudes[(i + 1) % longitudes.length] + (i === longitudes.length - 1 ? 360 : 0);
+        if (next - longitudes[i] > gap) {
+          gap = next - longitudes[i]; west = next % 360; east = longitudes[i];
+        }
+      }
+      if (west > 180) west -= 360;
+      while (east < west) east += 360;
+      while (east - west > 360) east -= 360;
+    }
+    return [[south, west], [north, east < west ? east + 360 : east]];
+  }
+  const places = cities.filter(city => city.countryCode === code);
+  if (!places.length) return null;
+  return [[Math.min(...places.map(city => city.latitude)) - .05, Math.min(...places.map(city => city.longitude)) - .05], [Math.max(...places.map(city => city.latitude)) + .05, Math.max(...places.map(city => city.longitude)) + .05]];
+}
 function coordinateCountry(latitude: number, longitude: number) {
   const key = `${latitude},${longitude}`;
   if (countryCache.has(key)) return countryCache.get(key)!;

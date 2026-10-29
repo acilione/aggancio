@@ -43,6 +43,7 @@ try {
   await page.getByRole('button', { name: 'Close dialog' }).click();
   // Switching filters resets the old cluster panel and refits without a manual Fit click.
   await page.getByLabel('City', { exact: true }).selectOption('Torino'); await count(0); await mapCount(0);
+  await page.waitForFunction(() => Math.abs(Number(document.querySelector('.map-wrapper').dataset.latitude) - 45.07) < .05 && Math.abs(Number(document.querySelector('.map-wrapper').dataset.longitude) - 7.68) < .05);
   assert.equal(await page.locator('.cluster-events').count(), 0);
   await page.locator('[data-day="2026-10-30"]').click(); await count(1); await mapCount(1);
   assert.ok(await page.locator('.commons-pin[title="Torino tomorrow"]').isVisible());
@@ -71,9 +72,23 @@ try {
   await page.getByLabel('Only events with venue coordinates').uncheck(); await count(37); await mapCount(37);
   await page.setViewportSize({ width: 390, height: 1000 });
   await mapCount(37);
+  await page.locator('.commons-cluster.approximate-location').first().click();
+  await page.waitForFunction(() => document.querySelectorAll('.expanded-event').length === 20);
+  const expanded = await page.locator('.expanded-event').evaluateAll(markers => markers.map(marker => { const box = marker.getBoundingClientRect(); return [box.x, box.y]; }));
+  assert.equal(new Set(expanded.map(point => point.join(','))).size, 20, 'Shared locations fan out into distinct mobile markers');
+  const mapBox = await page.locator('.map-wrapper').boundingBox();
+  const panelBox = await page.locator('.cluster-events').boundingBox();
+  assert.ok(panelBox.y >= mapBox.y && panelBox.y + panelBox.height <= mapBox.y + mapBox.height, 'Event chooser stays inside the map');
+  assert.ok(expanded.every(([, y]) => y + 44 <= panelBox.y), 'All expanded marker targets stay above the event chooser');
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   await mkdir('test-results', { recursive: true });
   await page.screenshot({ path: 'test-results/map-coverage-mobile.png', fullPage: true });
+  await page.getByLabel('Country', { exact: true }).selectOption('JP'); await count(0); await mapCount(0);
+  await page.waitForFunction(() => { const map = document.querySelector('.map-wrapper').dataset; return Number(map.latitude) > 25 && Number(map.latitude) < 45 && Number(map.longitude) > 125 && Number(map.longitude) < 150 && Number(map.zoom) >= 3; });
+  await page.getByLabel('Country', { exact: true }).selectOption('');
+  await page.getByLabel('Search city', { exact: true }).fill('Berlin');
+  await page.locator('.city-suggestions button').filter({ hasText: 'Germany' }).first().click(); await count(0); await mapCount(0);
+  await page.waitForFunction(() => { const map = document.querySelector('.map-wrapper').dataset; return Math.abs(Number(map.latitude) - 52.52) < .05 && Math.abs(Number(map.longitude) - 13.4) < .05 && Number(map.zoom) === 12; });
   assert.deepEqual(errors, []);
   console.log('PASS: Milano/today map-list parity beyond list pagination; estimates, precise duplicates, cluster pages, unplaced events, filter refitting, refresh/pan preservation, strict radius and mobile layout.');
 } finally { await browser.close(); }

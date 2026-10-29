@@ -10,12 +10,12 @@ Built files are in `releases/`. Give someone the one matching their operating sy
 
 | Computer | File | Start |
 | --- | --- | --- |
-| Windows Intel/AMD | `Commons-0.1.1-windows-x64.exe` | Double-click |
-| Windows ARM | `Commons-0.1.1-windows-arm64.exe` | Double-click |
-| Linux Intel/AMD | `Commons-0.1.1-linux-x64` | Allow execution in file permissions, then open |
-| Linux ARM | `Commons-0.1.1-linux-arm64` | Allow execution in file permissions, then open |
-| macOS Intel | `Commons-0.1.1-macos-intel.zip` | Extract, then open `Commons.app` |
-| macOS Apple Silicon | `Commons-0.1.1-macos-apple-silicon.zip` | Extract, then open `Commons.app` |
+| Windows Intel/AMD | `Commons-0.1.2-windows-x64.exe` | Double-click |
+| Windows ARM | `Commons-0.1.2-windows-arm64.exe` | Double-click |
+| Linux Intel/AMD | `Commons-0.1.2-linux-x64` | Allow execution in file permissions, then open |
+| Linux ARM | `Commons-0.1.2-linux-arm64` | Allow execution in file permissions, then open |
+| macOS Intel | `Commons-0.1.2-macos-intel.zip` | Extract, then open `Commons.app` |
+| macOS Apple Silicon | `Commons-0.1.2-macos-apple-silicon.zip` | Extract, then open `Commons.app` |
 
 The application opens `http://127.0.0.1:4173` in the default browser. No Node, Go, Python, Docker, administrator access, or application installation is required. Linux needs a desktop browser and `xdg-open`; some file managers require launching the executable from a terminal. macOS bundles target macOS 12 or newer. These builds are unsigned: Windows/macOS may require permission to open the download; macOS can offer **Open Anyway** in **System Settings → Privacy & Security** after the first attempt. Signed/notarized releases would need the distributor's signing credentials. Do not disable system protections globally.
 
@@ -67,7 +67,7 @@ npm run preview
 - A catalogue of 249 Gancio sources, covering all entries from both official directories plus additional instances found through Fedilist, Rumbly and an operator newsletter. Redirect aliases are retained. Search, enable, disable or remove sources in **Your sources**.
 - List as the default view; filters for city, category, search text, individual days, next seven days, and weekend. Day buttons show unique-event counts for the current non-date filters, including saved events and enabled sources. Selecting one day keeps the other daily counts available for comparison. Recurring events count once per occupied day; multi-day events use their own timezone and an exclusive end time.
 - Separate city search across 64,636 cities, a city dropdown with country labels, country-only filtering, and 5/10/25/50/100/250/500 km radii around a selected city centre. Radius filters include nearby towns and cross borders unless a country filter is selected. Country selection clears the previous city/radius. Daily counts and the optional map use the same location filters.
-- Optional map loaded on demand, including its JavaScript and CSS. A dedicated worker builds a Supercluster spatial index; only clusters or individual markers in the visible viewport are rendered. Zooming in reveals more detail. Co-located events remain grouped and can be browsed in pages of 20. Dashed markers identify city-centre estimates; records with no usable location remain selectable in the map's **unplaced events** section. Coverage counts account for every filtered event, including events beyond the list's first page. Filter changes refit the map; background updates preserve an intentional pan/zoom, while the initial load continues fitting newly arriving events. **Fit all events** resets the view. Closing the map releases its worker and markers.
+- Optional map loaded on demand, including its JavaScript and CSS. A dedicated worker builds a Supercluster spatial index; only clusters or individual markers in the visible viewport are rendered. Zooming in reveals more detail. Clicking a group opens an on-map event chooser, in pages of 20. When zoom cannot separate shared locations, the current page's markers spread apart for selection; these visual offsets never change stored coordinates or distance filtering. Remaining groups also expand at maximum zoom. Compact SVG pins identify venue locations; dashed circles identify estimates. Records with no usable location remain selectable in the map's **unplaced events** section. Coverage counts account for every filtered event, including events beyond the list's first page. Filter changes refit the map, centring on the selected city or country even when there are no matching events. Background updates preserve an intentional pan/zoom, while the initial load continues fitting newly arriving events. **Fit all events** resets the view. Closing the map releases its worker and markers.
 - Source updates run in 2–4 Web Workers (depending on reported CPU capacity), with up to four source requests per worker: 8–16 concurrent sources. Fetching, JSON parsing and event normalization happen off the UI thread. Each source's pages remain sequential. Results are applied in short batches to avoid rerendering the catalogue for every response. Disabling a source cancels its current request; failures retain cached events. Browsers without Web Workers fall back to six concurrent sources on the main thread.
 - Progress counts, retries through Refresh, pagination with a visible 1,000-row/source limit, explicit errors, and stale-cache fallback. Slow or unavailable source servers can still delay completion; events appear as successful sources finish.
 - Event-source links, original tags, inferred categories, and conservative deduplication by canonical URL. Separate occurrences are preserved; available venue coordinates are retained when another duplicate lacks them.
@@ -168,6 +168,7 @@ node scripts/browser-smoke.mjs
 node scripts/browser-features.mjs
 node scripts/browser-performance.mjs
 node scripts/browser-location.mjs
+node scripts/browser-map-controls.mjs
 node scripts/browser-map.mjs
 node scripts/browser-address.mjs
 ```

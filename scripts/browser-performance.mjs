@@ -90,9 +90,10 @@ try {
   await page.getByRole('heading', { name: 'Event details', exact: true }).waitFor();
   await page.getByRole('button', { name: 'Close dialog' }).click();
   // Co-located events remain accessible even at maximum zoom.
-  await page.locator('.commons-cluster').first().click();
+  if (!await page.locator('.cluster-events').isVisible()) await page.locator('.commons-cluster').first().click();
   await page.locator('.cluster-events').waitFor();
   assert.equal(await page.locator('.cluster-event').count(), 2);
+  assert.equal(await page.locator('.expanded-event').count(), 2, 'Shared coordinates spread into individually selectable markers');
   await page.getByRole('button', { name: 'List view', exact: true }).click();
   await page.waitForFunction(() => !document.querySelector('.map-canvas'));
   assert.ok(!page.workers().some(worker => worker.url().includes('map.worker')), 'Closing map terminates its worker');

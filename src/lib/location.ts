@@ -1,6 +1,7 @@
 import countries from '../data/countries.json';
 import type { AddressLocation } from './types';
 export interface CityLocation { id: number; name: string; countryCode: string; latitude: number; longitude: number; admin: string }
+export type GeoBounds = [[number, number], [number, number]];
 export const countryOptions = Object.entries(countries).map(([code, value]) => ({ code, name: value.name })).sort((a, b) => a.name.localeCompare(b.name));
 export const countryName = (code?: string) => countryOptions.find(country => country.code === code)?.name || '';
 export function normalizedName(value: string) { return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim(); }

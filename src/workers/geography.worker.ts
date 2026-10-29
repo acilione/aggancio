@@ -1,4 +1,4 @@
-import { enrichLocation, resolveCity, searchCities, sourceLocation } from '../lib/geography-index';
+import { countryBounds, enrichLocation, resolveCity, searchCities, sourceLocation } from '../lib/geography-index';
 import type { EventRecord, Source } from '../lib/types';
 self.onmessage = ({ data: { id, method, payload } }) => {
   if (method === 'cancel') return;
@@ -6,6 +6,7 @@ self.onmessage = ({ data: { id, method, payload } }) => {
     let result;
     if (method === 'search') result = searchCities(payload.query, payload.country);
     else if (method === 'resolve') result = resolveCity(payload.city, payload.country);
+    else if (method === 'bounds') result = countryBounds(payload);
     else if (method === 'sources') result = payload.map((source: Source) => sourceLocation(source)).filter(Boolean);
     else {
       const sources = new Map<string, Source>((payload.sources || []).map((source: Source) => [source.id, source]));

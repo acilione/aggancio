@@ -4,6 +4,44 @@ A static, browser-run community event explorer. Built with Svelte, TypeScript an
 
 ## Run locally
 
+### Portable downloads — no development tools needed
+
+Built files are in `releases/`. Give someone the one matching their operating system and processor:
+
+| Computer | File | Start |
+| --- | --- | --- |
+| Windows Intel/AMD | `Commons-0.1.0-windows-x64.exe` | Double-click |
+| Windows ARM | `Commons-0.1.0-windows-arm64.exe` | Double-click |
+| Linux Intel/AMD | `Commons-0.1.0-linux-x64` | Allow execution in file permissions, then open |
+| Linux ARM | `Commons-0.1.0-linux-arm64` | Allow execution in file permissions, then open |
+| macOS Intel | `Commons-0.1.0-macos-intel.zip` | Extract, then open `Commons.app` |
+| macOS Apple Silicon | `Commons-0.1.0-macos-apple-silicon.zip` | Extract, then open `Commons.app` |
+
+The application opens `http://127.0.0.1:4173` in the default browser. No Node, Go, Python, Docker, administrator access, or application installation is required. Linux needs a desktop browser and `xdg-open`; some file managers require launching the executable from a terminal. macOS bundles target macOS 12 or newer. These builds are unsigned: Windows/macOS may require permission to open the download; macOS can offer **Open Anyway** in **System Settings → Privacy & Security** after the first attempt. Signed/notarized releases would need the distributor's signing credentials. Do not disable system protections globally.
+
+Use **Quit local app** in the page footer to stop the server. Closing the browser tab alone leaves it running. Opening the executable again reopens the running instance. Quit before replacing it with an updated executable. If another program owns port 4173, the launcher reports the conflict instead of switching ports and making saved drafts appear lost.
+
+The exact address and browser profile identify storage. Drafts and caches stay in the browser; they do not travel inside the executable. Export/import drafts when transferring computers or moving from `localhost:5173`/`localhost:4173` to `127.0.0.1:4173`. Live events, map tiles, remote posters, and the first OCR language download still need internet; the bundled interface, city search, and previously cached listings can work offline. Source CORS restrictions are unchanged.
+
+The server listens only on IPv4 loopback, checks Host/Origin headers, serves only embedded files, and requires a per-run token for shutdown. It does not proxy sources or expose the filesystem. The bundled dependency licenses are available at `/THIRD-PARTY-NOTICES.txt`. Each release includes a SHA-256 checksum list and `START-HERE.txt` alongside the distributable files.
+
+### Build portable releases
+
+Maintainers need Node as below and Go 1.23 or newer (use a current patched Go release). Recipients need neither. From the repository root:
+
+```sh
+npm ci
+npm run portable:build
+```
+
+This builds the frontend, compresses it into `portable/site.zip`, tests the Go launcher, and cross-compiles all six bundles. No third-party Go modules, ZIP utility, native C compiler, or hosting service is needed. To choose a local Go installation, set `COMMONS_GO` to its absolute executable path. Generated archives, toolchains, staging files, and releases are ignored by Git. After changing only launcher code, `node scripts/build-portable.mjs` can reuse the existing `dist/` build. Run Go tests from `portable/` after preparing `site.zip`.
+
+For diagnostics, launch the executable with `--no-browser`; `--version` prints the release version. `--port` is available for isolated tests, but a changed port uses a different browser storage origin. macOS binaries live inside `Commons.app/Contents/MacOS/Commons`.
+
+After building, `node scripts/browser-portable.mjs` tests the native Windows/Linux launcher, browser worker loading, duplicate launch handling, guarded shutdown and draft persistence across restarts. Set `COMMONS_EXECUTABLE` for a different binary; Windows developers can add `--wsl` to test Ubuntu's Linux build. On Linux, `node scripts/test-portable.mjs` verifies automatic browser opening through a test stand-in and occupied-port handling without opening a real browser. These checks start and stop their own servers.
+
+### Development server
+
 Use Node **22.12+ or 24 LTS**. This workspace has Node 24 installed through nvm in WSL:
 
 ```sh

@@ -4,3 +4,7 @@ dist/
 test-results/
 *.local
 public/ocr/
+portable/site.zip
+portable/.tools/
+portable/.stage/
+releases/

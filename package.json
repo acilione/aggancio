@@ -9,6 +9,7 @@
     "prebuild": "node scripts/copy-ocr-assets.mjs",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
+    "portable:build": "npm run build && node scripts/build-portable.mjs",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "test": "vitest run",
     "sources:update": "node scripts/update-source-catalog.mjs"

@@ -81,7 +81,7 @@ try {
   await page.getByRole('button', { name: 'Save local draft', exact: true }).click();
   await page.getByRole('heading', { name: 'Drafts', exact: true }).waitFor();
   await page.locator('.event-title').first().click();
-  assert.ok(await page.locator('.detail-poster').isVisible());
+  await page.locator('.detail-poster').waitFor({ state: 'visible' });
   const jsonPromise = page.waitForEvent('download'); await page.getByRole('button', { name: 'Export JSON', exact: true }).click();
   const download = await jsonPromise;
   const path = await download.path();

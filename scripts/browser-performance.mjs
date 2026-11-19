@@ -84,10 +84,14 @@ try {
   await page.getByLabel('City', { exact: true }).selectOption('Torino');
   await page.getByRole('button', { name: 'Fit all events on map', exact: true }).click();
   await page.waitForFunction(() => document.querySelector('.map-topline')?.textContent.includes('3 located'));
-  await page.locator('.commons-cluster').first().click();
-  await page.waitForFunction(() => document.querySelectorAll('.commons-pin').length > 0);
-  await page.locator('.commons-pin').first().click();
+  const shared = page.locator('.commons-cluster[data-event-count="2"]');
+  if (!await shared.count()) await page.locator('.commons-cluster[data-event-count="3"]').click();
+  await shared.click();
+  await page.waitForFunction(() => document.querySelectorAll('.expanded-event').length === 2);
+  // A nearby venue must still take pointer clicks while the shared venue is open.
+  await page.locator('.commons-pin[title="Chess two"]').click();
   await page.getByRole('heading', { name: 'Event details', exact: true }).waitFor();
+  assert.ok((await page.locator('dialog').innerText()).includes('Chess two'));
   await page.getByRole('button', { name: 'Close dialog' }).click();
   // Co-located events remain accessible even at maximum zoom.
   if (!await page.locator('.cluster-events').isVisible()) await page.locator('.commons-cluster').first().click();

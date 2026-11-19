@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { ArrowUpRight, ArrowRight, CalendarDays, ChevronLeft, ChevronRight, Compass, Download, ExternalLink, FilePlus2, Globe2, Heart, Layers3, List, LoaderCircle, Map, MapPin, Music2, Plus, RefreshCw, Search, Settings2, ShieldCheck, SlidersHorizontal, Sprout, Trash2, Upload, X, Pencil, Copy, Check, AlertCircle, Gamepad2, Palette, Footprints, BookOpen, Users } from '@lucide/svelte';
-  import { categories, type Category, type EventRecord, type Source, type SourceState } from './lib/types';
+  import { categories, geographyVersion, type Category, type EventRecord, type Source, type SourceState } from './lib/types';
   import { addDays, countEventDays, dayKey, deduplicate, defaultSources, formatEventDate, formatEventTime, overlapsDays, primaryOccurrence, safeUrl } from './lib/events';
   import { SourceWorkers } from './lib/source-workers';
   import { geography } from './lib/geography-client';
@@ -116,25 +116,39 @@
       if (Array.isArray(savedAddresses?.value)) addressCache = Object.fromEntries((savedAddresses.value as AddressCacheEntry[]).filter(entry => entry && typeof entry.key === 'string' && freshEntry(entry)).slice(-2000).map(entry => [entry.key, entry]));
       if (typeof savedProvider?.value === 'string') { try { addressProvider = geocoderURL(savedProvider.value); } catch {} }
       try {
-        const [enriched, enrichedDrafts, locations] = await Promise.all([geography.enrich(cached, undefined, merged.sources), geography.enrich(local), geography.sources(merged.sources.filter(source => source.enabled))]);
-        events = enriched; drafts = enrichedDrafts; sourceCities = locations;
+        const [migrated, migratedDrafts, locations] = await Promise.all([
+          geography.enrich(cached.filter(event => event.geographyVersion !== geographyVersion), undefined, merged.sources),
+          geography.enrich(local.filter(event => event.geographyVersion !== geographyVersion)),
+          geography.sources(merged.sources.filter(source => source.enabled)),
+        ]);
+        sourceCities = locations;
+        if (migrated.length) events = replaceMigrated(cached, migrated);
+        if (migratedDrafts.length) drafts = replaceMigrated(local, migratedDrafts);
         try {
-          const migrated = enriched.filter((event, index) => event.geographyVersion !== cached[index].geographyVersion);
-          const migratedDrafts = enrichedDrafts.filter((event, index) => event.geographyVersion !== local[index].geographyVersion);
-          await db.transaction('rw', db.events, db.drafts, async () => {
+          if (migrated.length || migratedDrafts.length) await db.transaction('rw', db.events, db.drafts, async () => {
             if (migrated.length) await db.events.bulkPut(migrated);
             if (migratedDrafts.length) await db.drafts.bulkPut(migratedDrafts);
           });
         } catch { storageError = 'Corrected locations could not be cached. They remain available until this page closes.'; }
       } catch { locationError = 'Some city and country labels could not be resolved. Refresh to retry.'; }
+      const summaries = new globalThis.Map<string, { count: number; fetchedAt: string }>();
+      for (const event of cached) {
+        const summary = summaries.get(event.sourceId);
+        if (summary) summary.count++;
+        else summaries.set(event.sourceId, { count: 1, fetchedAt: event.cachedAt });
+      }
       for (const source of sources) {
-        const cachedEvents = cached.filter(event => event.sourceId === source.id);
-        states[source.id] = { status: 'idle', count: cachedEvents.length, message: source.kind === 'snapshot' ? 'Imported snapshot; refresh by importing a new file.' : 'Saved catalogue. Refreshing…', fetchedAt: cachedEvents[0]?.cachedAt };
+        const summary = summaries.get(source.id);
+        states[source.id] = { status: 'idle', count: summary?.count || 0, message: source.kind === 'snapshot' ? 'Imported snapshot; refresh by importing a new file.' : 'Saved catalogue. Refreshing…', fetchedAt: summary?.fetchedAt };
       }
     } catch { sources = defaultSources; storageError = 'Browser storage is unavailable. Imported events can still be explored, but drafts cannot be saved until storage is available.'; }
     initialized = true;
     await refresh();
   });
+  function replaceMigrated(cached: EventRecord[], migrated: EventRecord[]) {
+    const corrections = new globalThis.Map(migrated.map(event => [event.id, event]));
+    return cached.map(event => corrections.get(event.id) ?? event);
+  }
   async function refreshSource(source: Source) {
     if (disposed || source.kind !== 'gancio' || !source.enabled || controllers.has(source.id)) return;
     const controller = new AbortController(); controllers.set(source.id, controller);
@@ -150,7 +164,7 @@
       try { await saveSourceEvents(source.id, result.events); } catch { storageError = 'The latest events could not be cached. They remain available until this page closes.'; }
     } catch (reason) {
       if (disposed || !sources.some(item => item.id === source.id && item.enabled)) return;
-      const count = events.filter(event => event.sourceId === source.id).length;
+      const count = states[source.id]?.count || 0;
       states[source.id] = { ...states[source.id], status: 'error', count, message: `${reason instanceof Error && reason.name === 'AbortError' ? 'Request timed out.' : reason instanceof TypeError ? 'Could not connect. The source may be offline or block browser access (CORS).' : reason instanceof Error ? reason.message : 'Source unavailable.'} ${count ? 'Showing the last saved catalogue; it may be outdated.' : 'No events loaded from this source.'}` };
     } finally { clearTimeout(timeout); controllers.delete(source.id); }
   }

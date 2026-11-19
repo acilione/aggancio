@@ -6,16 +6,16 @@ A static, browser-run community event explorer. Built with Svelte, TypeScript an
 
 ### Portable downloads — no development tools needed
 
-Built files are in `releases/`. Give someone the one matching their operating system and processor:
+Choose the file for your operating system and processor from the [GitHub releases](https://github.com/acilione/events_app/releases). Local builds write the same files to `releases/`.
 
 | Computer | File | Start |
 | --- | --- | --- |
-| Windows Intel/AMD | `Commons-0.1.2-windows-x64.exe` | Double-click |
-| Windows ARM | `Commons-0.1.2-windows-arm64.exe` | Double-click |
-| Linux Intel/AMD | `Commons-0.1.2-linux-x64` | Allow execution in file permissions, then open |
-| Linux ARM | `Commons-0.1.2-linux-arm64` | Allow execution in file permissions, then open |
-| macOS Intel | `Commons-0.1.2-macos-intel.zip` | Extract, then open `Commons.app` |
-| macOS Apple Silicon | `Commons-0.1.2-macos-apple-silicon.zip` | Extract, then open `Commons.app` |
+| Windows Intel/AMD | `Commons-0.1.3-windows-x64.exe` | Double-click |
+| Windows ARM | `Commons-0.1.3-windows-arm64.exe` | Double-click |
+| Linux Intel/AMD | `Commons-0.1.3-linux-x64` | Allow execution in file permissions, then open |
+| Linux ARM | `Commons-0.1.3-linux-arm64` | Allow execution in file permissions, then open |
+| macOS Intel | `Commons-0.1.3-macos-intel.zip` | Extract, then open `Commons.app` |
+| macOS Apple Silicon | `Commons-0.1.3-macos-apple-silicon.zip` | Extract, then open `Commons.app` |
 
 The application opens `http://127.0.0.1:4173` in the default browser. No Node, Go, Python, Docker, administrator access, or application installation is required. Linux needs a desktop browser and `xdg-open`; some file managers require launching the executable from a terminal. macOS bundles target macOS 12 or newer. These builds are unsigned: Windows/macOS may require permission to open the download; macOS can offer **Open Anyway** in **System Settings → Privacy & Security** after the first attempt. Signed/notarized releases would need the distributor's signing credentials. Do not disable system protections globally.
 
@@ -42,12 +42,12 @@ After building, `node scripts/browser-portable.mjs` tests the native Windows/Lin
 
 ### Development server
 
-Use Node **22.12+ or 24 LTS**. This workspace has Node 24 installed through nvm in WSL:
+Use Node **22.12+ or 24 LTS**. From a fresh checkout:
 
 ```sh
-cd /home/cilio/devProjects/events_app
-nvm use 24
-npm install
+git clone https://github.com/acilione/events_app.git
+cd events_app
+npm ci
 npm run dev
 ```
 

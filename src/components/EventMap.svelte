@@ -101,23 +101,35 @@
     const element = marker.getElement();
     if (element) { element.dataset.eventCount = '1'; element.dataset.estimateCount = approximate ? '1' : '0'; }
   }
-  function renderExpanded() {
+  function renderExpanded(visible: MapMark[]) {
     if (!map || !cluster?.expanded) return;
     const anchor = map.latLngToContainerPoint([cluster.latitude, cluster.longitude]);
     const size = map.getSize();
     // Reserve the bottom of the map for the event chooser. Offsets are visual
     // only; the stored coordinates and distance filtering never change.
-    const columns = Math.min(5, Math.max(2, Math.floor((size.x - 30) / 44)));
-    const rows = Math.ceil(cluster.ids.length / columns);
-    const halfWidth = (columns - 1) * 21; const halfHeight = (rows - 1) * 19;
-    const markerBottom = size.y * .5 - 16;
-    const centre = L.point(Math.max(20 + halfWidth, Math.min(size.x - 20 - halfWidth, anchor.x)), Math.max(35 + halfHeight, Math.min(markerBottom - halfHeight, anchor.y)));
+    // All markers have 44px hit targets. Venue pins are anchored at the tip,
+    // 16px below the centre of their target.
+    const occupied = visible.filter(mark => mark.clusterId !== cluster!.id).map(mark => {
+      const point = map!.latLngToContainerPoint([mark.latitude, mark.longitude]);
+      if (mark.clusterId === undefined && !mark.approximateCount) point.y -= 16;
+      return point;
+    });
+    const slots: L.Point[] = [];
+    const spacing = 46;
+    const firstX = (size.x - (Math.floor(size.x / spacing) - 1) * spacing) / 2;
+    for (let y = 62; y <= size.y * .5 - 16; y += spacing) {
+      for (let x = firstX; x <= size.x - 22; x += spacing) {
+        if (occupied.every(pin => Math.abs(pin.x - x) >= 45 || Math.abs(pin.y - y) >= 45)) slots.push(L.point(x, y));
+      }
+    }
+    slots.sort((a, b) => a.distanceTo(anchor) - b.distanceTo(anchor));
     cluster.ids.forEach((id, i) => {
-      const event = eventById.get(id); if (!event) return;
-      const countInRow = Math.min(columns, cluster!.ids.length - Math.floor(i / columns) * columns);
-      const x = centre.x + (i % columns - (countInRow - 1) / 2) * 42;
-      const y = centre.y + (Math.floor(i / columns) - (rows - 1) / 2) * 38;
-      const point = map!.containerPointToLatLng([Math.max(20, Math.min(size.x - 20, x)), Math.max(35, Math.min(markerBottom, y))]);
+      const event = eventById.get(id);
+      const slot = slots[i];
+      // In a crowded viewport the chooser still lists every event on this page.
+      if (!event || !slot) return;
+      const tip = mapPoint(event)?.approximate ? slot : slot.add([0, 16]);
+      const point = map!.containerPointToLatLng(tip);
       L.polyline([[cluster!.latitude, cluster!.longitude], point], { color: '#65756b', weight: 1, opacity: .55, dashArray: '3 4', interactive: false }).addTo(layer);
       eventMarker(event, point, true);
     });
@@ -147,7 +159,7 @@
         const element = marker.getElement();
         if (element) { element.dataset.eventCount = String(mark.count); element.dataset.estimateCount = String(mark.approximateCount); }
       }
-      renderExpanded();
+      renderExpanded(marks);
       // At maximum zoom, a remaining group cannot separate geographically.
       // Open one automatically; other groups remain available by selection.
       if (map.getZoom() === 19 && !cluster && allowAutoExpand) {

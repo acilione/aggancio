@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { classify, coordinate, deduplicate, normalizeGancio, overlapsDays, safeUrl, defaultSources, fetchGancio } from './events';
+import { classify, coordinate, deduplicate, normalizeGancio, overlapsDays, primaryOccurrence, safeUrl, defaultSources, fetchGancio } from './events';
 import { extractPoster, zonedDateTimeToISO } from './poster';
 import { calendarExport, parseImport } from './export';
 import type { EventRecord } from './types';
@@ -32,6 +32,9 @@ describe('poster dates and event days', () => {
     expect(overlapsDays(value, '2030-11-04', '2030-11-04')).toBe(true);
     const midnight = event({ occurrences: [{ start: '2030-11-03T22:00:00Z', end: '2030-11-03T23:00:00Z' }] });
     expect(overlapsDays(midnight, '2030-11-04', '2030-11-04')).toBe(false);
+    const evening = { start: '2030-11-04T18:00:00Z' };
+    midnight.occurrences.push(evening);
+    expect(primaryOccurrence(midnight, '2030-11-04')).toBe(evening);
   });
   it('converts local dates independently of the computer timezone, including DST', () => {
     expect(zonedDateTimeToISO('2030-11-03T18:00', 'Europe/Rome')).toBe('2030-11-03T17:00:00.000Z');
@@ -43,12 +46,14 @@ describe('source boundaries', () => {
   it('preserves separate occurrences returned with the same source event ID', async () => {
     vi.stubGlobal('fetch', async () => ({ ok: true, json: async () => [
       { id: 42, title: 'Weekly chess', start_datetime: 1919955600 },
-      { id: 42, title: 'Weekly chess', start_datetime: 1920560400 },
+      null,
+      { id: 42, title: 'Weekly chess', start_datetime: 1920560400, tags: [null, 'chess'] },
     ] }));
     try {
       const result = await fetchGancio(defaultSources[0], new AbortController().signal);
       expect(result.events).toHaveLength(1);
       expect(result.events[0].occurrences).toHaveLength(2);
+      expect(result.events[0].tags).toEqual(['chess']);
     } finally { vi.unstubAllGlobals(); }
   });
   it('preserves missing coordinates instead of placing events at zero', () => {

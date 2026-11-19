@@ -3,7 +3,7 @@ import topology from 'world-atlas/countries-50m.json';
 import { feature } from 'topojson-client';
 import { geoBounds, geoContains } from 'd3-geo';
 import { countryCode, normalizedName, hasCoordinates, distanceKm, type CityLocation, type GeoBounds } from './location';
-import type { EventRecord, Source } from './types';
+import { geographyVersion, type EventRecord, type Source } from './types';
 import type { Feature, MultiPolygon, Polygon } from 'geojson';
 
 const labels: Record<number, string> = { 3165524: 'Torino', 3169070: 'Roma', 3173435: 'Milano', 3172394: 'Napoli', 3176959: 'Firenze', 3176219: 'Genova', 3171728: 'Padova', 3164603: 'Venezia' };
@@ -117,8 +117,8 @@ function addressCity(address: string, country: string, point?: { latitude: numbe
   return null;
 }
 export function enrichLocation(event: EventRecord, source?: Source): EventRecord {
-  if (event.geographyVersion === 2) return event;
-  const result = { ...event, geographyVersion: 2 };
+  if (event.geographyVersion === geographyVersion) return event;
+  const result = { ...event, geographyVersion };
   const gancio = !event.local && (source?.kind === 'gancio' || event.sourceId.startsWith('gancio:'));
   if (!hasCoordinates(event) || (gancio && event.latitude === 0 && event.longitude === 0)) result.latitude = result.longitude = undefined;
   const point = hasCoordinates(result) ? { latitude: result.latitude, longitude: result.longitude } : undefined;

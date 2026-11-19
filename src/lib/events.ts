@@ -1,4 +1,4 @@
-import type { Category, EventRecord, Source } from './types';
+import type { Category, EventRecord, Occurrence, Source } from './types';
 import { Parser } from 'htmlparser2';
 import { countryCode, hasCoordinates } from './location';
 
@@ -52,7 +52,7 @@ export function normalizeGancio(raw: Record<string, any>, source: Source): Event
   const start = timestamp(raw.start_datetime ?? raw.startDate);
   if (!start || !raw.title || raw.id === undefined) return null;
   const place = raw.place || {};
-  const tags = Array.isArray(raw.tags) ? raw.tags.map((tag: any) => typeof tag === 'string' ? tag : tag.tag || tag.name || '').filter(Boolean) : [];
+  const tags = Array.isArray(raw.tags) ? raw.tags.map(tag => typeof tag === 'string' ? tag : tag?.tag || tag?.name).filter((tag): tag is string => typeof tag === 'string' && !!tag) : [];
   const title = textOnly(raw.title);
   const description = textOnly(raw.description);
   const original = safeUrl(raw.ap_id ?? raw.apId ?? raw.external_url ?? raw.url);
@@ -87,12 +87,13 @@ export async function fetchGancio(source: Source, signal: AbortSignal): Promise<
     const response = await fetch(url, { signal, credentials: 'omit' });
     if (!response.ok) throw new Error(`Source returned HTTP ${response.status}.`);
     const payload = await response.json();
-    const rows: any[] = Array.isArray(payload) ? payload : payload.events;
+    const rows: unknown[] = Array.isArray(payload) ? payload : payload?.events;
     if (!Array.isArray(rows)) throw new Error('This endpoint did not return a supported event list.');
-    const signature = rows.map(row => `${row.id}:${row.start_datetime ?? row.startDate}`).join(',');
+    const records = rows.filter((row): row is Record<string, unknown> => !!row && typeof row === 'object' && !Array.isArray(row));
+    const signature = records.map(row => `${row.id}:${row.start_datetime ?? row.startDate}`).join(',');
     if (signatures.has(signature) && rows.length) return { events: [...collected.values()], limited: true };
     signatures.add(signature);
-    for (const raw of rows) {
+    for (const raw of records) {
       const event = normalizeGancio(raw, source);
       if (!event) continue;
       const previous = collected.get(event.id);
@@ -129,14 +130,13 @@ export function dayKey(date: Date | string, timezone?: string): string {
 export function addDays(day: string, amount: number): string {
   const date = new Date(`${day}T12:00:00Z`); date.setUTCDate(date.getUTCDate() + amount); return date.toISOString().slice(0, 10);
 }
+function lastDay(occurrence: Occurrence, timezone: string): string {
+  if (!occurrence.end) return dayKey(occurrence.start, timezone);
+  const lastInstant = Math.max(Date.parse(occurrence.start), Date.parse(occurrence.end) - 1);
+  return dayKey(new Date(lastInstant), timezone);
+}
 export function overlapsDays(event: EventRecord, from: string, to: string): boolean {
-  return event.occurrences.some(occ => {
-    const startDay = dayKey(occ.start, event.timezone);
-    // End timestamps are exclusive: midnight ending doesn't add an extra event day.
-    const endMs = occ.end ? Math.max(Date.parse(occ.start), Date.parse(occ.end) - 1) : Date.parse(occ.start);
-    const endDay = dayKey(new Date(endMs), event.timezone);
-    return startDay <= to && endDay >= from;
-  });
+  return event.occurrences.some(occ => dayKey(occ.start, event.timezone) <= to && lastDay(occ, event.timezone) >= from);
 }
 export function countEventDays(events: EventRecord[], days: string[]): Record<string, number> {
   const counts = Object.fromEntries(days.map(day => [day, 0]));
@@ -144,7 +144,7 @@ export function countEventDays(events: EventRecord[], days: string[]): Record<st
     const matched = new Set<string>();
     for (const occurrence of event.occurrences) {
       const start = dayKey(occurrence.start, event.timezone);
-      const end = dayKey(new Date(occurrence.end ? Math.max(Date.parse(occurrence.start), Date.parse(occurrence.end) - 1) : Date.parse(occurrence.start)), event.timezone);
+      const end = occurrence.end ? lastDay(occurrence, event.timezone) : start;
       for (const day of days) if (day >= start && day <= end) matched.add(day);
     }
     for (const day of matched) counts[day]++;
@@ -152,14 +152,26 @@ export function countEventDays(events: EventRecord[], days: string[]): Record<st
   return counts;
 }
 export function primaryOccurrence(event: EventRecord, from = dayKey(new Date())) {
-  return event.occurrences.find(occ => dayKey(occ.end || occ.start, event.timezone) >= from) || event.occurrences[0];
+  return event.occurrences.find(occ => lastDay(occ, event.timezone) >= from) || event.occurrences[0];
+}
+const cardFormats = new Map<string, { date: Intl.DateTimeFormat; time: Intl.DateTimeFormat }>();
+function cardFormat(timeZone: string) {
+  let formats = cardFormats.get(timeZone);
+  if (!formats) {
+    formats = {
+      date: new Intl.DateTimeFormat('en-GB', { timeZone, weekday: 'short', day: 'numeric', month: 'short' }),
+      time: new Intl.DateTimeFormat('en-GB', { timeZone, hour: '2-digit', minute: '2-digit' }),
+    };
+    cardFormats.set(timeZone, formats);
+  }
+  return formats;
 }
 export function formatEventDate(event: EventRecord, from?: string): string {
   const occ = primaryOccurrence(event, from);
-  return new Intl.DateTimeFormat('en-GB', { timeZone: event.timezone, weekday: 'short', day: 'numeric', month: 'short' }).format(new Date(occ.start));
+  return cardFormat(event.timezone).date.format(new Date(occ.start));
 }
 export function formatEventTime(event: EventRecord, from?: string): string {
-  return new Intl.DateTimeFormat('en-GB', { timeZone: event.timezone, hour: '2-digit', minute: '2-digit' }).format(new Date(primaryOccurrence(event, from).start));
+  return cardFormat(event.timezone).time.format(new Date(primaryOccurrence(event, from).start));
 }
 export function deduplicate(events: EventRecord[]): { event: EventRecord; sources: { name: string; url: string }[] }[] {
   const groups = new Map<string, { event: EventRecord; sources: { name: string; url: string }[] }>();

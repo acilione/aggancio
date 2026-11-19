@@ -17,6 +17,8 @@ export const geography = {
   resolve: (city: string, country = '') => request<CityLocation | null>('resolve', { city, country }),
   bounds: (country: string) => request<GeoBounds | null>('bounds', country),
   sources: (sources: Source[]) => request<CityLocation[]>('sources', sources),
-  enrich: (events: EventRecord[], source?: Source, sources?: Source[]) => request<EventRecord[]>('enrich', { events, source, sources }),
+  enrich: (events: EventRecord[], source?: Source, sources?: Source[]) => events.length
+    ? request<EventRecord[]>('enrich', { events, source, sources })
+    : Promise.resolve(events),
   dispose: () => client.dispose(),
 };

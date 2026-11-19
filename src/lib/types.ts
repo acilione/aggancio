@@ -1,6 +1,7 @@
 export type Category = 'All' | 'Music' | 'Arts & culture' | 'Games & chess' | 'Sport & outdoors' | 'Learning' | 'Community' | 'Other';
 export const categories: Category[] = ['All', 'Music', 'Arts & culture', 'Games & chess', 'Sport & outdoors', 'Learning', 'Community', 'Other'];
 export interface Occurrence { start: string; end?: string }
+export const geographyVersion = 2;
 export interface AddressLocation { latitude: number; longitude: number; precision: 'address' | 'street'; label: string; provider: string; osmUrl: string; key: string }
 export interface Source {
   id: string;

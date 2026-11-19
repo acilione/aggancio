@@ -8,6 +8,9 @@
   import { countryName, hasCoordinates, venuePosition, matchesLocation, type CityLocation, type GeoBounds } from './lib/location';
   import { applyAddressCache, defaultGeocoder, freshEntry, geocoderURL, type AddressCache, type AddressCacheEntry } from './lib/address-lookup';
   import AddressLookup from './components/AddressLookup.svelte';
+  import CityPreferences from './components/CityPreferences.svelte';
+  import { preferredCityFilter, preferredCityMatcher, readPreferredCities } from './lib/city-preferences';
+  import { calendarOrigin, reconcileScan, scanDirectories, type ScanReport } from './lib/source-scan';
   import LocationFilters from './components/LocationFilters.svelte';
   import { db, saveSourceEvents, saveSources } from './lib/storage';
   import { catalogueCheckedAt, mergeCatalogue, runSourceQueue } from './lib/sources';
@@ -26,6 +29,21 @@
   let query = $state('');
   let city = $state('');
   let country = $state('');
+  let preferredCities = $state<CityLocation[]>([]);
+  let showPreferences = $state(false);
+  const isPreferredCity = $derived(preferredCityMatcher(preferredCities));
+  const preferredBounds = $derived.by((): GeoBounds | null => {
+    if (city !== preferredCityFilter || !preferredCities.length) return null;
+    const latitudes = preferredCities.map(place => place.latitude);
+    const longitudes = preferredCities.map(place => place.longitude);
+    return [[Math.min(...latitudes), Math.min(...longitudes)], [Math.max(...latitudes), Math.max(...longitudes)]];
+  });
+  async function savePreferredCities(values: CityLocation[]) {
+    await db.settings.put({ key: 'preferred-cities', value: values });
+    preferredCities = values;
+    country = ''; await selectCity(values.length ? preferredCityFilter : '');
+    visibleLimit = 30; showPreferences = false;
+  }
   let radius = $state(0);
   let exactLocationsOnly = $state(false);
   let addressCache = $state<AddressCache>({});
@@ -44,6 +62,7 @@
   async function selectCity(value: string) {
     city = value; cityCenter = null; radius = 0;
     const current = ++cityResolve;
+    if (value === preferredCityFilter) { country = ''; return; }
     if (!value) return;
     const [name, code] = value.split('|');
     const nation = code || cityChoices.find(item => item.value === value)?.countryCode || country;
@@ -75,6 +94,29 @@
   let sourceError = $state('');
   let sourceQuery = $state('');
   let sourceFilter = $state('all');
+  let scanning = $state(false);
+  let scanError = $state('');
+  let scanReport = $state<ScanReport | null>(null);
+  async function rescanSources() {
+    if (scanning) return;
+    scanning = true; scanError = '';
+    try {
+      const { entries, failed } = await scanDirectories();
+      const { next, report } = await db.transaction('rw', db.settings, async () => {
+        const stored = await db.settings.get('sources');
+        const remembered = await db.settings.get('catalogue-seen');
+        const result = reconcileScan((stored?.value as Source[]) ?? $state.snapshot(sources), (remembered?.value as string[]) ?? [], entries);
+        const report: ScanReport = { at: new Date().toISOString(), added: result.added, known: result.known, removed: result.removed, failed };
+        await saveSources(result.sources);
+        await db.settings.bulkPut([{ key: 'catalogue-seen', value: result.seen }, { key: 'last-source-scan', value: report }]);
+        return { next: result.sources, report };
+      });
+      sources = next; scanReport = report;
+      if (report.added.length) { sourceFilter = 'new'; sourceQuery = ''; }
+      else if (sourceFilter === 'new') sourceFilter = 'all';
+    } catch (reason) { scanError = reason instanceof Error ? reason.message : 'Could not complete the rescan.'; }
+    finally { scanning = false; }
+  }
   let refreshCompleted = $state(0);
   let refreshTotal = $state(0);
   let snapshotName = $state('');
@@ -104,7 +146,10 @@
   onDestroy(() => { disposed = true; controllers.forEach(controller => controller.abort()); workers.dispose(); geography.dispose(); clearTimeout(flushTimer); clearTimeout(toastTimeout); });
   onMount(async () => {
     try {
-      const [sourceSetting, cached, local, saved, catalogueSeen] = await Promise.all([db.settings.get('sources'), db.events.toArray(), db.drafts.toArray(), db.settings.get('saved'), db.settings.get('catalogue-seen')]);
+      const [sourceSetting, cached, local, saved, catalogueSeen, savedCities, lastScan] = await Promise.all([db.settings.get('sources'), db.events.toArray(), db.drafts.toArray(), db.settings.get('saved'), db.settings.get('catalogue-seen'), db.settings.get('preferred-cities'), db.settings.get('last-source-scan')]);
+      preferredCities = readPreferredCities(savedCities?.value);
+      if (preferredCities.length) city = preferredCityFilter;
+      scanReport = (lastScan?.value as ScanReport) ?? null;
       const merged = mergeCatalogue(Array.isArray(sourceSetting?.value) ? sourceSetting.value as Source[] : undefined, Array.isArray(catalogueSeen?.value) ? catalogueSeen.value as string[] : undefined);
       sources = merged.sources;
       await db.transaction('rw', db.settings, async () => {
@@ -182,7 +227,7 @@
   }
   const matchingSources = $derived(sources.filter(source =>
     [source.name, source.url, source.city, source.region || ''].join(' ').toLowerCase().includes(sourceQuery.toLowerCase()) &&
-    (sourceFilter === 'all' || (sourceFilter === 'enabled' ? source.enabled : sourceFilter === 'disabled' ? !source.enabled : states[source.id]?.status === 'error'))
+    (sourceFilter === 'all' || (sourceFilter === 'new' ? scanReport?.added.includes(source.id) : sourceFilter === 'enabled' ? source.enabled : sourceFilter === 'disabled' ? !source.enabled : states[source.id]?.status === 'error'))
   ));
   async function setMatchingEnabled(enabled: boolean) {
     const ids = new Set(matchingSources.map(source => source.id));
@@ -229,13 +274,13 @@
   });
   const matchingEvents = $derived(deduplicate(allEvents.filter(event =>
     (view !== 'drafts' || event.local) && (!onlySaved || savedIds.includes(event.id)) &&
-    matchesLocation(event, city, country, cityCenter, radius, exactLocationsOnly) &&
+    (city === preferredCityFilter ? isPreferredCity(event) : matchesLocation(event, city, country, cityCenter, radius, exactLocationsOnly)) &&
     (category === 'All' || event.categories.includes(category)) &&
     (!query.trim() || [event.title, event.description, event.venue, event.city, ...event.tags].join(' ').toLowerCase().includes(query.trim().toLowerCase()))
   )));
   const filtered = $derived(matchingEvents.filter(group => overlapsDays(group.event, dateWindow[0], dateWindow[1])).map(group => ({ group, start: primaryOccurrence(group.event, dateWindow[0]).start })).sort((a, b) => a.start.localeCompare(b.start)).map(item => item.group));
   const displayEvents = $derived(filtered.map(group => group.event));
-  const mapFilterKey = $derived(JSON.stringify([city, country, radius, exactLocationsOnly, category, query, dateWindow, onlySaved, view, addressProvider]));
+  const mapFilterKey = $derived(JSON.stringify([city, city === preferredCityFilter ? preferredCities.map(place => place.id) : [], country, radius, exactLocationsOnly, category, query, dateWindow, onlySaved, view, addressProvider]));
   const weekDays = $derived(Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)));
   const dailyCounts = $derived(countEventDays(matchingEvents.map(group => group.event), weekDays));
   function clearFilters() { query = ''; city = ''; country = ''; radius = 0; exactLocationsOnly = false; cityCenter = null; cityResolve++; category = 'All'; dateMode = view === 'drafts' ? 'any' : 'upcoming'; selectedDay = today; weekStart = today; onlySaved = false; visibleLimit = 30; }
@@ -290,7 +335,7 @@
       if (!url || !sourceName.trim()) throw new Error('Enter a source name and valid HTTP(S) address.');
       const origin = new URL(url).origin;
       if (location.protocol === 'https:' && !origin.startsWith('https:')) throw new Error('An HTTPS website needs an HTTPS source.');
-      if (sources.some(source => source.url === origin)) throw new Error('This source is already in your list.');
+      if (sources.some(source => source.url === origin || source.aliases?.some(alias => calendarOrigin(alias) === origin))) throw new Error('This source is already in your list.');
       try { new Intl.DateTimeFormat('en', { timeZone: sourceTimezone }); } catch { throw new Error('Enter a valid IANA timezone, such as Europe/Rome or America/New_York.'); }
       const source: Source = { id: `gancio:${crypto.randomUUID()}`, kind: 'gancio', name: sourceName.trim(), url: origin, city: sourceCity.trim(), timezone: sourceTimezone, enabled: true };
       await saveSources([...sources, source]); sources = [...sources, source];
@@ -307,7 +352,16 @@
   }
   async function removeSource(source: Source) {
     try {
-      const next = sources.filter(item => item.id !== source.id); await saveSources(next); await db.events.where('sourceId').equals(source.id).delete();
+      const next = sources.filter(item => item.id !== source.id);
+      await db.transaction('rw', db.settings, db.events, async () => {
+        await saveSources(next);
+        if (source.kind === 'gancio') {
+          const saved = await db.settings.get('catalogue-seen');
+          const origins = [source.url, ...(source.aliases || [])].map(calendarOrigin).filter(Boolean);
+          await db.settings.put({ key: 'catalogue-seen', value: [...new Set([...(saved?.value as string[] || []), ...origins])] });
+        }
+        await db.events.where('sourceId').equals(source.id).delete();
+      });
       sources = next; events = events.filter(event => event.sourceId !== source.id); delete states[source.id];
     } catch { sourceError = 'Could not remove this source.'; }
   }
@@ -332,10 +386,11 @@
     {#if storageError}<div class="page-notice warning" role="alert"><AlertCircle size={17} /> {storageError}</div>{/if}
 
     <section class="search-panel" aria-label="Filter events">
+      {#if view === 'explore'}<div class="preference-action"><button class="text-button" disabled={!initialized} onclick={() => showPreferences = true}><Settings2 size={15} /> City preferences</button></div>{/if}
       <LocationFilters bind:city bind:country bind:radius bind:center={cityCenter} bind:exactOnly={exactLocationsOnly} />
       {#if locationError}<p class="location-explanation" role="status">{locationError}</p>{/if}
       <div class="search-fields">
-        <label class="city-search"><MapPin size={19} /><span class="sr-only">City</span><select aria-label="City" value={city} onchange={event => selectCity(event.currentTarget.value)}><option value="">All cities</option>{#each cityChoices as item}<option value={item.value}>{item.label}</option>{/each}</select></label>
+        <label class="city-search"><MapPin size={19} /><span class="sr-only">City</span><select aria-label="City" value={city} onchange={event => selectCity(event.currentTarget.value)}><option value="">All cities</option>{#if view === 'explore' && preferredCities.length}<option value={preferredCityFilter}>Preferred cities ({preferredCities.map(place => place.name).join(', ')})</option>{/if}{#each cityChoices as item}<option value={item.value}>{item.label}</option>{/each}</select></label>
         <label class="text-search"><Search size={19} /><span class="sr-only">Search events</span><input type="search" bind:value={query} placeholder="Search events, venues or topics…" /></label>
         <label class="date-search"><CalendarDays size={18} /><span class="sr-only">Date range</span><select aria-label="Date range" bind:value={dateMode}><option value="upcoming">Upcoming</option><option value="week">Next 7 days</option><option value="weekend">This weekend</option><option value="day">Choose a day</option><option value="any">Any date</option></select></label>
       </div>
@@ -382,7 +437,7 @@
         {/each}
         {#if filtered.length > visibleLimit}<button class="load-more secondary-button" onclick={() => visibleLimit += 30}>Show next {Math.min(30, filtered.length - visibleLimit)} events <Plus size={16} /></button>{/if}
       </div>
-      {#if showMap}<aside class="map-panel"><EventMap events={displayEvents} center={cityCenter ? [cityCenter.latitude, cityCenter.longitude] : undefined} bounds={countryFocus || undefined} filterKey={`${mapFilterKey}:${addressMapRevision}`} selectedId={selected?.id} onSelect={openEvent} /><AddressLookup events={displayEvents} cache={addressCache} provider={addressProvider} filterKey={mapFilterKey} focused={!!cityCenter || displayEvents.length <= 20} onResult={saveAddressResult} onProvider={saveAddressProvider} /><p class="map-privacy">Map tiles load from OpenStreetMap. Location is never requested automatically.</p></aside>{/if}
+      {#if showMap}<aside class="map-panel"><EventMap events={displayEvents} center={cityCenter ? [cityCenter.latitude, cityCenter.longitude] : undefined} bounds={preferredBounds || countryFocus || undefined} filterKey={`${mapFilterKey}:${addressMapRevision}`} selectedId={selected?.id} onSelect={openEvent} /><AddressLookup events={displayEvents} cache={addressCache} provider={addressProvider} filterKey={mapFilterKey} focused={!!cityCenter || displayEvents.length <= 20} onResult={saveAddressResult} onProvider={saveAddressProvider} /><p class="map-privacy">Map tiles load from OpenStreetMap. Location is never requested automatically.</p></aside>{/if}
     </section>
     <footer class="main-footer"><button class="text-button" onclick={() => showSources = true}>Sources & privacy <ArrowUpRight size={13} /></button></footer>
   </main>
@@ -409,11 +464,18 @@
   </Dialog>
 {/if}
 
+{#if showPreferences}
+  <CityPreferences saved={preferredCities} onSave={savePreferredCities} onDismiss={() => showPreferences = false} />
+{/if}
 {#if showSources}
   <Dialog title="Sources" onDismiss={() => showSources = false}>
     <p class="dialog-intro">Choose the calendars you want to see. Commons reads their public events directly; your preferences stay in this browser.</p>
     <p class="small muted">{sources.length} sources · catalogue checked {new Date(catalogueCheckedAt).toLocaleDateString()}. Unavailable sources, test instances and sources with unconfirmed timezones or software start disabled. Availability can change.</p>
-    <div class="source-controls"><label class="field">Search sources<input type="search" bind:value={sourceQuery} placeholder="Name, city, region or domain" /></label><label class="field">Show sources<select bind:value={sourceFilter}><option value="all">All sources</option><option value="enabled">Enabled</option><option value="disabled">Disabled</option><option value="failed">Failed this session</option></select></label></div>
+    <div class="source-actions"><button class="secondary-button" disabled={scanning || !initialized} onclick={rescanSources}><RefreshCw size={15} /> {scanning ? 'Scanning directories…' : 'Rescan Gancio directories'}</button></div>
+    <p class="small muted">Check the official directory and Aggancio catalogue for more calendars. New sources start disabled.</p>
+    {#if scanError}<p class="error-message" role="alert">{scanError}</p>{/if}
+    {#if scanReport}<p class="small" role="status">Last scan {new Date(scanReport.at).toLocaleString()} · {scanReport.added.length} new · {scanReport.known} already listed · {scanReport.removed} previously removed.{#if scanReport.failed.length} Could not check {scanReport.failed.join(', ')}.{/if}</p>{/if}
+    <div class="source-controls"><label class="field">Search sources<input type="search" bind:value={sourceQuery} placeholder="Name, city, region or domain" /></label><label class="field">Show sources<select bind:value={sourceFilter}><option value="all">All sources</option>{#if scanReport?.added.length}<option value="new">New in last scan</option>{/if}<option value="enabled">Enabled</option><option value="disabled">Disabled</option><option value="failed">Failed this session</option></select></label></div>
     <div class="source-actions"><span class="small muted">{matchingSources.length} matching · {sources.filter(source => source.enabled).length} enabled</span><button class="text-button" disabled={refreshing || !matchingSources.length} onclick={() => setMatchingEnabled(true)}>Enable matching</button><button class="text-button" disabled={!matchingSources.length} onclick={() => setMatchingEnabled(false)}>Disable matching</button></div>
     <div class="source-list">{#each matchingSources as source (source.id)}<div class="source-card"><div class="source-card-top"><span class="source-icon"><Globe2 size={20} /></span><div><strong>{source.name}</strong><a href={source.url} target="_blank" rel="noopener noreferrer">{new URL(source.url).host} <ArrowUpRight size={11} /></a></div><button class="toggle" class:enabled={source.enabled} role="switch" aria-checked={source.enabled} aria-label={`Enable ${source.name}`} onclick={() => toggleSource(source)}><span></span></button></div><p class:error-text={states[source.id]?.status === 'error'} class="source-status">{#if states[source.id]?.status === 'loading'}<LoaderCircle size={13} class="spin" />{/if}{!source.enabled ? 'Disabled — no requests or events from this source.' : states[source.id]?.message || 'Ready to load.'}</p><div class="source-check small muted">{#if source.region}<p>{source.region}</p>{/if}{#if source.checkedAt}<p>Last check: {source.checkMessage}{#if source.timezoneUnconfirmed} Timezone unconfirmed; UTC fallback.{/if}</p>{/if}{#if source.discoveredAt?.length}<a href={source.discoveredAt[0]} target="_blank" rel="noopener noreferrer">Discovery record <ArrowUpRight size={11} /></a>{/if}</div><div class="source-card-bottom"><small>{states[source.id]?.count || 0} events · {source.kind === 'snapshot' ? 'Snapshot' : 'Gancio API'}{#if states[source.id]?.fetchedAt} · {new Date(states[source.id].fetchedAt!).toLocaleDateString()}{/if}</small><button class="icon-button" aria-label={`Remove ${source.name}`} onclick={() => removeSource(source)}><Trash2 size={14} /></button></div></div>{/each}</div>
     <form class="source-form" onsubmit={addSource}><h3>Add a Gancio calendar</h3><label class="field">Name<input required bind:value={sourceName} placeholder="Your community calendar" /></label><label class="field">Instance URL<input required type="url" bind:value={sourceUrl} placeholder="https://calendar.example.org" /></label><div class="two-fields"><label class="field">Fallback city / area<input bind:value={sourceCity} placeholder="Optional; used when missing" /></label><label class="field">Source timezone<input required list="source-timezones" bind:value={sourceTimezone} placeholder="e.g. Europe/Rome" /><datalist id="source-timezones"><option>Europe/Rome</option><option>Europe/London</option><option>Europe/Paris</option><option>America/New_York</option><option>Asia/Tokyo</option><option>UTC</option></datalist></label></div><button class="secondary-button"><Plus size={16} /> Add source</button></form>

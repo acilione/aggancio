@@ -10,12 +10,12 @@ Choose the file for your operating system and processor from the [GitHub release
 
 | Computer | File | Start |
 | --- | --- | --- |
-| Windows Intel/AMD | `Commons-0.1.3-windows-x64.exe` | Double-click |
-| Windows ARM | `Commons-0.1.3-windows-arm64.exe` | Double-click |
-| Linux Intel/AMD | `Commons-0.1.3-linux-x64` | Allow execution in file permissions, then open |
-| Linux ARM | `Commons-0.1.3-linux-arm64` | Allow execution in file permissions, then open |
-| macOS Intel | `Commons-0.1.3-macos-intel.zip` | Extract, then open `Commons.app` |
-| macOS Apple Silicon | `Commons-0.1.3-macos-apple-silicon.zip` | Extract, then open `Commons.app` |
+| Windows Intel/AMD | `Commons-0.1.4-windows-x64.exe` | Double-click |
+| Windows ARM | `Commons-0.1.4-windows-arm64.exe` | Double-click |
+| Linux Intel/AMD | `Commons-0.1.4-linux-x64` | Allow execution in file permissions, then open |
+| Linux ARM | `Commons-0.1.4-linux-arm64` | Allow execution in file permissions, then open |
+| macOS Intel | `Commons-0.1.4-macos-intel.zip` | Extract, then open `Commons.app` |
+| macOS Apple Silicon | `Commons-0.1.4-macos-apple-silicon.zip` | Extract, then open `Commons.app` |
 
 The application opens `http://127.0.0.1:4173` in the default browser. No Node, Go, Python, Docker, administrator access, or application installation is required. Linux needs a desktop browser and `xdg-open`; some file managers require launching the executable from a terminal. macOS bundles target macOS 12 or newer. These builds are unsigned: Windows/macOS may require permission to open the download; macOS can offer **Open Anyway** in **System Settings → Privacy & Security** after the first attempt. Signed/notarized releases would need the distributor's signing credentials. Do not disable system protections globally.
 
@@ -108,6 +108,10 @@ Existing cached events are re-enriched when opened, repairing the old limited ci
 **Bungarang is not connected live.** Its event-list API rejected an unrelated origin with `Invalid CORS request` during inspection. Obtain a supported feed/export or origin permission before enabling direct access. The snapshot importer is a working alternative for an agreed data export; it does not scrape arbitrary websites or bypass CORS. An adapter must normalize another site's format into the schema below.
 
 OCR automatically proposes a draft; it does not guarantee correct programme interpretation. Multiple Italian/English dates are recognized. Missing years, times and ranges are flagged. Range endpoints are proposed for review rather than silently inventing daily sessions. Different activities on the same poster should become separate drafts (use Duplicate and edit). Styling, columns, ambiguous dates and small print may require manual corrections. Poster recognition currently uses a shared detected time for proposed occurrences; review each session's time.
+
+Use **City preferences** in Explore to choose one or more cities. Saving applies the selection and restores it the next time you open this browser. Choose **All cities** to browse elsewhere this session, or remove every preferred city and save to change the startup view.
+
+In **Your sources**, select **Rescan Gancio directories** to check the live official Gancio directory and the latest Aggancio catalogue. The report shows new, already listed and previously removed calendars, and identifies any directory it could not reach. Enable the calendars you want under **New in last scan**. The ordinary **Refresh** button updates events from enabled calendars.
 
 ## Source catalogue maintenance
 

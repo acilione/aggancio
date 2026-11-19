@@ -6,7 +6,7 @@ A static, browser-run community event explorer. Built with Svelte, TypeScript an
 
 ### Portable downloads — no development tools needed
 
-Choose the file for your operating system and processor from the [GitHub releases](https://github.com/acilione/events_app/releases). Local builds write the same files to `releases/`.
+Choose the file for your operating system and processor from the [GitHub releases](https://github.com/acilione/aggancio/releases). Local builds write the same files to `releases/`.
 
 | Computer | File | Start |
 | --- | --- | --- |
@@ -45,8 +45,8 @@ After building, `node scripts/browser-portable.mjs` tests the native Windows/Lin
 Use Node **22.12+ or 24 LTS**. From a fresh checkout:
 
 ```sh
-git clone https://github.com/acilione/events_app.git
-cd events_app
+git clone https://github.com/acilione/aggancio.git
+cd aggancio
 npm ci
 npm run dev
 ```
